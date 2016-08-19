@@ -309,7 +309,7 @@ a {
     margin-bottom: 10px;
   }
   #container .header-subtitle {
-    padding: 0 24px;
+    padding: 0;
   }
   #container .article-info-index.article-info {
     padding-top: 10px;
@@ -413,8 +413,9 @@ a {
   #container .share {
     padding: 3px 10px;
   }
+  #container .share_jia,
   #container .duoshuo {
-    padding: 0 13px;
+    padding: 0 12px;
   }
   #container #disqus_thread {
     padding: 0 13px;
@@ -518,7 +519,7 @@ a {
 }
 #header .header-subtitle {
   text-align: center;
-  color: #999;
+  color: #000;
   font-size: 14px;
   line-height: 25px;
   overflow: hidden;
@@ -707,6 +708,7 @@ a {
   text-align: left;
   line-height: 30px;
 }
+.share_jia,
 .duoshuo {
   padding: 0 40px;
 }
