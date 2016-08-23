@@ -981,11 +981,12 @@ a {
 .article-entry li code {
   padding: 1px 3px;
   margin: 0 3px;
-  background: #ddd;
-  border: 1px solid #ccc;
+  background: #f9f2f4;
   font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
   word-wrap: break-word;
-  font-size: 14px;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #c7254e;
 }
 .article-entry blockquote {
   background: #ddd;
@@ -1512,7 +1513,7 @@ a {
 }
 .article-entry .highlight table {
   margin: 0;
-  width: auto;
+  width: 100%;
 }
 .article-entry .highlight td {
   border: none;
@@ -1536,15 +1537,17 @@ a {
   float: right;
 }
 .article-entry .highlight .gutter pre {
-  text-align: right;
-  padding-right: 20px;
+  text-align: left;
+  padding-right: 0;
 }
 .article-entry .highlight .gutter pre .line {
   text-shadow: none;
+  display: none;
 }
 .article-entry .highlight .line {
   font-size: 15px;
-  height: 15px;
+  height: 22px;
+  font-family: monospace;
 }
 .article-entry .gist {
   margin: 0 -20px;
