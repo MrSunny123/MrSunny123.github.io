@@ -1,4 +1,4 @@
-require([], function (){
+if(require([], function (){
 
 	var isMobileInit = false;
 	var loadMobile = function(){
@@ -107,4 +107,13 @@ require([], function (){
 		$(".article a[href]").attr("target", "_blank")
 	}
 	
-});
+}),
+$(".instagram").length) {
+    var bp = document.createElement("script");
+    bp.src = "/js/photo.js";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s),
+    require(["/js/photo.js", "/fancybox/jquery.fancybox.js", "/js/jquery.lazyload.js"], function(i) {
+        i.init()
+    })
+};

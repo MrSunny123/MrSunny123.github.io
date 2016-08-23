@@ -11,9 +11,7 @@ define([], function(){
 			hide: function(){
 				$tipBox.addClass("hide");
 			},
-			init: function(){
-				
-			}
+			init: function(){}
 		}
 	})();
 
@@ -25,7 +23,7 @@ define([], function(){
 			tags[i].className = "";
 			tags.eq(i).addClass("color"+num);
 		}
-	}
+	};
 
 	var slide = function(idx){
 		var $wrap = $(".switch-wrap");
@@ -34,7 +32,7 @@ define([], function(){
 		});
 		$(".icon-wrap").addClass("hide");
 		$(".icon-wrap").eq(idx).removeClass("hide");
-	}
+	};
 
 	var bind = function(){
 		var switchBtn = $("#myonoffswitch");

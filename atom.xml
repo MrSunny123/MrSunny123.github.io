@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://mrsunny123.github.io/"/>
-  <updated>2016-08-22T03:41:35.430Z</updated>
+  <updated>2016-08-22T08:14:44.354Z</updated>
   <id>http://mrsunny123.github.io/</id>
   
   <author>
@@ -20,16 +20,18 @@
     <link href="http://mrsunny123.github.io/2016/08/22/blog/"/>
     <id>http://mrsunny123.github.io/2016/08/22/blog/</id>
     <published>2016-08-22T03:04:40.000Z</published>
-    <updated>2016-08-22T03:41:35.430Z</updated>
+    <updated>2016-08-22T08:14:44.354Z</updated>
     
-    <content type="html"><![CDATA[<p>一直都在博客园写博客，不过最近在逛园子的时候不小心看到了hexo,简直有种相见恨晚的感觉呀！在github上创建自己的开源博客，维护方便，主题多多，更重要的是，终于找到只属于自己的小窝啦！也希望自己能坚持写文^_^<br>为了引起读者的兴趣，先介绍一下，搭建完成之后，只需这几个简单常用的命令，就能够轻松维护自己的博客了：</p>
+    <content type="html"><![CDATA[<p>一直都在博客园写博客，不过最近在逛园子的时候不小心看到了hexo,简直有种相见恨晚的感觉呀！在github上创建自己的开源博客，维护方便，主题多多，更重要的是，终于找到只属于自己的小窝啦！也希望自己能坚持写文^_^<br><a id="more"></a><br>为了引起读者的兴趣，先介绍一下，搭建完成之后，只需这几个简单常用的命令，就能够轻松维护自己的博客了：</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;一直都在博客园写博客，不过最近在逛园子的时候不小心看到了hexo,简直有种相见恨晚的感觉呀！在github上创建自己的开源博客，维护方便，主题多多，更重要的是，终于找到只属于自己的小窝啦！也希望自己能坚持写文^_^&lt;br&gt;为了引起读者的兴趣，先介绍一下，搭建完成之后，只需这
+      &lt;p&gt;一直都在博客园写博客，不过最近在逛园子的时候不小心看到了hexo,简直有种相见恨晚的感觉呀！在github上创建自己的开源博客，维护方便，主题多多，更重要的是，终于找到只属于自己的小窝啦！也希望自己能坚持写文^_^&lt;br&gt;
     
     </summary>
+    
+      <category term="工作" scheme="http://mrsunny123.github.io/categories/work/"/>
     
     
       <category term="Hexo" scheme="http://mrsunny123.github.io/tags/Hexo/"/>
@@ -43,7 +45,7 @@
     <link href="http://mrsunny123.github.io/2016/08/19/test/"/>
     <id>http://mrsunny123.github.io/2016/08/19/test/</id>
     <published>2016-08-19T07:58:16.000Z</published>
-    <updated>2016-08-19T08:02:36.132Z</updated>
+    <updated>2016-08-22T06:36:52.952Z</updated>
     
     <content type="html"><![CDATA[<p>这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章这是一篇测试文章</p>
 ]]></content>
@@ -54,6 +56,8 @@
 
     
     </summary>
+    
+      <category term="生活" scheme="http://mrsunny123.github.io/categories/life/"/>
     
     
       <category term="Hexo" scheme="http://mrsunny123.github.io/tags/Hexo/"/>
