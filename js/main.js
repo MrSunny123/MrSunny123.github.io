@@ -1,15 +1,15 @@
-if(require([], function (){
+require([], function (){
 
 	var isMobileInit = false;
 	var loadMobile = function(){
-		require(['/js/mobile.js'], function(mobile){
+		require([yiliaConfig.root + '/js/mobile.js'], function(mobile){
 			mobile.init();
 			isMobileInit = true;
 		});
 	}
 	var isPCInit = false;
 	var loadPC = function(){
-		require(['/js/pc.js'], function(pc){
+		require([yiliaConfig.root + '/js/pc.js'], function(pc){
 			pc.init();
 			isPCInit = true;
 		});
@@ -107,13 +107,4 @@ if(require([], function (){
 		$(".article a[href]").attr("target", "_blank")
 	}
 	
-}),
-$(".instagram").length) {
-    var bp = document.createElement("script");
-    bp.src = "/js/photo.js";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s),
-    require(["/js/photo.js", "/fancybox/jquery.fancybox.js", "/js/jquery.lazyload.js"], function(i) {
-        i.init()
-    })
-};
+});
