@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://mrsunny123.github.io/"/>
-  <updated>2016-08-24T06:20:43.511Z</updated>
+  <updated>2016-09-18T07:28:14.310Z</updated>
   <id>http://mrsunny123.github.io/</id>
   
   <author>
@@ -14,6 +14,113 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Web 存储 —— 关于Cookie, LocalStorage 与 SessionStorage</title>
+    <link href="http://mrsunny123.github.io/2016/09/18/Web-Storage/"/>
+    <id>http://mrsunny123.github.io/2016/09/18/Web-Storage/</id>
+    <published>2016-09-18T07:21:20.000Z</published>
+    <updated>2016-09-18T07:28:14.310Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>做项目是会有各种需求，有时候希望通过一些手段来持久化的存储一些有用的数据。一般将这项任务交给了服务器端的数据库或者浏览器端的cookie。随着HTML5的出现，web开发又有了新选择：Web Storage。下面就来说说cookie与web Storage。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p><code>Cookie</code>是小甜饼的意思。cookie 确实非常小，它的大小限制为4KB左右。它的主要用途有保存登录信息，比如你登录某个网站市场可以看到“记住密码”，这通常就是通过在 Cookie 中存入一段辨别用户身份的数据来实现的。</p>
+<h2 id="Web-Storage"><a href="#Web-Storage" class="headerlink" title="Web Storage"></a>Web Storage</h2><p>html5中的Web Storage包括了两种存储方式：<code>sessionStorage</code>和<code>localStorage</code>。<br><a id="more"></a><br><code>SessionStorage</code>用于本地存储一个会话（session）中的数据，这些数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁。因此SessionStorage不是一种持久化的本地存储，仅仅是会话级别的存储。</p>
+<p><code>LocalStorage</code>用于持久化的本地存储，除非主动删除数据，否则数据是永远不会过期的。</p>
+<h3 id="Web-Storage浏览器兼容性"><a href="#Web-Storage浏览器兼容性" class="headerlink" title="Web Storage浏览器兼容性"></a>Web Storage浏览器兼容性</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">特性/浏览器</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Firefox (Gecko)</th>
+<th style="text-align:center">Internet Explorer</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">Safari (WebKit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>localStorage</strong></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">3.5</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">10.50</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>sessionStorage</strong></td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">10.50</td>
+<td style="text-align:center">4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="localStorage和sessionStorage操作"><a href="#localStorage和sessionStorage操作" class="headerlink" title="localStorage和sessionStorage操作"></a>localStorage和sessionStorage操作</h3><p>LocalStorage和SessionStorage都具有相同的操作方法，例如setItem、getItem、removeItem和clear等。</p>
+<p><strong>setItem</strong><br>用途：将value存储到key字段<br>用法：.setItem( key, value)<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.setItem(&quot;key&quot;, &quot;value&quot;);</div><div class="line">localStorage.setItem(&quot;site&quot;, &quot;123&quot;);</div></pre></td></tr></table></figure></p>
+<p><strong>getItem</strong><br>用途：获取指定key本地存储的值<br>用法：.getItem( key)<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.getItem(&quot;key&quot;);</div><div class="line">localStorage.getItem(&quot;site&quot;);</div></pre></td></tr></table></figure></p>
+<p><strong>removeItem</strong><br>用途：删除指定key本地存储的值<br>用法：.removeItem( key)<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.removeItem(&quot;key&quot;);</div><div class="line">localStorage.removeItem(&quot;site&quot;);</div></pre></td></tr></table></figure></p>
+<p><strong>clear</strong><br>用途：清除所有的key/value<br>用法：.clear()<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.clear();</div><div class="line">localStorage.clear();</div></pre></td></tr></table></figure></p>
+<p><strong>点操作和[ ]</strong><br>web Storage不但可以用自身的setItem,getItem等方便存取，也可以像普通对象一样用点(.)操作符，及[]的方式进行数据存储，像如下的代码： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var storage = window.localStorage; </div><div class="line">storage.key1 = &quot;hello&quot;; </div><div class="line">storage[&quot;key2&quot;] = &quot;world&quot;; </div><div class="line">console.log(storage.key1); </div><div class="line">console.log(storage[&quot;key2&quot;]);</div></pre></td></tr></table></figure>
+<p><strong>localStorage和sessionStorage的key和length属性实现遍历</strong><br>sessionStorage和localStorage提供的key()和length可以方便的实现存储的数据遍历，例如下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var storage = window.localStorage; </div><div class="line">for (var i=0, len = storage.length; i  &lt;  len; i++)&#123; </div><div class="line">    var key = storage.key(i);     </div><div class="line">    var value = storage.getItem(key);     </div><div class="line">    console.log(key + &quot;=&quot; + value); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="三者的对比"><a href="#三者的对比" class="headerlink" title="三者的对比"></a>三者的对比</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Cookie</th>
+<th style="text-align:left">LocalStorage</th>
+<th style="text-align:left">SessionStorage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">数据的有效期</td>
+<td style="text-align:left">可设置失效时间，默认是关闭浏览器后失效</td>
+<td style="text-align:left">除非被清除，否则永久保存</td>
+<td style="text-align:left">仅在当前会话下有效，关闭页面或浏览器后被清除</td>
+</tr>
+<tr>
+<td style="text-align:left">可存储数据大小</td>
+<td style="text-align:left">4K左右</td>
+<td style="text-align:left">5M左右</td>
+<td style="text-align:left">5M左右</td>
+</tr>
+<tr>
+<td style="text-align:left">是否需要与服务端通信</td>
+<td style="text-align:left">每次都会携带在HTTP头中，如果使用cookie保存过多数据会带来性能问题</td>
+<td style="text-align:left">仅在客户端（即浏览器）中保存，不参与和服务器的通信</td>
+<td style="text-align:left">仅在客户端（即浏览器）中保存，不参与和服务器的通信</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>除了上面以外，<code>LocalStorage</code>与<code>SessionStorage</code>拥有<code>setItem</code>,<code>getItem</code>,<code>removeItem</code>,<code>clear</code>等方法，操作起来比较方便，而<code>Cookie</code>需要前端开发者自己封装<code>setCookie</code>，<code>getCookie</code>。</p>
+</blockquote>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p><code>Cookie</code>比较常见的应用是判断用户是否登录。针对登录过的用户，服务器端会在他登录时往 <code>Cookie</code> 中插入一段加密过的唯一辨识单一用户的辨识码，下次只要读取这个值就可以判断当前用户是否登录啦。<br><code>LocalStorage</code>可以用来保存用户在电商网站的购物车信息，也可以保存一些HTML5游戏的本地数据。</p>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>使用<code>Cookie</code>、<code>localStorage</code> 和 <code>sessionStorage</code>的时候，需要时刻注意是否有代码存在 XSS 注入的风险。如果你的网站中有 XSS 的风险，它们就能对你的 <code>localStorage</code> 随意更改。所以千万不要用它们存储你系统中的敏感数据。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.cnblogs.com/yuzhongwusan/archive/2011/12/19/2293347.html" target="_blank" rel="external">HTMl5的sessionStorage和localStorage</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API" target="_blank" rel="external">使用 Web Storage API</a><br><a href="https://segmentfault.com/a/1190000002723469" target="_blank" rel="external">详说 Cookie, LocalStorage 与 SessionStorage</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;做项目是会有各种需求，有时候希望通过一些手段来持久化的存储一些有用的数据。一般将这项任务交给了服务器端的数据库或者浏览器端的cookie。随着HTML5的出现，web开发又有了新选择：Web Storage。下面就来说说cookie与web Storage。&lt;/p&gt;
+&lt;h1 id=&quot;正文&quot;&gt;&lt;a href=&quot;#正文&quot; class=&quot;headerlink&quot; title=&quot;正文&quot;&gt;&lt;/a&gt;正文&lt;/h1&gt;&lt;h2 id=&quot;Cookie&quot;&gt;&lt;a href=&quot;#Cookie&quot; class=&quot;headerlink&quot; title=&quot;Cookie&quot;&gt;&lt;/a&gt;Cookie&lt;/h2&gt;&lt;p&gt;&lt;code&gt;Cookie&lt;/code&gt;是小甜饼的意思。cookie 确实非常小，它的大小限制为4KB左右。它的主要用途有保存登录信息，比如你登录某个网站市场可以看到“记住密码”，这通常就是通过在 Cookie 中存入一段辨别用户身份的数据来实现的。&lt;/p&gt;
+&lt;h2 id=&quot;Web-Storage&quot;&gt;&lt;a href=&quot;#Web-Storage&quot; class=&quot;headerlink&quot; title=&quot;Web Storage&quot;&gt;&lt;/a&gt;Web Storage&lt;/h2&gt;&lt;p&gt;html5中的Web Storage包括了两种存储方式：&lt;code&gt;sessionStorage&lt;/code&gt;和&lt;code&gt;localStorage&lt;/code&gt;。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="工作" scheme="http://mrsunny123.github.io/categories/work/"/>
+    
+    
+      <category term="JavaScript" scheme="http://mrsunny123.github.io/tags/JavaScript/"/>
+    
+      <category term="教程" scheme="http://mrsunny123.github.io/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="HTML5" scheme="http://mrsunny123.github.io/tags/HTML5/"/>
+    
+  </entry>
   
   <entry>
     <title>JavaScript对象克隆</title>
@@ -47,9 +154,9 @@
       <category term="工作" scheme="http://mrsunny123.github.io/categories/work/"/>
     
     
-      <category term="教程" scheme="http://mrsunny123.github.io/tags/%E6%95%99%E7%A8%8B/"/>
-    
       <category term="JavaScript" scheme="http://mrsunny123.github.io/tags/JavaScript/"/>
+    
+      <category term="教程" scheme="http://mrsunny123.github.io/tags/%E6%95%99%E7%A8%8B/"/>
     
   </entry>
   
@@ -125,9 +232,9 @@
       <category term="工作" scheme="http://mrsunny123.github.io/categories/work/"/>
     
     
-      <category term="Hexo" scheme="http://mrsunny123.github.io/tags/Hexo/"/>
-    
       <category term="教程" scheme="http://mrsunny123.github.io/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="Hexo" scheme="http://mrsunny123.github.io/tags/Hexo/"/>
     
   </entry>
   
