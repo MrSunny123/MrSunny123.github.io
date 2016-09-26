@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://mrsunny123.github.io/"/>
-  <updated>2016-09-19T07:06:38.185Z</updated>
+  <updated>2016-09-26T09:38:34.776Z</updated>
   <id>http://mrsunny123.github.io/</id>
   
   <author>
@@ -14,6 +14,61 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>移动Web开发小结</title>
+    <link href="http://mrsunny123.github.io/2016/09/26/%E7%A7%BB%E5%8A%A8Web/"/>
+    <id>http://mrsunny123.github.io/2016/09/26/移动Web/</id>
+    <published>2016-09-26T09:22:25.000Z</published>
+    <updated>2016-09-26T09:38:34.776Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>在做移动Web开发时有很多地方跟PC端是不一样的，需要不一样的设置，这里就记录下移动Web开发中有用的设置和一些通用代码。</p>
+</blockquote>
+<h1 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h1><h2 id="设置页面宽度等于设备宽度，并禁止用户缩放页面"><a href="#设置页面宽度等于设备宽度，并禁止用户缩放页面" class="headerlink" title="设置页面宽度等于设备宽度，并禁止用户缩放页面"></a>设置页面宽度等于设备宽度，并禁止用户缩放页面</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="忽略页面中的数字识别为电话，忽略email识别"><a href="#忽略页面中的数字识别为电话，忽略email识别" class="headerlink" title="忽略页面中的数字识别为电话，忽略email识别"></a>忽略页面中的数字识别为电话，忽略email识别</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;format-detection&quot; content=&quot;telphone=no, email=no&quot; /&gt;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="开启对web-app程序的支持（仅针对IOS系统）"><a href="#开启对web-app程序的支持（仅针对IOS系统）" class="headerlink" title="开启对web app程序的支持（仅针对IOS系统）"></a>开启对web app程序的支持（仅针对IOS系统）</h2><blockquote>
+<p>网站开启对web app程序的支持，其实意思就是删除默认的苹果工具栏和菜单栏，开启全屏显示</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="改变顶部状态条的颜色（仅针对IOS系统）"><a href="#改变顶部状态条的颜色（仅针对IOS系统）" class="headerlink" title="改变顶部状态条的颜色（仅针对IOS系统）"></a>改变顶部状态条的颜色（仅针对IOS系统）</h2><blockquote>
+<p>在 web app 下状态条（屏幕顶部条）的颜色默认值为 default（白色），可以定为 black（黑色）和 black-translucent（灰色半透明）；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="完整的HTML模板"><a href="#完整的HTML模板" class="headerlink" title="完整的HTML模板"></a>完整的HTML模板</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;meta charset=&quot;utf-8&quot;&gt;</div><div class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;</div><div class="line">&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;</div><div class="line">&lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;</div><div class="line">&lt;meta name=&quot;format-detection&quot; content=&quot;telphone=no, email=no&quot; /&gt;</div><div class="line">&lt;title&gt;标题&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">这里开始内容</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><h2 id="css-reset"><a href="#css-reset" class="headerlink" title="css reset"></a>css reset</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">html&#123;</div><div class="line">    -webkit-tap-highlight-color: rgba(0,0,0,0); /*去掉触摸遮盖层*/</div><div class="line">    -webkit-user-modify: read-write-plaintext-only;</div><div class="line">    -webkit-user-select: none; /*禁止用户选择文字*/</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*设置所有盒子大小计算边框内*/</div><div class="line">*,</div><div class="line">*:before,</div><div class="line">*:after &#123;</div><div class="line">    box-sizing: border-box;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*消除输入框的阴影和边框*/</div><div class="line">input,textarea, select&#123;</div><div class="line">    -webkit-appearance: none; /*去掉webkit默认的表单样式*/</div><div class="line">    appearance: none;</div><div class="line">    outline: none;</div><div class="line">    border: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="消除transition动画闪屏"><a href="#消除transition动画闪屏" class="headerlink" title="消除transition动画闪屏"></a>消除transition动画闪屏</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.animate &#123;</div><div class="line">    -webkit-transform-style: preserve-3d; /*设置内嵌的元素在 3D 空间如何呈现：保留 3D*/</div><div class="line">    -webkit-backface-visibility: hidden; /*设置进行转换的元素的背面在面对用户时是否可见：隐藏*/</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="开启硬件加速"><a href="#开启硬件加速" class="headerlink" title="开启硬件加速"></a>开启硬件加速</h2><blockquote>
+<p> 解决页面闪白，保证动画流畅。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.css &#123;</div><div class="line">   -webkit-transform: translate3d(0, 0, 0);</div><div class="line">   -moz-transform: translate3d(0, 0, 0);</div><div class="line">   -ms-transform: translate3d(0, 0, 0);</div><div class="line">   transform: translate3d(0, 0, 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="关于打电话、发短信、发邮件的实现"><a href="#关于打电话、发短信、发邮件的实现" class="headerlink" title="关于打电话、发短信、发邮件的实现"></a>关于打电话、发短信、发邮件的实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;tel:10086&quot;&gt;打电话给：10086&lt;/a&gt;</div><div class="line">&lt;a href=&quot;sms:10086&quot;&gt;发短信给：10086&lt;/a&gt;</div><div class="line">&lt;a href=&quot;mailto:zhangxy_92@outlook.com&quot;&gt;发邮件给：zhangxy_92@outlook.com&lt;/a&gt;</div></pre></td></tr></table></figure>
+<h2 id="关于布局"><a href="#关于布局" class="headerlink" title="关于布局"></a>关于布局</h2><blockquote>
+<p>移动端中对于flexbox的支持已经很好，flexbox是布局神器。阮一峰老师写过<a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">flexbox 入门教程</a>；以后自己可能也会写一篇flexbox的学习和总结笔记。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;在做移动Web开发时有很多地方跟PC端是不一样的，需要不一样的设置，这里就记录下移动Web开发中有用的设置和一些通用代码。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;HTML&quot;&gt;&lt;a href=&quot;#HTML&quot; class=&quot;headerlink&quot; title=&quot;HTML&quot;&gt;&lt;/a&gt;HTML&lt;/h1&gt;&lt;h2 id=&quot;设置页面宽度等于设备宽度，并禁止用户缩放页面&quot;&gt;&lt;a href=&quot;#设置页面宽度等于设备宽度，并禁止用户缩放页面&quot; class=&quot;headerlink&quot; title=&quot;设置页面宽度等于设备宽度，并禁止用户缩放页面&quot;&gt;&lt;/a&gt;设置页面宽度等于设备宽度，并禁止用户缩放页面&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&amp;quot; /&amp;gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;忽略页面中的数字识别为电话，忽略email识别&quot;&gt;&lt;a href=&quot;#忽略页面中的数字识别为电话，忽略email识别&quot; class=&quot;headerlink&quot; title=&quot;忽略页面中的数字识别为电话，忽略email识别&quot;&gt;&lt;/a&gt;忽略页面中的数字识别为电话，忽略email识别&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&amp;lt;meta name=&amp;quot;format-detection&amp;quot; content=&amp;quot;telphone=no, email=no&amp;quot; /&amp;gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="工作" scheme="http://mrsunny123.github.io/categories/work/"/>
+    
+    
+      <category term="HTML5" scheme="http://mrsunny123.github.io/tags/HTML5/"/>
+    
+      <category term="CSS3" scheme="http://mrsunny123.github.io/tags/CSS3/"/>
+    
+      <category term="移动开发" scheme="http://mrsunny123.github.io/tags/%E7%A7%BB%E5%8A%A8%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
   
   <entry>
     <title>JS开发中的一些小技巧和方法</title>
