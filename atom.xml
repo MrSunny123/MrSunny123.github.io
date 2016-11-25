@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://mrsunny123.github.io/"/>
-  <updated>2016-09-26T09:38:34.776Z</updated>
+  <updated>2016-11-25T09:52:18.702Z</updated>
   <id>http://mrsunny123.github.io/</id>
   
   <author>
@@ -14,6 +14,315 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaScript必会技能——正则表达式</title>
+    <link href="http://mrsunny123.github.io/2016/11/25/RegExp/"/>
+    <id>http://mrsunny123.github.io/2016/11/25/RegExp/</id>
+    <published>2016-11-25T09:39:59.000Z</published>
+    <updated>2016-11-25T09:52:18.702Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="正则表达式是什么"><a href="#正则表达式是什么" class="headerlink" title="正则表达式是什么"></a>正则表达式是什么</h1><p>RegExp 对象表示正则表达式，它是对<code>字符串</code>执行模式匹配的强大工具。</p>
+<h2 id="为什么使用正则表达式"><a href="#为什么使用正则表达式" class="headerlink" title="为什么使用正则表达式"></a>为什么使用正则表达式</h2><ul>
+<li>测试字符串内的模式。例如，可以测试输入字符串，以查看字符串内是否出现电话号码模式或信用卡号码模式。这称为数据验证。</li>
+<li>替换文本。可以使用正则表达式来识别文档中的特定文本，完全删除该文本或者用其他文本替换它。</li>
+<li>基于模式匹配从字符串中提取子字符串。可以查找文档内或输入域内特定的文本。<a id="more"></a>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2>正则表达式有两种方法定义：</li>
+</ul>
+<p>1.直接量语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/pattern/attributes</div></pre></td></tr></table></figure></p>
+<p>2.创建 RegExp 对象的语法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">new RegExp(pattern, attributes);</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>参数</strong>：参数pattern是一个字符串，指定了正则表达式的模式；参数attributes是一个可选的参数，包含属性g，i，m，分别使用与全局匹配，不区分大小写匹配，多行匹配；<br><strong>返回值</strong>：一个新的RegExp对象，具有指定的模式和标志；</p>
+</blockquote>
+<h3 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h3><table>
+<thead>
+<tr>
+<th>修饰符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td>执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>执行不分大小写匹配。</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>执行多行匹配。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="括号"><a href="#括号" class="headerlink" title="括号"></a>括号</h3><p>方括号包含一系列字符，可以匹配它所包含的任意字符；同时可以通过<code>^</code>符号来定义否定字符类</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[abc]</code></td>
+<td>查找在方括号中的任意一个字符</td>
+</tr>
+<tr>
+<td><code>[^abc]</code></td>
+<td>查找不在方括号中的任意一个字符</td>
+</tr>
+<tr>
+<td><code>[0-9]</code></td>
+<td>查找0-9中的任意一个数字</td>
+</tr>
+<tr>
+<td><code>[a-z]</code></td>
+<td>查找任何从小写 a 到小写 z 的字符</td>
+</tr>
+<tr>
+<td><code>[A-Z]</code></td>
+<td>查找任何从大写 a 到大写 z 的字符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h3><table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>查找任意的单个字符，除换行符和其他Unicode行终止符之外</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>查找字母数字和下划线 ，等价于<code>[a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>查找除字母数字下划线之外的字符，等价于<code>[\^a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>查找数字字符，等价于<code>[0-9]</code></td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>查找非数字字符，等价于<code>[\^0-9]</code></td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>匹配任何空白字符，包括空格，制表符，换行符等等。等价于<code>[\f\n\r\t\v]</code></td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td>匹配任何非空白字符，等价于<code>[\^\f\n\r\t\v]</code></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>查找一个单词边界，也就是指单词和空格间的位置，比如<code>er\b</code>可以匹配”never”中的”er”,但是不能匹配”verb”中的”er”</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>查找非单词边界，<code>er\B</code>能匹配”ver”中的”er”,但不能匹配”never”中的”er”</td>
+</tr>
+<tr>
+<td><code>\0</code></td>
+<td>查找空字符(<code>&quot;&quot;</code>)</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>查找换行符</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>查找回车符</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>查找换页符</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>查找制表符</td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>查找垂直制表符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h3><table>
+<thead>
+<tr>
+<th>量词</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n+</code></td>
+<td>匹配任何至少包含一个n的字符串，等价于<code>n{1,}</code></td>
+</tr>
+<tr>
+<td><code>n*</code></td>
+<td>匹配零个或者多个n的字符串，等价于<code>n{0,}</code></td>
+</tr>
+<tr>
+<td><code>n?</code></td>
+<td>匹配零个或者1个n的字符串，等价于<code>n{0,1}</code></td>
+</tr>
+<tr>
+<td><code>n{x}</code></td>
+<td>匹配包含x个n的序列字符串</td>
+</tr>
+<tr>
+<td><code>n{x,y}</code></td>
+<td>匹配至少x个，最多y个n的字符串</td>
+</tr>
+<tr>
+<td><code>n{x,}</code></td>
+<td>匹配至少x个n的字符串</td>
+</tr>
+<tr>
+<td><code>n$</code></td>
+<td>匹配以n结尾的字符串</td>
+</tr>
+<tr>
+<td><code>^n</code></td>
+<td>匹配以n开头的字符串</td>
+</tr>
+</tbody>
+</table>
+<p>###正则表达式的特殊字符中需要转义字符###</p>
+<blockquote>
+<p>正则表达式中的特殊字符都有它们的特殊含义，所以当我们要匹配这些特殊字符本身时，需要对字符进行转义，转义只需要在字符前面加上<code>\</code>，这些特殊字符包括<code>$</code> <code>^</code> <code>*</code> <code>+</code> <code>.</code> <code>[</code> <code>?</code> <code>{</code> <code>|</code> <code>(</code> <code>)</code> <code>\</code></p>
+</blockquote>
+<h2 id="支持正则表达式的方法"><a href="#支持正则表达式的方法" class="headerlink" title="支持正则表达式的方法"></a>支持正则表达式的方法</h2><h3 id="RegExp-对象方法"><a href="#RegExp-对象方法" class="headerlink" title="RegExp 对象方法"></a>RegExp 对象方法</h3><p>1.<strong>test方法</strong>：该方法用于检测一个字符串是否匹配某个模式。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>RegExpObject.test(str)</code><br><strong>参数</strong>：str是需要检测的字符串<br><strong>返回值</strong>：如果字符串str中含有与RegExpObject匹配的文本的话，返回true，否则返回false</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var str = &quot;longen and yunxi&quot;;</div><div class="line">console.log(/longen/.test(str)); // true</div><div class="line">console.log(/longlong/.test(str)); //false</div></pre></td></tr></table></figure></p>
+<p>2.<strong>exec方法</strong>：该方法用于检索字符串中的正则表达式的匹配。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>RegExpObject.exec(str)</code><br><strong>参数</strong>：str是需要检测的字符串<br><strong>返回值</strong>：返回一个数组，存放匹配的结果，如果未找到匹配，则返回值为null</p>
+</blockquote>
+<p>示例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var str = &quot;javascript html css&quot;;</div><div class="line">console.log(/html/.exec(str)); // [&quot;html&quot;, index: 11, input: &quot;javascript html css&quot;]</div><div class="line">返回的数组的第一个元素是与正则表达式相匹配的文本，该方法还返回2个属性，index属性声明的是匹配文本的第一个字符的位置；input属性则存放的是被检索的字符串string。</div><div class="line"></div><div class="line">// 假如没有找到的话，则返回null</div><div class="line">console.log(/node/.exec(str)); // null</div></pre></td></tr></table></figure>
+<h3 id="支持正则表达式的-String-对象的方法"><a href="#支持正则表达式的-String-对象的方法" class="headerlink" title="支持正则表达式的 String 对象的方法"></a>支持正则表达式的 String 对象的方法</h3><p>1.<strong>search方法</strong>：该方法用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的字符串。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.search(regexp)</code><br><strong>参数</strong>：regexp可以是在stringObject中检索的字符串，也可以是需要检索的RegExp对象<br><strong>返回值</strong>：stringObject中第一个与regexp对象相匹配的子串的起始位置。如果没有找到任何匹配的子串，则返回-1；</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var str = &quot;hello world,hello world&quot;;</div><div class="line">// 返回匹配到的第一个位置</div><div class="line">console.log(str.search(/hello/)); // 0</div><div class="line">// search方法不执行全局匹配，它将忽略标志g，同时它也没有regexp对象的lastIndex的属性，且总是从字符串开始位置进行查找，总是返回的是stringObject匹配的第一个位置。</div><div class="line">console.log(str.search(/hello/g)); //0</div><div class="line">console.log(str.search(/world/)); // 6</div><div class="line"></div><div class="line">// 也可以是检索字符串中的字符</div><div class="line">console.log(str.search(&quot;wo&quot;)); // 6</div><div class="line"></div><div class="line">// 如果没有检索到的话，则返回-1</div><div class="line">console.log(str.search(/longen/)); // -1</div><div class="line"></div><div class="line">// 我们检索的时候 可以忽略大小写来检索</div><div class="line">var str2 = &quot;Hello&quot;;</div><div class="line">console.log(str2.search(/hello/i)); // 0</div></pre></td></tr></table></figure></p>
+<p>2.<strong>match方法</strong>：该方法用于在字符串内检索指定的值，或找到一个或者多个正则表达式的匹配。该方法类似于indexOf()或者lastIndexOf(); 但是它返回的是指定的值，而不是字符串的位置。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.match(regexp)</code><br><strong>参数</strong>：regexp可以是在stringObject中检索的字符串，也可以是需要检索的RegExp对象<br><strong>返回值</strong>：存放匹配成功的数组；如果没有找到任何的一个匹配，那么它将返回的是null。</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var str = &quot;hello world&quot;;</div><div class="line">// 返回的数组内有三个元素，第一个元素的存放的是匹配的文本，还有二个对象属性；index属性表明的是匹配文本的起始字符在stringObject中的位置；input属性声明的是对stringObject对象的引用；</div><div class="line">console.log(str.match(&quot;hello&quot;)); // [&quot;hello&quot;, index: 0, input: &quot;hello world&quot;]</div><div class="line">console.log(str.match(&quot;Hello&quot;)); // null</div><div class="line">console.log(str.match(/hello/)); // [&quot;hello&quot;, index: 0, input: &quot;hello world&quot;]</div><div class="line"></div><div class="line">// 全局匹配也返回一个数组，但有些不一样；它的数组元素中存放的是 stringObject 中所有的匹配子串，而且也没有 index 属性或 input 属性。</div><div class="line">var str2=&quot;1 plus 2 equal 3&quot;</div><div class="line">console.log(str2.match(/\d+/g)); //[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]</div></pre></td></tr></table></figure></p>
+<p>3.<strong>replace方法</strong>：该方法用于在字符串中使用一些字符替换另一些字符，或者替换一个与正则表达式匹配的子字符串。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.replace(regexp/substr,replacement);</code><br><strong>参数</strong>：regexp/substr可以是字符串或者是需要替换模式的RegExp对象；replacement可以是替换的文本或者是生成替换文本的函数。<br><strong>返回值</strong>：返回替换后的新字符串。</p>
+<p>字符串 stringObject 的 replace() 方法执行的是查找并替换的操作。它将在 stringObject 中查找与regexp 相匹配的子字符串，然后用 replacement 来替换这些子串。如果 regexp 具有全局标志 g，那么replace() 方法将替换所有匹配的子串。否则，它只替换第一个匹配子串。 </p>
+<p>replacement可以是字符串，也可以是函数。如果它是字符串，那么每个匹配都将由字符串替换。但是 replacement 中的 $字符具有特定的含义。如下表所示，它说明从模式匹配得到的字符串将用于替换。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$1</code>、<code>$2</code>、…、<code>$99</code></td>
+<td>与 regexp 中的第 1 到第 99 个子表达式相匹配的文本。</td>
+</tr>
+<tr>
+<td><code>$&amp;</code></td>
+<td>与 regexp 相匹配的子串。</td>
+</tr>
+<tr>
+<td><code>$`</code></td>
+<td>位于匹配子串左侧的文本。</td>
+</tr>
+<tr>
+<td><code>$’</code></td>
+<td>位于匹配子串右侧的文本。</td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td>表示美元符号$。</td>
+</tr>
+</tbody>
+</table>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">var str = &quot;hello world&quot;;</div><div class="line">// 使用字符串替换字符串</div><div class="line">var s1 = str.replace(&quot;hello&quot;,&quot;a&quot;);</div><div class="line">console.log(s1);// a world</div><div class="line"></div><div class="line">// 使用正则替换字符串</div><div class="line">var s2 = str.replace(/hello/,&quot;b&quot;);</div><div class="line">console.log(s2); // b world</div><div class="line"></div><div class="line">// 使用正则全局替换字符串</div><div class="line">var s3 = str.replace(/l/g,&apos;&apos;);</div><div class="line">console.log(s3); // heo word</div><div class="line"></div><div class="line">// $1,$2 代表的是第一个和第二个子表达式相匹配的文本</div><div class="line">// 子表达式需要使用小括号括起来,代表的含义是分组</div><div class="line">var name = &quot;longen    ,yunxi&quot;;</div><div class="line">var s4 = name.replace(/(\w+)\s*,\s*(\w+)/,&quot;$2 $1&quot;);</div><div class="line">console.log(s4); // &quot;yunxi,longen&quot;</div><div class="line"></div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &apos;$&amp;&apos;)) //hello world</div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &apos;$$&apos;)) //hello $orld</div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &apos;$`&apos;)) //hello hello orld</div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &quot;$&apos;&quot;)) //hello orldorld</div><div class="line"></div><div class="line">// replace 第二个参数也可以是一个function 函数</div><div class="line">// 单词首字母大写</div><div class="line">var name = &apos;aaa bbb ccc&apos;;</div><div class="line">var uw=name.replace(/\b\w+\b/g, function(word)&#123;</div><div class="line">	return word.substring(0,1).toUpperCase()+word.substring(1);&#125;</div><div class="line">);</div><div class="line">console.log(uw) //Aaa Bbb Ccc</div><div class="line"></div><div class="line"></div><div class="line">var name2 = &quot;123cbc45678rtyu909876pjkl54321&quot;;</div><div class="line">name2.replace(/\d+/g,function(v)&#123;</div><div class="line">    console.log(v); </div><div class="line">    /*</div><div class="line">     * 第一次打印123</div><div class="line">     * 第二次打印45678</div><div class="line">     * 第三次打印909876</div><div class="line">     * 第四次打印54321</div><div class="line">     */</div><div class="line">&#125;);</div><div class="line">/*</div><div class="line"> * 如下函数，回调函数参数一共有四个</div><div class="line"> * 第一个参数的含义是 匹配的字符串</div><div class="line"> * 第二个参数的含义是 正则表达式分组内容，没有分组的话，就没有该参数,</div><div class="line"> * 如果没有该参数的话那么第四个参数就是undefined</div><div class="line"> * 第三个参数的含义是 匹配项在字符串中的索引index</div><div class="line"> * 第四个参数的含义是 原字符串</div><div class="line"> */</div><div class="line"> name2.replace(/(\d+)/g,function(a,b,c,d)&#123;</div><div class="line">    console.log(a);</div><div class="line">    console.log(b);</div><div class="line">    console.log(c);</div><div class="line">    console.log(d);</div><div class="line">    /*</div><div class="line">     * 如上会执行四次，值分别如下(正则使用小括号，代表分组)：</div><div class="line">     * 第一次： 123,123,0,123cbc45678rtyu909876pjkl54321</div><div class="line">     * 第二次： 45678,45678,6,123cbc45678rtyu909876pjkl54321</div><div class="line">     * 第三次： 909876,909876,15,123cbc45678rtyu909876pjkl54321</div><div class="line">     * 第四次： 54321,54321,25,123cbc45678rtyu909876pjkl54321</div><div class="line">     */</div><div class="line"> &#125;);</div></pre></td></tr></table></figure></p>
+<p>4.<strong>split方法</strong>：该方法把一个字符串分割成字符串数组。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.split(separator,howmany)</code><br><strong>参数</strong>：<br>   1.separator[必填项]，字符串或正则表达式，该参数指定的地方分割stringObject;<br>   2.howmany[可选] 该参数指定返回的数组的最大长度，如果设置了该参数，返回的子字符串不会多于这个参数指定的数组。如果没有设置该参数的话，整个字符串都会被分割，不考虑他的长度。<br><strong>返回值</strong>：一个字符串数组。该数组通过在separator指定的边界处将字符串stringObject分割成子字符串。</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var str=&quot;How are you doing today?&quot;</div><div class="line">console.log(str.split(&quot; &quot;)) //[&quot;How&quot;, &quot;are&quot;, &quot;you&quot;, &quot;doing&quot;, &quot;today?&quot;]</div><div class="line">console.log(str.split(&quot;&quot;)) //[&quot;H&quot;, &quot;o&quot;, &quot;w&quot;, &quot; &quot;, &quot;a&quot;, &quot;r&quot;, &quot;e&quot;, &quot; &quot;, &quot;y&quot;, &quot;o&quot;, &quot;u&quot;, &quot; &quot;, &quot;d&quot;, &quot;o&quot;, &quot;i&quot;, &quot;n&quot;, &quot;g&quot;, &quot; &quot;, &quot;t&quot;, &quot;o&quot;, &quot;d&quot;, &quot;a&quot;, &quot;y&quot;, &quot;?&quot;]</div><div class="line">console.log(str.split(&quot; &quot;,3)) //[&quot;How&quot;, &quot;are&quot;, &quot;you&quot;]</div><div class="line"></div><div class="line">// 也可以使用正则表达式</div><div class="line">console.log(str.split(/\s+/)) //[&quot;How&quot;, &quot;are&quot;, &quot;you&quot;, &quot;doing&quot;, &quot;today?&quot;]</div></pre></td></tr></table></figure></p>
+<h2 id="贪婪模式与非贪婪模式"><a href="#贪婪模式与非贪婪模式" class="headerlink" title="贪婪模式与非贪婪模式"></a>贪婪模式与非贪婪模式</h2><p>Javascript中的正则表达式贪婪模式与非贪婪模式的区别是：被量词修饰的子表达式的匹配行为；贪婪模式在整个表达式匹配成功的情况下尽可能多的匹配；非贪婪模式在整个表达式匹配成功的前提下，尽可能少的匹配。</p>
+<p>一些常见的修饰贪婪模式的量词如下：<br><code>{x,y}</code>，<code>{x,}</code>，<code>?</code>，<code>*</code>和<code>+</code></p>
+<p>非贪婪模式就是在如上贪婪模式后加上一个问号（<code>?</code>），就可以变成非贪婪模式的量词；如下：<br><code>{x,y}?</code>，<code>{x,}?</code>，<code>??</code>，<code>*?</code>，和<code>+?</code></p>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//贪婪模式，尽可能多的匹配</div><div class="line">console.log(&apos;0123456789&apos;.replace(/\d&#123;3,6&#125;/,&quot;*&quot;)) //*6789</div><div class="line"></div><div class="line">//非贪婪模式，尽可能少的匹配</div><div class="line">console.log(&apos;0123456789&apos;.replace(/\d&#123;3,6&#125;?/,&quot;*&quot;)) //*3456789</div></pre></td></tr></table></figure></p>
+<h2 id="分组与反向引用"><a href="#分组与反向引用" class="headerlink" title="分组与反向引用"></a>分组与反向引用</h2><p><strong>分组</strong>，又称为子表达式。把正则表达式拆分成小表达式。</p>
+<p>直接上代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//不分组，量词仅作用到最后一个字符(c)</div><div class="line">console.log(/abc&#123;2&#125;/.test(&apos;abcabc&apos;)); // false</div><div class="line">console.log(/abc&#123;2&#125;/.test(&apos;abcc&apos;)); //true</div><div class="line"></div><div class="line">//分组，量词作用于整个括号里的子表达式</div><div class="line">console.log(/(abc)&#123;2&#125;/.test(&apos;abcabc&apos;)); // true</div><div class="line">console.log(/(abc)&#123;2&#125;/.test(&apos;abcc&apos;)); //false</div></pre></td></tr></table></figure></p>
+<p>分组经常和<strong>反向引用</strong>一起使用，反向引用在前面的replace方法就有了，只不过没有说他的概念，这里说一下：<code>当一个正则表达式被分组后，每个分组自动被赋予一个组号，一左到右分别是 $1 $2…</code><br>再举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//格式化日期</div><div class="line">var reg = /^(\d&#123;4&#125;)[/-](\d&#123;2&#125;)[/-](\d&#123;2&#125;)$/</div><div class="line">console.log(&apos;2016/11/18&apos;.replace(reg, &apos;$1年$2月$3日&apos;)) //2016年11月18日</div><div class="line">console.log(&apos;2016-11-18&apos;.replace(reg, &apos;$1年$2月$3日&apos;)) //2016年11月18日</div><div class="line">console.log(&apos;2016-11-18&apos;.replace(reg, &apos;$1$2$3&apos;)) //20161118</div></pre></td></tr></table></figure></p>
+<h2 id="非捕获性分组"><a href="#非捕获性分组" class="headerlink" title="非捕获性分组"></a>非捕获性分组</h2><p>不是所有分组都能创建反向引用，有一种分组叫做非捕获性分组，非捕获性分组以<code>(?:pattern)</code>表示，在一些只需要分组匹配但是并不需要得到各个分组匹配的结果时，使用非捕获性分组可以提高匹配速度；非捕获分组的含义我们可以理解为如下：子表达式可以作为被整体修饰但是子表达式匹配的结果不会被存储；如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var reg = /(?:\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/</div><div class="line">var date = &apos;2012-12-21&apos;</div><div class="line">reg.test(date)</div><div class="line">RegExp.$1  // 12</div><div class="line">RegExp.$2  // 21</div></pre></td></tr></table></figure>
+<p>这里，<code>(?:\d{4})</code>分组不会捕获任何字符串，所以<code>$1</code>为<code>(\d{2})</code>捕获的字符串。</p>
+<h2 id="零宽断言"><a href="#零宽断言" class="headerlink" title="零宽断言"></a>零宽断言</h2><p>初学者第一次看到这个名词可能有点懵逼(我第一次也不懂)，这里说明一下。</p>
+<blockquote>
+<p>零宽断言就是下结论，例如ab，正则：a(?=b)，匹配a并且向右看是b，得到的结果是a，断言不会在匹配的内容当中，如果是a(?=c)，则匹配不到任何内容，因为匹配a以后向右看并不是c。另外，零宽断言分两种：前瞻(Lookahead)和后顾(Lookbehind);<code>但JavaScript只支持前瞻</code>。</p>
+</blockquote>
+<p>前瞻表达式的语法如下：</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m(?=n)</code></td>
+<td>匹配后面紧接n的字符串m</td>
+</tr>
+<tr>
+<td><code>m(?!n)</code></td>
+<td>匹配后面没有紧接n的字符串m</td>
+</tr>
+</tbody>
+</table>
+<p>再两个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 获取字符串中以ing结尾的单词的前半部分</div><div class="line">var str = &apos;I love dancing but he likes singing&apos;;</div><div class="line">var pattern = /\b\w+(?=ing\b)/g;</div><div class="line">var ans = str.match(pattern);</div><div class="line">console.log(ans); // [&quot;danc&quot;, &quot;sing&quot;]</div><div class="line"></div><div class="line"></div><div class="line">// 获取第五位不是i的单词的前四位</div><div class="line">var s = &apos;I love dancing but he likes singing&apos;;</div><div class="line">var pattern = /\b\w&#123;4&#125;(?!i)/g;</div><div class="line">var ans = s.match(pattern);</div><div class="line">console.log(ans); // [&quot;love&quot;, &quot;like&quot;]</div></pre></td></tr></table></figure></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>正则表达式基础知识差不多这些够用了，后面就是多谢多运用。共勉！</p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>最后推荐两个比较好的工具，能帮助我们写出更好更准确的正则表达式。<br><a href="https://regexper.com/" target="_blank" rel="external">正则表达式图形化工具</a><br><a href="http://regexr.com/" target="_blank" rel="external">正则表达式检测工具</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://www.runoob.com/jsref/jsref-obj-regexp.html" target="_blank" rel="external">JavaScript RegExp 对象</a><br><a href="http://www.cnblogs.com/tugenhua0707/p/5037811.html" target="_blank" rel="external">深入浅出的javascript的正则表达式学习教程</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;正则表达式是什么&quot;&gt;&lt;a href=&quot;#正则表达式是什么&quot; class=&quot;headerlink&quot; title=&quot;正则表达式是什么&quot;&gt;&lt;/a&gt;正则表达式是什么&lt;/h1&gt;&lt;p&gt;RegExp 对象表示正则表达式，它是对&lt;code&gt;字符串&lt;/code&gt;执行模式匹配的强大工具。&lt;/p&gt;
+&lt;h2 id=&quot;为什么使用正则表达式&quot;&gt;&lt;a href=&quot;#为什么使用正则表达式&quot; class=&quot;headerlink&quot; title=&quot;为什么使用正则表达式&quot;&gt;&lt;/a&gt;为什么使用正则表达式&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;测试字符串内的模式。例如，可以测试输入字符串，以查看字符串内是否出现电话号码模式或信用卡号码模式。这称为数据验证。&lt;/li&gt;
+&lt;li&gt;替换文本。可以使用正则表达式来识别文档中的特定文本，完全删除该文本或者用其他文本替换它。&lt;/li&gt;
+&lt;li&gt;基于模式匹配从字符串中提取子字符串。可以查找文档内或输入域内特定的文本。
+    
+    </summary>
+    
+      <category term="学习" scheme="http://mrsunny123.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="教程" scheme="http://mrsunny123.github.io/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="JavaScript" scheme="http://mrsunny123.github.io/tags/JavaScript/"/>
+    
+  </entry>
   
   <entry>
     <title>移动Web开发小结</title>
