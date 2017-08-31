@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>ES6的rest参数和扩展运算符 | Sunny的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="rest参数和扩展运算符都是ES6新增的特性。rest参数的形式为：...变量名；扩展运算符是三个点（...）。
+rest参数rest参数用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6的rest参数和扩展运算符">
+<meta property="og:url" content="http://mrsunny123.github.io/2017/07/17/ES6-rest-spread/index.html">
+<meta property="og:site_name" content="Sunny的博客">
+<meta property="og:description" content="rest参数和扩展运算符都是ES6新增的特性。rest参数的形式为：...变量名；扩展运算符是三个点（...）。
+rest参数rest参数用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。">
+<meta property="og:updated_time" content="2017-08-31T03:27:48.530Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6的rest参数和扩展运算符">
+<meta name="twitter:description" content="rest参数和扩展运算符都是ES6新增的特性。rest参数的形式为：...变量名；扩展运算符是三个点（...）。
+rest参数rest参数用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。">
+  
+    <link rel="alternative" href="/atom.xml" title="Sunny的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="//favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/head.jpg" class="js-avatar show" src="/img/head.jpg">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sunny</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">花开堪折直须折，莫待无花空折枝。</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/MrSunny123" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/5896702219" title="weibo">weibo</a>
+					        
+								<a class="mail" target="_blank" href="mailto:zhangxy_92@outlook.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 12.5px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 12.5px;">CSS3</a> <a href="/tags/ES5/" style="font-size: 10px;">ES5</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/HTML5/" style="font-size: 12.5px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Koa2/" style="font-size: 10px;">Koa2</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/VSCode/" style="font-size: 10px;">VSCode</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/教程/" style="font-size: 17.5px;">教程</a> <a href="/tags/移动开发/" style="font-size: 10px;">移动开发</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">程序猿一枚，目前专注WEB前端开发......</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sunny</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img lazy-src="/img/head.jpg" class="js-avatar show" src="/img/head.jpg">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sunny</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">花开堪折直须折，莫待无花空折枝。</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/MrSunny123" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/5896702219" title="weibo">weibo</a>
+			        
+						<a class="mail" target="_blank" href="mailto:zhangxy_92@outlook.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-ES6-rest-spread" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/17/ES6-rest-spread/" class="article-date">
+  	<time datetime="2017-07-17T03:24:31.000Z" itemprop="datePublished">2017-07-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ES6的rest参数和扩展运算符
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6/">ES6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+        <div class="busuanzi-read-num">
+            阅读次数：<span id="busuanzi_value_page_pv"></span>次
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>rest参数</strong>和<strong>扩展运算符</strong>都是<code>ES6</code>新增的特性。<br><strong>rest参数</strong>的形式为：<code>...变量名</code>；<strong>扩展运算符</strong>是三个点（<code>...</code>）。</p>
+<h2 id="rest参数"><a href="#rest参数" class="headerlink" title="rest参数"></a>rest参数</h2><p>rest参数用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function add(...values) &#123;</div><div class="line">  let sum = 0;</div><div class="line">  for (var val of values) &#123;</div><div class="line">    sum += val;</div><div class="line">  &#125;</div><div class="line">  return sum;</div><div class="line">&#125;</div><div class="line"></div><div class="line">add(1, 2, 3) // 6</div></pre></td></tr></table></figure></p>
+<p>传递给 add 函数的一组参数值，被整合成了数组 values。</p>
+<p>下面是一个 rest 参数代替arguments变量的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// arguments变量的写法</div><div class="line">function sortNumbers() &#123;</div><div class="line">  return Array.prototype.slice.call(arguments).sort();</div><div class="line">&#125;</div><div class="line"></div><div class="line">// rest参数的写法</div><div class="line">const sortNumbers = (...numbers) =&gt; numbers.sort();</div></pre></td></tr></table></figure>
+<p><strong>rest参数和arguments对象的区别</strong></p>
+<ul>
+<li>rest参数只包含那些没有对应形参的实参；而 arguments 对象包含了传给函数的所有实参。</li>
+<li>arguments 对象不是一个真实的数组；而rest参数是真实的 Array 实例，也就是说你能够在它上面直接使用所有的数组方法。</li>
+<li>arguments 对象对象还有一些附加的属性 (比如callee属性)。</li>
+</ul>
+<p>另外，使用rest参数时应注意一下两点：</p>
+<ul>
+<li>rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">function f(a, ...b, c) &#123; ... &#125; // 报错</div></pre></td></tr></table></figure>
+<ul>
+<li>函数的length属性，不包括 rest 参数。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(function(a) &#123;&#125;).length  // 1</div><div class="line">(function(...a) &#123;&#125;).length  // 0</div><div class="line">(function(a, ...b) &#123;&#125;).length  // 1</div></pre></td></tr></table></figure>
+<h2 id="扩展运算符"><a href="#扩展运算符" class="headerlink" title="扩展运算符"></a>扩展运算符</h2><p>扩展运算符可以看做是 rest 参数的逆运算，将一个数组转为用逗号分隔的参数序列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">console.log(...[1, 2, 3]) // 1 2 3</div><div class="line"></div><div class="line">console.log(1, ...[2, 3, 4], 5) //1 2 3 4 5</div></pre></td></tr></table></figure>
+<h3 id="扩展运算符的应用"><a href="#扩展运算符的应用" class="headerlink" title="扩展运算符的应用"></a>扩展运算符的应用</h3><h4 id="普通的函数调用"><a href="#普通的函数调用" class="headerlink" title="普通的函数调用"></a>普通的函数调用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function push(array, ...items) &#123;</div><div class="line">  array.push(...items);</div><div class="line">&#125;</div><div class="line"></div><div class="line">function add(x, y) &#123;</div><div class="line">  return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">var numbers = [4, 38];</div><div class="line">add(...numbers) // 42</div></pre></td></tr></table></figure>
+<p>上面代码中，<code>array.push(...items)</code>和<code>add(...numbers)</code>这两行，都是函数的调用，它们的都使用了扩展运算符。该运算符将一个数组，变为参数序列。</p>
+<h4 id="替代-apply-方法调用函数"><a href="#替代-apply-方法调用函数" class="headerlink" title="替代 apply 方法调用函数"></a>替代 apply 方法调用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// ES5 的写法</div><div class="line">Math.max.apply(null, [14, 3, 77])</div><div class="line"></div><div class="line">// ES6 的写法</div><div class="line">Math.max(...[14, 3, 77])</div><div class="line"></div><div class="line">// 等同于</div><div class="line">Math.max(14, 3, 77);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// ES5 的写法</div><div class="line">var arr1 = [0, 1, 2];</div><div class="line">var arr2 = [3, 4, 5];</div><div class="line">Array.prototype.push.apply(arr1, arr2);</div><div class="line"></div><div class="line">// ES6 的写法</div><div class="line">var arr1 = [0, 1, 2];</div><div class="line">var arr2 = [3, 4, 5];</div><div class="line">arr1.push(...arr2);</div></pre></td></tr></table></figure>
+<h4 id="合并数组"><a href="#合并数组" class="headerlink" title="合并数组"></a>合并数组</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var arr1 = [&apos;a&apos;, &apos;b&apos;];</div><div class="line">var arr2 = [&apos;c&apos;];</div><div class="line">var arr3 = [&apos;d&apos;, &apos;e&apos;];</div><div class="line"></div><div class="line">// ES5的合并数组</div><div class="line">arr1.concat(arr2, arr3)  // [ &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos; ]</div><div class="line"></div><div class="line">// ES6的合并数组</div><div class="line">[...arr1, ...arr2, ...arr3]  // [ &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos; ]</div></pre></td></tr></table></figure>
+<h4 id="与解构赋值结合"><a href="#与解构赋值结合" class="headerlink" title="与解构赋值结合"></a>与解构赋值结合</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">const [first, ...rest] = [1, 2, 3, 4, 5];</div><div class="line">first // 1</div><div class="line">rest  // [2, 3, 4, 5]</div><div class="line"></div><div class="line">const [first, ...rest] = [];</div><div class="line">first // undefined</div><div class="line">rest  // []</div><div class="line"></div><div class="line">const [first, ...rest] = [&quot;foo&quot;];</div><div class="line">first  // &quot;foo&quot;</div><div class="line">rest   // []</div></pre></td></tr></table></figure>
+<p>如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const [...butLast, last] = [1, 2, 3, 4, 5];  // 报错</div><div class="line"></div><div class="line">const [first, ...middle, last] = [1, 2, 3, 4, 5];  // 报错</div></pre></td></tr></table></figure>
+<h4 id="将字符串转为数组"><a href="#将字符串转为数组" class="headerlink" title="将字符串转为数组"></a>将字符串转为数组</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var str = &apos;hello&apos;;</div><div class="line"></div><div class="line">// ES5  </div><div class="line">var arr1 = str.split(&apos;&apos;);  // [ &quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot; ] </div><div class="line"></div><div class="line">// ES6  </div><div class="line">var arr2 = [...str];  // [ &quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot; ]</div></pre></td></tr></table></figure>
+<h4 id="实现了-Iterator-接口的对象"><a href="#实现了-Iterator-接口的对象" class="headerlink" title="实现了 Iterator 接口的对象"></a>实现了 Iterator 接口的对象</h4><p>任何 <a href="http://es6.ruanyifeng.com/#docs/iterator" target="_blank" rel="external">Iterator</a> 接口的对象，都可以用扩展运算符转为真正的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var nodeList = document.querySelectorAll(&apos;div&apos;);</div><div class="line">var array = [...nodeList];</div></pre></td></tr></table></figure>
+<p>上面代码中，<code>querySelectorAll</code>方法返回的是一个<code>nodeList</code>对象。它不是数组，而是一个类似数组的对象。这时，扩展运算符可以将其转为真正的数组，原因就在于<code>NodeList</code>对象实现了 <code>Iterator</code> 。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从上面的例子可以看出，rest参数使用场景应该稍少一些，主要是处理不定数量参数，可以避免arguments对象的使用。而扩展运算符的应用就比较广了，在实际项目中灵活应用，能写出更精简的代码。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/08/10/Understanding-EcmaScript6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          上一篇：ES6常用新特性——读《Understanding ECMAScript 6》总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/06/27/Array-Ergodic/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">下一篇：JavaScript数组迭代（遍历）方法</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="ds-share" data-thread-key="此处请替换为当前文章的thread-key" data-title="此处请替换为分享时显示的标题" data-images="此处请替换为分享时显示的图片的链接地址" data-content="此处请替换为分享时显示的内容" data-url="此处请替换为分享时显示的链接地址">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      	
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ 	</div>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<!-- 
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+ -->
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="ES6-rest-spread" data-title="ES6的rest参数和扩展运算符" data-url="http://mrsunny123.github.io/2017/07/17/ES6-rest-spread/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"sunny-blog"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+				<span id="busuanzi_container_site_pv">
+    			本站总访问量<span id="busuanzi_value_site_pv" style="color:#000; opacity:1;"></span>次
+				</span>
+				<span id="busuanzi_container_site_uv">
+  				本站访客数<span id="busuanzi_value_site_uv" style="color:#000" opacity:1;></span>人次
+				</span>
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten --- &copy; 2017 Sunny
+      	</div>
+    </div>
+  </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: /
+	}
+</script>
+<script src="/js/require,jquery.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS3/" style="font-size: 10px;">CSS3</a> <a href="/tags/HTML5/" style="font-size: 15px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/教程/" style="font-size: 20px;">教程</a> <a href="/tags/移动开发/" style="font-size: 10px;">移动开发</a>
+						<a href="/tags/CSS/" style="font-size: 12.5px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 12.5px;">CSS3</a> <a href="/tags/ES5/" style="font-size: 10px;">ES5</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/HTML5/" style="font-size: 12.5px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Koa2/" style="font-size: 10px;">Koa2</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/VSCode/" style="font-size: 10px;">VSCode</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/教程/" style="font-size: 17.5px;">教程</a> <a href="/tags/移动开发/" style="font-size: 10px;">移动开发</a>
 					</div>
 				</section>
 				
@@ -175,6 +175,483 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Understanding-EcmaScript6" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/10/Understanding-EcmaScript6/" class="article-date">
+  	<time datetime="2017-08-10T03:38:11.000Z" itemprop="datePublished">2017-08-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/10/Understanding-EcmaScript6/">ES6常用新特性——读《Understanding ECMAScript 6》总结</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>现在ES6在很多项目中大量使用。最近我也花时间看了一下<a href="https://sagittarius-rev.gitbooks.io/understanding-ecmascript-6-zh-ver/content/">《Understanding ECMAScript6》的中文电子书</a>。在这里总结了一些在实际开发中常用的新特性。</p>
+<h2 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h2><p>在ES6之前，JS只有一种变量声明方式——使用 <code>var</code> 关键字声明的变量。这种声明变量的方式，<em>无论其实际声明位置在何处，都会被视为声明于所在函数的顶部（如果声明不在任意函数内，则视为在全局作用域的顶部）。这就是所谓的<strong>变量提升</strong> </em>（ <strong>hoisting</strong> ）。<br>ES6 引入了块级作用域，让变量的生命周期更加可控。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6/">ES6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/08/10/Understanding-EcmaScript6/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
+  
+    <article id="post-ES6-rest-spread" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/17/ES6-rest-spread/" class="article-date">
+  	<time datetime="2017-07-17T03:24:31.000Z" itemprop="datePublished">2017-07-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/17/ES6-rest-spread/">ES6的rest参数和扩展运算符</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>rest参数</strong>和<strong>扩展运算符</strong>都是<code>ES6</code>新增的特性。<br><strong>rest参数</strong>的形式为：<code>...变量名</code>；<strong>扩展运算符</strong>是三个点（<code>...</code>）。</p>
+<h2 id="rest参数"><a href="#rest参数" class="headerlink" title="rest参数"></a>rest参数</h2><p>rest参数用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6/">ES6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/07/17/ES6-rest-spread/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
+  
+    <article id="post-Array-Ergodic" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/27/Array-Ergodic/" class="article-date">
+  	<time datetime="2017-06-27T03:14:04.000Z" itemprop="datePublished">2017-06-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/27/Array-Ergodic/">JavaScript数组迭代（遍历）方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ES5和ES6中新增了不少东西，对于数组而言，新增了不少迭代方法，让我们可以抛弃<code>for</code>循环，更方便的写JS代码。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>ES5和ES6中新增的的数组迭代方法如下：</p>
+<ul>
+<li>forEach</li>
+<li>map</li>
+<li>filter</li>
+<li>some</li>
+<li>every</li>
+<li>reduce / reduceRight</li>
+<li>find / findIndex</li>
+</ul>
+<p>其中，find / findIndex是ES6新增的，其余都是ES5新增的。所以这些方法对低版本IE都不兼容。<br>接下来我们看看这些方法如何使用并在低版本IE进行兼容。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES5/">ES5</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6/">ES6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/06/27/Array-Ergodic/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
+  
+    <article id="post-Koa2-Code" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/21/Koa2-Code/" class="article-date">
+  	<time datetime="2017-06-21T03:03:02.000Z" itemprop="datePublished">2017-06-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/21/Koa2-Code/">Koa2源码阅读笔记</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近空闲时间读了一下<a href="https://github.com/koajs/koa">Koa2</a>的源码；在阅读Koa2(version 2.2.0)的源码的过程中，我的感受是代码简洁、思路清晰（不得不佩服大神的水平）。<br>下面是我读完之后的一些感受。</p>
+<h2 id="Koa的设计理念"><a href="#Koa的设计理念" class="headerlink" title="Koa的设计理念"></a>Koa的设计理念</h2><blockquote>
+<p>Koa 是一个轻量级的、极富表现力的 http 框架。<br>一个web request会通过 Koa 的中间件栈，来动态完成 response 的处理。<br>Koa2 采用了 async 和 await 的语法来增强中间件的表现力。<br>Koa 不在内核方法中绑定任何中间件，它仅仅提供了一个轻量优雅的函数库。</p>
+</blockquote>
+<h2 id="Koa基本组成"><a href="#Koa基本组成" class="headerlink" title="Koa基本组成"></a>Koa基本组成</h2><p>Koa源码非常精简，只有四个文件：</p>
+<ul>
+<li>application.js：框架入口；负责管理中间件，以及处理请求</li>
+<li>context.js：context对象的原型，代理request与response对象上的方法和属性</li>
+<li>request.js：request对象的原型，提供请求相关的方法和属性</li>
+<li>response.js：response对象的原型，提供响应相关的方法和属性
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa2/">Koa2</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/06/21/Koa2-Code/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
+  
+    <article id="post-Sticky-Footer" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/16/Sticky-Footer/" class="article-date">
+  	<time datetime="2017-06-16T02:48:28.000Z" itemprop="datePublished">2017-06-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/16/Sticky-Footer/">紧贴底部的页脚</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在写前端页面时，经常会遇到这种情况：<em>有一个具有块级样式的页脚，当页面内容足够长时它一切正常；有的时候，由于页面长度不够，页面底部的页脚会很尴尬的跑上来；页脚不能像我们期望中那样“紧贴”在视口的最底部，而是紧跟在内容的下方。</em></p>
+<p>那么怎样做到内容多时页脚在内容下方，内容少时页脚“紧贴”在视口底部？我总结了四种方法。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS3/">CSS3</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/work/">工作</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/06/16/Sticky-Footer/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
+  
+    <article id="post-VSCode-Keyboard" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/05/12/VSCode-Keyboard/" class="article-date">
+  	<time datetime="2017-05-12T02:39:28.000Z" itemprop="datePublished">2017-05-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/12/VSCode-Keyboard/">VSCode 常用快捷键</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>用 <code>VSCdode</code> 开发也有一段时间了，本人觉得非常好用，现在已经是我的主力编辑器。<br><code>VSCode</code> 内置很多快捷键，可以大大的提高我们的开发效率。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VSCode/">VSCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具/">工具</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/05/12/VSCode-Keyboard/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
+  
+    <article id="post-Css-Selector" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/15/Css-Selector/" class="article-date">
+  	<time datetime="2016-12-15T01:50:56.000Z" itemprop="datePublished">2016-12-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/15/Css-Selector/">CSS选择器整理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>很多人都觉得<code>CSS</code>特别简单，但其实真正写好<code>CSS</code>并不容易，<code>CSS</code>的每一点其实内容都很多，就拿选择器来说，<code>CSS</code>选择器大概可以分为五类：</p>
+<ul>
+<li>元素选择器</li>
+<li>关系选择器</li>
+<li>属性选择器</li>
+<li>伪类选择器</li>
+<li>伪对象选择器
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/12/15/Css-Selector/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+<!--  -->
+
+
+
+
+
   
     <article id="post-RegExp" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -380,202 +857,10 @@
 
 
   
-    <article id="post-Web-Storage" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2016/09/11/Web-Storage/" class="article-date">
-  	<time datetime="2016-09-11T07:21:20.000Z" itemprop="datePublished">2016-09-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/11/Web-Storage/">Web 存储 —— 关于Cookie, LocalStorage 与 SessionStorage</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>做项目是会有各种需求，有时候希望通过一些手段来持久化的存储一些有用的数据。一般将这项任务交给了服务器端的数据库或者浏览器端的cookie。随着HTML5的出现，web开发又有了新选择：Web Storage。下面就来说说cookie与web Storage。</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p><code>Cookie</code>是小甜饼的意思。cookie 确实非常小，它的大小限制为4KB左右。它的主要用途有保存登录信息，比如你登录某个网站市场可以看到“记住密码”，这通常就是通过在 Cookie 中存入一段辨别用户身份的数据来实现的。</p>
-<h2 id="Web-Storage"><a href="#Web-Storage" class="headerlink" title="Web Storage"></a>Web Storage</h2><p>html5中的Web Storage包括了两种存储方式：<code>sessionStorage</code>和<code>localStorage</code>。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/教程/">教程</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/学习/">学习</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/09/11/Web-Storage/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-<!--  -->
-
-
-
-
-
-  
-    <article id="post-JS-Clone" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/24/JS-Clone/" class="article-date">
-  	<time datetime="2016-08-24T02:41:20.000Z" itemprop="datePublished">2016-08-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/24/JS-Clone/">JavaScript对象克隆</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前有人问我如何克隆一个JS对象，我当时没答上来；过后我查资料弄懂了这个问题，现在整理成文。</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>JavaScript的一切实例都是对象，但他们也分为原始类型和引用类型。原始类型对象指的是字符串（<code>String</code>）、数值（<code>Number</code>）、布尔值（<code>Boolean</code>）、<code>undefined</code>、<code>null</code>，引用类型对象指的是数组（<code>Array</code>）、对象（<code>Object</code>）、函数（<code>Function</code>）。<br>既然对象分为这两类，他们的复制克隆也是有差别的。普通对象存储的是对象的实际数据，而引用对象存储的是对象的引用地址，而把对象的实际内容单独存放。下面我们就来看看他们克隆的区别。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/教程/">教程</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/work/">工作</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/08/24/JS-Clone/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-<!--  -->
-
-
-
-
-
-  
-    <article id="post-Hello-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/23/Hello-Hexo/" class="article-date">
-  	<time datetime="2016-08-23T03:10:53.000Z" itemprop="datePublished">2016-08-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/Hello-Hexo/">Hexo搭建个人博客</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>做前端也有一段时间了，身为一个有(ai)追(zhuang)求(X)前端，怎么能没有自己的个人博客呢^_^<br>有想法就去做，所以最近用Hexo在github上搭建一个自己的开源博客，终于有了自己的博客了，也希望自己以后能坚持写文！！！<br>搭建过程中也遇到一些问题，接下来，我将遇到的问题记录下来作为第一篇博客，希望能帮到有需要的人。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/教程/">教程</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/work/">工作</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/08/23/Hello-Hexo/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-<!--  -->
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">
@@ -590,7 +875,7 @@
 				</span>
     	</div>
       	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten --- &copy; 2016 Sunny
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten --- &copy; 2017 Sunny
       	</div>
     </div>
   </div>

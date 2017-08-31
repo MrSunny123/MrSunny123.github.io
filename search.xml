@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+    
+    <entry>
+      <title><![CDATA[ES6常用新特性——读《Understanding ECMAScript 6》总结]]></title>
+      <url>http://mrsunny123.github.io/2017/08/10/Understanding-EcmaScript6/</url>
+      <content type="html"><![CDATA[<p>现在ES6在很多项目中大量使用。最近我也花时间看了一下<a href="https://sagittarius-rev.gitbooks.io/understanding-ecmascript-6-zh-ver/content/" target="_blank" rel="external">《Understanding ECMAScript6》的中文电子书</a>。在这里总结了一些在实际开发中常用的新特性。</p>
+<h2 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h2><p>在ES6之前，JS只有一种变量声明方式——使用 <code>var</code> 关键字声明的变量。这种声明变量的方式，<em>无论其实际声明位置在何处，都会被视为声明于所在函数的顶部（如果声明不在任意函数内，则视为在全局作用域的顶部）。这就是所谓的<strong>变量提升</strong> </em>（ <strong>hoisting</strong> ）。<br>ES6 引入了块级作用域，让变量的生命周期更加可控。<br><a id="more"></a></p>
+<h3 id="块级声明"><a href="#块级声明" class="headerlink" title="块级声明"></a>块级声明</h3><p><strong>块级声明也就是让所声明的变量在指定块的作用域外无法被访问</strong>。块级作用域（又被称为词法作用域）在如下情况被创建：</p>
+<ol>
+<li>在一个函数内部</li>
+<li>在一个代码块（由一对花括号包裹）内部<h4 id="let声明"><a href="#let声明" class="headerlink" title="let声明"></a>let声明</h4>let声明会将变量的作用域限制在当前代码块中。由于 let 声明并不会被提升到当前代码块的顶部，因此你需要手动将 let 声明放置到顶部，以便让变量在整个代码块内部可用。例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function getValue(condition) &#123;</div><div class="line">    if (condition) &#123;</div><div class="line">        let value = &quot;blue&quot;;</div><div class="line">        // 其他代码</div><div class="line">        return value;</div><div class="line">    &#125; else &#123;</div><div class="line">        // value 在此处不可用</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">    // value 在此处不可用</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>注意事项</strong><br>如果一个标识符已经在代码块内部被定义，那么在此代码块内使用同一个标识符进行 let 声明就会导致抛出错误。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var count = 30;</div><div class="line"></div><div class="line">let count = 40; // 语法错误</div></pre></td></tr></table></figure></p>
+<p>另一方面，在嵌套的作用域内使用 let 声明一个同名的新变量，则不会抛出错误，以下代码对此进行了演示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var count = 30;</div><div class="line"></div><div class="line">// 不会抛出错误</div><div class="line">if (condition) &#123;</div><div class="line">    let count = 40;</div><div class="line">    // 其他代码</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="常量声明"><a href="#常量声明" class="headerlink" title="常量声明"></a>常量声明</h4><p>在 ES6 中里也可以使用 <code>const</code> 语法进行声明。使用 <code>const</code> 声明的变量会被认为是<strong>常量</strong>（ constant ）。<strong><code>const</code> 用法与 <code>let</code> 类似，但有一个重要的区别，<code>const</code> 声明的变量的值在被设置完成后就不能再被改变。正因为如此，所有的 const 变量都需要在声明时进行初始化</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">const maxItems = 30; // 有效的常量</div><div class="line"></div><div class="line">const name; // 语法错误：未进行初始化</div><div class="line"></div><div class="line"></div><div class="line">const minItems = 5;</div><div class="line"></div><div class="line">minItems = 6; //抛出错误</div></pre></td></tr></table></figure></p>
+<h2 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h2><p><strong>模板字符串</strong>（template string）是增强版的字符串，<strong>使用反引号（ ` ）来包裹普通字符串</strong>。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">// 普通字符串</div><div class="line">let message = `Hello world!`;</div><div class="line">console.log(message);  // Hello world!</div><div class="line"></div><div class="line">//在字符串中包含反引号，只需使用反斜杠（ \ ）转义即可</div><div class="line">let message = `\`Hello\` world!`;</div><div class="line">console.log(message);  // `Hello` world!</div><div class="line"></div><div class="line">// 多行字符串（只需在想要的位置包含换行即可）</div><div class="line">let message = `Multiline</div><div class="line">string`;</div><div class="line"></div><div class="line">console.log(message);           // &quot;Multiline</div><div class="line">                                //  string&quot;</div><div class="line">console.log(message.length);    // 16</div><div class="line"></div><div class="line">//反引号之内的所有空白符都是字符串的一部分，因此需要留意缩进。</div><div class="line">let message = `Multiline</div><div class="line">               string`;</div><div class="line">               </div><div class="line">console.log(message);           // &quot;Multiline</div><div class="line">                                //                 string&quot;</div><div class="line">console.log(message.length);    // 31</div><div class="line"></div><div class="line"></div><div class="line">// 字符串中嵌入变量</div><div class="line">var name = &quot;Bob&quot;, time = &quot;today&quot;;</div><div class="line">console.log(`Hello $&#123;name&#125;, how are you $&#123;time&#125;?`)  // Hello Bob, how are you today?</div></pre></td></tr></table></figure></p>
+<h3 id="替换位"><a href="#替换位" class="headerlink" title="替换位"></a>替换位</h3><p><strong>模板字符串替换位的标识是 <code>${}</code> </strong>。大括号内部可以放入任意的JavaScript表达式，比如：变量名、运算、函数调用，以及引用对象属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">//普通变量名</div><div class="line">var name = &quot;Nicholas&quot;;</div><div class="line">var message = `Hello, $&#123;name&#125;.`;</div><div class="line">console.log(message);  // Hello, Nicholas.</div><div class="line"></div><div class="line">//计算</div><div class="line">var x = 1;</div><div class="line">var y = 2;</div><div class="line">console.log(`$&#123;x&#125; + $&#123;y&#125; = $&#123;x + y&#125;`)  // 1 + 2 = 3</div><div class="line">console.log(`$&#123;x&#125; + $&#123;y * 2&#125; = $&#123;x + y * 2&#125;`)  // 1 + 4 = 5</div><div class="line"></div><div class="line">//函数调用</div><div class="line">function fn() &#123;</div><div class="line">  return &quot;Hello World&quot;;</div><div class="line">&#125;</div><div class="line">console.log(`foo $&#123;fn()&#125; bar`)  // foo Hello World bar</div><div class="line"></div><div class="line">//对象属性</div><div class="line">var obj = &#123;x: 1, y: 2&#125;;</div><div class="line">console.log(`$&#123;obj.x + obj.y&#125;`)</div></pre></td></tr></table></figure></p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="函数参数的默认值"><a href="#函数参数的默认值" class="headerlink" title="函数参数的默认值"></a>函数参数的默认值</h3><p>在 ES5 或更早的版本中，我们可能会使用下述模式来创建带有参数默认值的函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function add(x, y) &#123;</div><div class="line">    x = x || 20;</div><div class="line">    y = y || 30;</div><div class="line">    return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log(add()); // 50</div></pre></td></tr></table></figure>
+<p>这种写法有一个缺点：如果参数<code>x</code>或者<code>y</code>赋值了，但是对应的布尔值为<code>false</code>，则该赋值不起作用。<br>在这种情况下，更安全的替代方法是使用<code>typeof</code>来检测参数的类型，示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function add(x, y) &#123;</div><div class="line">    x = (typeof x !== &quot;undefined&quot;) ? x : 20;</div><div class="line">    y = (typeof y !== &quot;undefined&quot;) ? x : 30;</div><div class="line">    </div><div class="line">    //...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面来看看ES6函数参数默认值的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function add(x = 20, y = 30) &#123;</div><div class="line">    return x + y;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，ES6 的写法比 ES5 简洁许多，而且非常自然。</p>
+<h3 id="rest参数和扩展运算符"><a href="#rest参数和扩展运算符" class="headerlink" title="rest参数和扩展运算符"></a>rest参数和扩展运算符</h3><p>关于这两部分内容可以看<a href="https://segmentfault.com/a/1190000010222698" target="_blank" rel="external">这里</a></p>
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p>ES6 最有意思的一个新部分就是箭头函数（ arrow function ）。箭头函数使用“箭头”（=&gt;）来定义。<br>先来看看箭头函数与传统的函数写法的区别：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// ES6</div><div class="line">var f = () =&gt; 5;</div><div class="line">// ES5</div><div class="line">var f = function () &#123; return 5 &#125;;</div><div class="line"></div><div class="line">// ES6</div><div class="line">var sum = (num1, num2) =&gt; num1 + num2;</div><div class="line">// ES5</div><div class="line">var sum = function(num1, num2) &#123;</div><div class="line">  return num1 + num2;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>如果箭头函数的代码块部分多于一条语句，就要使用大括号将它们括起来，并且使用return语句返回。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const foo = () =&gt; &#123;</div><div class="line">   const a = 20;</div><div class="line">   const b = 30;</div><div class="line">   return a + b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>箭头函数的一个用处是简化回调函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// ES5</div><div class="line">[1,2,3].map(function (x) &#123;</div><div class="line">  return x * x;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">// ES6</div><div class="line">[1,2,3].map(x =&gt; x * x);</div></pre></td></tr></table></figure>
+<p><strong>箭头函数可以替换函数表达式，但是不能替换函数声明</strong></p>
+<p>在使用箭头函数时要注意如下几点：</p>
+<ul>
+<li>不能更改<code>this</code> ：this的值在函数内部不能被修改，在函数的整个生命周期内其值会<br>保持不变。</li>
+<li>没有arguments对象：既然箭头函数没有arguments绑定，你必须依赖于具名参数或<br>剩余参数来访问函数的参数。</li>
+<li>不能被使用<code>new</code>调用： 箭头函数没有[[Construct]]方法，因此不能被用为构造函<br>数，使用<code>new</code>调用箭头函数会抛出错误。</li>
+<li>没有原型： 既然不能对箭头函数使用<code>new</code>，那么它也不需要原型，也就是没有<br>prototype属性。</li>
+</ul>
+<h2 id="对象字面量语法的扩展"><a href="#对象字面量语法的扩展" class="headerlink" title="对象字面量语法的扩展"></a>对象字面量语法的扩展</h2><h3 id="属性和方法的简写"><a href="#属性和方法的简写" class="headerlink" title="属性和方法的简写"></a>属性和方法的简写</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">// 属性的简写</div><div class="line">function f(x, y) &#123;</div><div class="line">  return &#123;x, y&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 等同于</div><div class="line">function f(x, y) &#123;</div><div class="line">  return &#123;x: x, y: y&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">f(1, 2) // Object &#123;x: 1, y: 2&#125;</div><div class="line"></div><div class="line"></div><div class="line">// 方法的简写</div><div class="line">var o = &#123;</div><div class="line">  method() &#123;</div><div class="line">    return &quot;Hello!&quot;;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 等同于</div><div class="line">var o = &#123;</div><div class="line">  method: function() &#123;</div><div class="line">    return &quot;Hello!&quot;;</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="需计算属性名"><a href="#需计算属性名" class="headerlink" title="需计算属性名"></a>需计算属性名</h3><p>JavaScript语言定义对象的属性，有两种方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var person = &#123;&#125;,</div><div class="line">    lastName = &quot;last name&quot;;</div><div class="line"></div><div class="line">// 方法一    </div><div class="line">person[&quot;first name&quot;] = &quot;Nicholas&quot;; </div><div class="line">// 方法二  </div><div class="line">person[lastName] = &quot;Zakas&quot;;</div><div class="line"></div><div class="line">console.log(person[&quot;first name&quot;]); // &quot;Nicholas&quot;</div><div class="line">console.log(person[lastName]); // &quot;Zakas&quot;</div></pre></td></tr></table></figure>
+<p>但是，如果使用字面量方式定义对象（使用大括号），在ES5中只能使用方法一定义属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var person = &#123;</div><div class="line">    &quot;first name&quot;: &quot;Nicholas&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">console.log(person[&quot;first name&quot;]); // &quot;Nicholas&quot;</div></pre></td></tr></table></figure></p>
+<p>在ES6中，需计算属性名是对象字面量语法的一部分，它用的也是方括号表示法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">var lastName = &quot;last name&quot;;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    &quot;first name&quot;: &quot;Nicholas&quot;,</div><div class="line">    [lastName]: &quot;Zakas&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">console.log(person[&quot;first name&quot;]); // &quot;Nicholas&quot;</div><div class="line">console.log(person[lastName]); // &quot;Zakas&quot;</div><div class="line"></div><div class="line"></div><div class="line">// 方括号内也可以是表达式</div><div class="line">var suffix = &quot; name&quot;;</div><div class="line"></div><div class="line">var person = &#123;</div><div class="line">    [&quot;first&quot; + suffix]: &quot;Nicholas&quot;,</div><div class="line">    [&quot;last&quot; + suffix]: &quot;Zakas&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">console.log(person[&quot;first name&quot;]); // &quot;Nicholas&quot;</div><div class="line">console.log(person[&quot;last name&quot;]); // &quot;Zakas&quot;</div><div class="line"></div><div class="line"></div><div class="line">// 也可以用来表示方法名</div><div class="line">var obj = &#123;</div><div class="line">  [&apos;h&apos; + &apos;ello&apos;]() &#123;</div><div class="line">    console.log(&apos;hi&apos;);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">obj.hello() // hi</div></pre></td></tr></table></figure>
+<h2 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h2><p>解构赋值也是ES6中非常常用的一个特性。<br>按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。</p>
+<h3 id="对象解构"><a href="#对象解构" class="headerlink" title="对象解构"></a>对象解构</h3><p>对象解构语法在赋值语句的左侧使用了对象字面量，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let node = &#123;</div><div class="line">    type: &quot;Identifier&quot;,</div><div class="line">    name: &quot;foo&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let &#123; type, name &#125; = node;</div><div class="line"></div><div class="line">console.log(type); // &quot;Identifier&quot;</div><div class="line">console.log(name); // &quot;foo&quot;</div></pre></td></tr></table></figure>
+<p>代码中，<code>node.type</code>的值被存储到<code>type</code>本地变量中，<code>node.name</code>的值则存储到<code>name</code>变量中。</p>
+<p>当使用解构赋值语句时，如果所指定的本地变量在对象中没有找到同名属性，那么该变量会被赋值为<code>undefined</code>。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let node = &#123;</div><div class="line">    type: &quot;Identifier&quot;,</div><div class="line">    name: &quot;foo&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let &#123; type, name, value &#125; = node;</div><div class="line"></div><div class="line">console.log(type); // &quot;Identifier&quot;</div><div class="line">console.log(name); // &quot;foo&quot;</div><div class="line">console.log(value); // undefined</div></pre></td></tr></table></figure></p>
+<p>我们可以选择性地定义一个默认值，以便在指定属性不存在时使用该值。就像这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let node = &#123;</div><div class="line">    type: &quot;Identifier&quot;,</div><div class="line">    name: &quot;foo&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let &#123; type, name, value = true &#125; = node;</div><div class="line"></div><div class="line">console.log(type); // &quot;Identifier&quot;</div><div class="line">console.log(name); // &quot;foo&quot;</div><div class="line">console.log(value); // true</div></pre></td></tr></table></figure></p>
+<p>上面的示例都使用了对象中的属性名作为本地变量的名称。但ES6允许我们在给本地变量赋值时使用一个不同的名称。就像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let node = &#123;</div><div class="line">    type: &quot;Identifier&quot;,</div><div class="line">    name: &quot;foo&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let &#123; type: localType, name: localName &#125; = node;</div><div class="line"></div><div class="line">console.log(localType); // &quot;Identifier&quot;</div><div class="line">console.log(localName); // &quot;foo&quot;</div><div class="line"></div><div class="line"></div><div class="line">// 我们也可以给变量别名加默认值</div><div class="line">let node = &#123;</div><div class="line">    type: &quot;Identifier&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">let &#123; type: localType, name: localName = &quot;bar&quot; &#125; = node;</div><div class="line"></div><div class="line">console.log(localType); // &quot;Identifier&quot;</div><div class="line">console.log(localName); // &quot;bar&quot;</div></pre></td></tr></table></figure>
+<h3 id="数组结构"><a href="#数组结构" class="headerlink" title="数组结构"></a>数组结构</h3><p>数组解构的语法看起来与对象解构非常相似，只是将对象字面量替换成了数组字面量。直接看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">let colors = [ &quot;red&quot;, &quot;green&quot;, &quot;blue&quot; ];</div><div class="line"></div><div class="line">let [ firstColor, secondColor ] = colors;</div><div class="line"></div><div class="line">console.log(firstColor); // &quot;red&quot;</div><div class="line">console.log(secondColor); // &quot;green&quot;</div><div class="line"></div><div class="line"></div><div class="line">// 也可以在解构模式中忽略一些项</div><div class="line">let colors = [ &quot;red&quot;, &quot;green&quot;, &quot;blue&quot; ];</div><div class="line"></div><div class="line">let [ , , thirdColor ] = colors;</div><div class="line"></div><div class="line">console.log(thirdColor); // &quot;blue&quot;</div><div class="line"></div><div class="line"></div><div class="line">// 也可以添加默认值</div><div class="line">let colors = [ &quot;red&quot; ];</div><div class="line"></div><div class="line">let [ firstColor, secondColor = &quot;green&quot; ] = colors;</div><div class="line"></div><div class="line">console.log(firstColor); // &quot;red&quot;</div><div class="line">console.log(secondColor); // &quot;green&quot;</div></pre></td></tr></table></figure>
+<h3 id="字符串结构"><a href="#字符串结构" class="headerlink" title="字符串结构"></a>字符串结构</h3><p>字符串也可以进行结构赋值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">const [a, b, c, d, e] = &apos;hello&apos;;</div><div class="line"></div><div class="line">console.log(a) // &quot;h&quot;</div><div class="line">console.log(b) // &quot;e&quot;</div><div class="line">console.log(c) // &quot;l&quot;</div><div class="line">console.log(d) // &quot;l&quot;</div><div class="line">console.log(e) // &quot;o&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="参数结构"><a href="#参数结构" class="headerlink" title="参数结构"></a>参数结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function add([x, y])&#123;</div><div class="line">  return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">add([1, 2]); // 3</div><div class="line"></div><div class="line"></div><div class="line">// 参数解构也可以有默认</div><div class="line">function move(&#123;x = 0, y = 0&#125; = &#123;&#125;) &#123;</div><div class="line">  return [x, y];</div><div class="line">&#125;</div><div class="line"></div><div class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</div><div class="line">move(&#123;x: 3&#125;); // [3, 0]</div><div class="line">move(&#123;&#125;); // [0, 0]</div><div class="line">move(); // [0, 0]</div></pre></td></tr></table></figure>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>模块功能主要由两个命令构成：<code>export</code>和<code>import</code>。<code>export</code>命令用于规定模块的对外接口，<code>import</code>命令用于输入其他模块提供的功能。</p>
+<h3 id="export-命令"><a href="#export-命令" class="headerlink" title="export 命令"></a>export 命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">// 导出数据</div><div class="line">export var color = &quot;red&quot;;</div><div class="line">export let name = &quot;Nicholas&quot;;</div><div class="line">export const magicNumber = 7;</div><div class="line"></div><div class="line">// 导出函数</div><div class="line">export function sum(num1, num2) &#123;</div><div class="line">    return num1 + num1;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 导出类</div><div class="line">export class Rectangle &#123;</div><div class="line">    constructor(length, width) &#123;</div><div class="line">        this.length = length;</div><div class="line">        this.width = width;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">// export还可以像下面这样写，放在大括号内统一导出</div><div class="line">export var color = &quot;red&quot;;</div><div class="line">export let name = &quot;Nicholas&quot;;</div><div class="line">export const magicNumber = 7;</div><div class="line"></div><div class="line">export &#123;color, name, magicNumber&#125;;</div><div class="line"></div><div class="line"></div><div class="line">// 重命名导出</div><div class="line">function sum(num1, num2) &#123;</div><div class="line">    return num1 + num1;</div><div class="line">&#125;</div><div class="line">export &#123;sum as add&#125; // 这里sum函数被作为add导出</div></pre></td></tr></table></figure>
+<h3 id="import-命令"><a href="#import-命令" class="headerlink" title="import 命令"></a>import 命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 导入单个</div><div class="line">import &#123; color &#125; from &quot;./example.js&quot;;</div><div class="line"></div><div class="line">// 导入多个</div><div class="line">import &#123; color, name, sum &#125; from &quot;./example.js&quot;;</div><div class="line"></div><div class="line">// 重命名导入</div><div class="line">import &#123; color as redColor &#125; from &quot;./example.js&quot;;</div><div class="line"></div><div class="line">// 整体导入</div><div class="line">import * as example from &quot;./example.js&quot;;</div></pre></td></tr></table></figure>
+<p>###导出/导入默认值###<br>导出默认值要使用<code>default</code>关键字</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// 导出默认值一共有三种写法</div><div class="line"></div><div class="line">// 第一种</div><div class="line">export default function(num1, num2) &#123;</div><div class="line">    return num1 + num2;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 第二种</div><div class="line">function sum(num1, num2) &#123;</div><div class="line">    return num1 + num2;</div><div class="line">&#125;</div><div class="line">export default sum;</div><div class="line"></div><div class="line">// 第三种</div><div class="line">function sum(num1, num2) &#123;</div><div class="line">    return num1 + num2;</div><div class="line">&#125;</div><div class="line">export &#123; sum as default &#125;;</div></pre></td></tr></table></figure>
+<p>导入默认值得方式也有所不同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import sum from &quot;./example.js&quot;; // 与前面不同的是，这里没有了大括号。</div><div class="line"></div><div class="line">console.log(sum(1, 2)); // 3</div></pre></td></tr></table></figure></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>上面只是总结得只是一部分ES6的常用特性，其实还有<code>Promise</code>，<code>Class</code>等，因篇幅原因，这些可能留到以后再写。</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[ES6的rest参数和扩展运算符]]></title>
+      <url>http://mrsunny123.github.io/2017/07/17/ES6-rest-spread/</url>
+      <content type="html"><![CDATA[<p><strong>rest参数</strong>和<strong>扩展运算符</strong>都是<code>ES6</code>新增的特性。<br><strong>rest参数</strong>的形式为：<code>...变量名</code>；<strong>扩展运算符</strong>是三个点（<code>...</code>）。</p>
+<h2 id="rest参数"><a href="#rest参数" class="headerlink" title="rest参数"></a>rest参数</h2><p>rest参数用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function add(...values) &#123;</div><div class="line">  let sum = 0;</div><div class="line">  for (var val of values) &#123;</div><div class="line">    sum += val;</div><div class="line">  &#125;</div><div class="line">  return sum;</div><div class="line">&#125;</div><div class="line"></div><div class="line">add(1, 2, 3) // 6</div></pre></td></tr></table></figure></p>
+<p>传递给 add 函数的一组参数值，被整合成了数组 values。</p>
+<p>下面是一个 rest 参数代替arguments变量的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// arguments变量的写法</div><div class="line">function sortNumbers() &#123;</div><div class="line">  return Array.prototype.slice.call(arguments).sort();</div><div class="line">&#125;</div><div class="line"></div><div class="line">// rest参数的写法</div><div class="line">const sortNumbers = (...numbers) =&gt; numbers.sort();</div></pre></td></tr></table></figure>
+<p><strong>rest参数和arguments对象的区别</strong></p>
+<ul>
+<li>rest参数只包含那些没有对应形参的实参；而 arguments 对象包含了传给函数的所有实参。</li>
+<li>arguments 对象不是一个真实的数组；而rest参数是真实的 Array 实例，也就是说你能够在它上面直接使用所有的数组方法。</li>
+<li>arguments 对象对象还有一些附加的属性 (比如callee属性)。</li>
+</ul>
+<p>另外，使用rest参数时应注意一下两点：</p>
+<ul>
+<li>rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">function f(a, ...b, c) &#123; ... &#125; // 报错</div></pre></td></tr></table></figure>
+<ul>
+<li>函数的length属性，不包括 rest 参数。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(function(a) &#123;&#125;).length  // 1</div><div class="line">(function(...a) &#123;&#125;).length  // 0</div><div class="line">(function(a, ...b) &#123;&#125;).length  // 1</div></pre></td></tr></table></figure>
+<h2 id="扩展运算符"><a href="#扩展运算符" class="headerlink" title="扩展运算符"></a>扩展运算符</h2><p>扩展运算符可以看做是 rest 参数的逆运算，将一个数组转为用逗号分隔的参数序列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">console.log(...[1, 2, 3]) // 1 2 3</div><div class="line"></div><div class="line">console.log(1, ...[2, 3, 4], 5) //1 2 3 4 5</div></pre></td></tr></table></figure>
+<h3 id="扩展运算符的应用"><a href="#扩展运算符的应用" class="headerlink" title="扩展运算符的应用"></a>扩展运算符的应用</h3><h4 id="普通的函数调用"><a href="#普通的函数调用" class="headerlink" title="普通的函数调用"></a>普通的函数调用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function push(array, ...items) &#123;</div><div class="line">  array.push(...items);</div><div class="line">&#125;</div><div class="line"></div><div class="line">function add(x, y) &#123;</div><div class="line">  return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">var numbers = [4, 38];</div><div class="line">add(...numbers) // 42</div></pre></td></tr></table></figure>
+<p>上面代码中，<code>array.push(...items)</code>和<code>add(...numbers)</code>这两行，都是函数的调用，它们的都使用了扩展运算符。该运算符将一个数组，变为参数序列。</p>
+<h4 id="替代-apply-方法调用函数"><a href="#替代-apply-方法调用函数" class="headerlink" title="替代 apply 方法调用函数"></a>替代 apply 方法调用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// ES5 的写法</div><div class="line">Math.max.apply(null, [14, 3, 77])</div><div class="line"></div><div class="line">// ES6 的写法</div><div class="line">Math.max(...[14, 3, 77])</div><div class="line"></div><div class="line">// 等同于</div><div class="line">Math.max(14, 3, 77);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// ES5 的写法</div><div class="line">var arr1 = [0, 1, 2];</div><div class="line">var arr2 = [3, 4, 5];</div><div class="line">Array.prototype.push.apply(arr1, arr2);</div><div class="line"></div><div class="line">// ES6 的写法</div><div class="line">var arr1 = [0, 1, 2];</div><div class="line">var arr2 = [3, 4, 5];</div><div class="line">arr1.push(...arr2);</div></pre></td></tr></table></figure>
+<h4 id="合并数组"><a href="#合并数组" class="headerlink" title="合并数组"></a>合并数组</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var arr1 = [&apos;a&apos;, &apos;b&apos;];</div><div class="line">var arr2 = [&apos;c&apos;];</div><div class="line">var arr3 = [&apos;d&apos;, &apos;e&apos;];</div><div class="line"></div><div class="line">// ES5的合并数组</div><div class="line">arr1.concat(arr2, arr3)  // [ &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos; ]</div><div class="line"></div><div class="line">// ES6的合并数组</div><div class="line">[...arr1, ...arr2, ...arr3]  // [ &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos; ]</div></pre></td></tr></table></figure>
+<h4 id="与解构赋值结合"><a href="#与解构赋值结合" class="headerlink" title="与解构赋值结合"></a>与解构赋值结合</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">const [first, ...rest] = [1, 2, 3, 4, 5];</div><div class="line">first // 1</div><div class="line">rest  // [2, 3, 4, 5]</div><div class="line"></div><div class="line">const [first, ...rest] = [];</div><div class="line">first // undefined</div><div class="line">rest  // []</div><div class="line"></div><div class="line">const [first, ...rest] = [&quot;foo&quot;];</div><div class="line">first  // &quot;foo&quot;</div><div class="line">rest   // []</div></pre></td></tr></table></figure>
+<p>如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">const [...butLast, last] = [1, 2, 3, 4, 5];  // 报错</div><div class="line"></div><div class="line">const [first, ...middle, last] = [1, 2, 3, 4, 5];  // 报错</div></pre></td></tr></table></figure>
+<h4 id="将字符串转为数组"><a href="#将字符串转为数组" class="headerlink" title="将字符串转为数组"></a>将字符串转为数组</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var str = &apos;hello&apos;;</div><div class="line"></div><div class="line">// ES5  </div><div class="line">var arr1 = str.split(&apos;&apos;);  // [ &quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot; ] </div><div class="line"></div><div class="line">// ES6  </div><div class="line">var arr2 = [...str];  // [ &quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot; ]</div></pre></td></tr></table></figure>
+<h4 id="实现了-Iterator-接口的对象"><a href="#实现了-Iterator-接口的对象" class="headerlink" title="实现了 Iterator 接口的对象"></a>实现了 Iterator 接口的对象</h4><p>任何 <a href="http://es6.ruanyifeng.com/#docs/iterator" target="_blank" rel="external">Iterator</a> 接口的对象，都可以用扩展运算符转为真正的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var nodeList = document.querySelectorAll(&apos;div&apos;);</div><div class="line">var array = [...nodeList];</div></pre></td></tr></table></figure>
+<p>上面代码中，<code>querySelectorAll</code>方法返回的是一个<code>nodeList</code>对象。它不是数组，而是一个类似数组的对象。这时，扩展运算符可以将其转为真正的数组，原因就在于<code>NodeList</code>对象实现了 <code>Iterator</code> 。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从上面的例子可以看出，rest参数使用场景应该稍少一些，主要是处理不定数量参数，可以避免arguments对象的使用。而扩展运算符的应用就比较广了，在实际项目中灵活应用，能写出更精简的代码。</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[JavaScript数组迭代（遍历）方法]]></title>
+      <url>http://mrsunny123.github.io/2017/06/27/Array-Ergodic/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ES5和ES6中新增了不少东西，对于数组而言，新增了不少迭代方法，让我们可以抛弃<code>for</code>循环，更方便的写JS代码。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>ES5和ES6中新增的的数组迭代方法如下：</p>
+<ul>
+<li>forEach</li>
+<li>map</li>
+<li>filter</li>
+<li>some</li>
+<li>every</li>
+<li>reduce / reduceRight</li>
+<li>find / findIndex</li>
+</ul>
+<p>其中，find / findIndex是ES6新增的，其余都是ES5新增的。所以这些方法对低版本IE都不兼容。<br>接下来我们看看这些方法如何使用并在低版本IE进行兼容。<br><a id="more"></a></p>
+<h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><p>forEach方法是这些方法里面最基本的一个方法，它的作用是<strong>对数组的每个元素执行一次提供的函数</strong>。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var arr = [1, 2, 3];</div><div class="line"></div><div class="line">arr.forEach(function (element, index, array) &#123;</div><div class="line">  console.log(element, index, array)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//output</div><div class="line">1 0 [1, 2, 3]</div><div class="line">2 1 [1, 2, 3]</div><div class="line">3 2 [1, 2, 3]</div></pre></td></tr></table></figure>
+<p>forEach方法中的callback函数会被依次传入三个参数：</p>
+<ul>
+<li>数组当前项的值</li>
+<li>数组当前项的索引</li>
+<li>数组对象本身</li>
+</ul>
+<p>forEach方法还可以传入第二个参数，这个参数是可选的。<strong>如果给forEach传递了第二个参数，callback函数里的<code>this</code>将指向这个参数。</strong>如果没有传入第二个参数，则<code>this</code>指向全局对象（在浏览器是为window），严格模式下是<code>undefined</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var arr = [1, 2, 3];</div><div class="line">var obj = &#123;name: &apos;zhang&apos;&#125;;</div><div class="line"></div><div class="line">arr.forEach(function (element, index, array) &#123;</div><div class="line">  console.log(element, index, array, this)</div><div class="line">&#125;, obj)</div><div class="line"></div><div class="line">// output</div><div class="line">1 0 [1, 2, 3] &#123;name: &quot;zhang&quot;&#125;</div><div class="line">2 1 [1, 2, 3] &#123;name: &quot;zhang&quot;&#125;</div><div class="line">3 2 [1, 2, 3] &#123;name: &quot;zhang&quot;&#125;</div></pre></td></tr></table></figure>
+<p>下面我们用forEach写一个稍显完整的例子了，数组求和：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var sum = 0;</div><div class="line"></div><div class="line">[1, 2, 3].forEach(function (element, index, array) &#123;</div><div class="line">  console.log(array[index] == element); // true</div><div class="line">  sum += item;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">console.log(sum); // 6</div></pre></td></tr></table></figure>
+<p>最后我们对低版本IE进行一下拓展，是这个方法就有更好的兼容性,代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Array.prototype.forEach = Array.prototype.forEach || function(fn, context)&#123;</div><div class="line">  for (var k = 0, length = this.length; k &lt; length; k++) &#123;</div><div class="line">    if (typeof fn === &quot;function&quot; &amp;&amp; Object.prototype.hasOwnProperty.call(this, k)) &#123;</div><div class="line">      fn.call(context, this[k], k, this);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map方法的作用就是将原数组按照一定的规则映射成一个新的数组。再将其返回，<strong>是返回一个新的数组，而不是将原数组直接改变</strong>。使用方法和参数都跟forEach相似。<br>下面是一个数值求平方的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var data = [1, 2, 3];</div><div class="line"></div><div class="line">var arrayOfSquares = data.map(function (element) &#123;</div><div class="line">  return element * element;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">console.log(arrayOfSquares); //[1, 4, 9]</div></pre></td></tr></table></figure></p>
+<p>callback需要有return值，如果没有，就像下面这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var data = [1, 2, 3];</div><div class="line"></div><div class="line">var arrayOfSquares = data.map(function (element) &#123;</div><div class="line">  element * element;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">console.log(arrayOfSquares); // [undefined, undefined, undefined]</div></pre></td></tr></table></figure>
+<p>最后我们对map方法进行一下拓展：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Array.prototype.map = Array.prototype.map || function (fn, context) &#123;</div><div class="line">  var arr = [];</div><div class="line">  if (typeof fn === &quot;function&quot;) &#123;</div><div class="line">    for (var k = 0, length = this.length; k &lt; length; k++) &#123;      </div><div class="line">      arr.push(fn.call(context, this[k], k, this));</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return arr;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p>filter为“过滤”、“筛选”的意思。指数组filter后，返回过滤后的新数组。用法和参数跟map差不多。<br><strong>与map方法不同的是，filter方法的callback函数需要返回弱等于<code>true</code>或<code>false</code>的值。如果为<code>true</code>，则通过，否则，不通过。</strong><br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var arr = [0, 1, 2, 3];</div><div class="line"></div><div class="line">var newArr = arr.filter(function (element, index, array) &#123;</div><div class="line">  return e;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var newArr2 = arr.filter(function (element, index, array) &#123;</div><div class="line">  return e&gt;=2; </div><div class="line">&#125;)</div><div class="line"></div><div class="line">console.log(newArr); // [1, 2, 3]</div><div class="line">console.log(newArr2); // [2, 3]</div></pre></td></tr></table></figure>
+<p>下面是对filter方法的拓展：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Array.prototype.filter = Array.prototype.filter || function (fn, context) &#123;</div><div class="line">  var arr = [];</div><div class="line">  if (typeof fn === &quot;function&quot;) &#123;</div><div class="line">    for (var k = 0, length = this.length; k &lt; length; k++) &#123;</div><div class="line">      fn.call(context, this[k], k, this) &amp;&amp; arr.push(this[k]);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return arr;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="some"><a href="#some" class="headerlink" title="some"></a>some</h3><p>some方法是只要数组中的某个值，符合你给定的判断条件就返回<code>true</code>；否则，返回<code>false</code>。用法和参数跟前面的方法一样。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function isBigEnough(element, index, array) &#123;</div><div class="line">  return element &gt;= 4;</div><div class="line">&#125;</div><div class="line">var passed = [1, 2, 3].some(isBigEnough);</div><div class="line">var passed2 = [1, 2, 3, 4].some(isBigEnough);</div><div class="line"></div><div class="line">console.log(passed); // false</div><div class="line">console.log(passed2); // true</div></pre></td></tr></table></figure>
+<p>下面是some方法的拓展：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Array.prototype.some = Array.prototype.some || function (fn, context) &#123;</div><div class="line">  var passed = false;</div><div class="line">  if (typeof fn === &quot;function&quot;) &#123;</div><div class="line">   	for (var k = 0, length = this.length; k &lt; length; k++) &#123;</div><div class="line">	  if (passed === true) break;</div><div class="line">	  passed = !!fn.call(context, this[k], k, this);</div><div class="line">	&#125;</div><div class="line">  &#125;</div><div class="line">  return passed;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="every"><a href="#every" class="headerlink" title="every"></a>every</h3><p>every方法与some方法相对，every方法是数组中的所有值都符合你给定的判断条件的时候才会返回<code>true</code>，否则就返回<code>false</code>。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function isBigEnough(element, index, array) &#123;</div><div class="line">  return element &gt;= 3;</div><div class="line">&#125;</div><div class="line">var passed = [2, 3, 4].every(isBigEnough);</div><div class="line">var passed2 = [3, 4, 5].every(isBigEnough);</div><div class="line"></div><div class="line">console.log(passed); // false</div><div class="line">console.log(passed2); // true</div></pre></td></tr></table></figure>
+<p>every方法拓展如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Array.prototype.every = Array.prototype.every || function (fn, context) &#123;</div><div class="line">  var passed = true;</div><div class="line">  if (typeof fn === &quot;function&quot;) &#123;</div><div class="line">    for (var k = 0, length = this.length; k &lt; length; k++) &#123;</div><div class="line">      if (passed === false) break;</div><div class="line">      passed = !!fn.call(context, this[k], k, this);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return passed;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="reduce-reduceRight"><a href="#reduce-reduceRight" class="headerlink" title="reduce / reduceRight"></a>reduce / reduceRight</h3><p>reduce / reduceRight 方法比上面的几种方法要复杂一些；它的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array.reduce(callback,[initialValue])</div></pre></td></tr></table></figure>
+<p>其中<code>callback</code>可以依次接受四个参数：</p>
+<ul>
+<li><code>accumulator</code>上一次调用回调返回的值，或者是提供的初始值（<code>initialValue</code>）</li>
+<li><code>currentValue</code>数组中正在处理的元素</li>
+<li><code>currentIndex</code>数组中正在处理的元素索引，如果提供了<code>initialValue</code> ，从0开始；否则从1开始。</li>
+<li><code>array</code>数组对象本身</li>
+</ul>
+<p>reduce / reduceRight 方法中，第二个参数（<code>initialValue</code>）是可选的；其值用于第一次调用<code>callback</code>的第一个参数。<br>我们先来看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var sum = [1, 2, 3].reduce(function(a, b) &#123;</div><div class="line">    return a + b;</div><div class="line">&#125;);</div><div class="line">console.log(sum); // 6</div></pre></td></tr></table></figure>
+<p>下面我们来看看reduce是如何运行的<br>例如执行下面这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var sum = [0,1,2,3,4].reduce(function(accumulator, currentValue, currentIndex, array)&#123;</div><div class="line">  console.log(accumulator, currentValue, currentIndex, array)</div><div class="line">  return accumulator + currentValue;</div><div class="line">&#125;);</div><div class="line">console.log(sum);</div><div class="line"></div><div class="line">// output</div><div class="line">0 1 1 [0, 1, 2, 3, 4]</div><div class="line">1 2 2 [0, 1, 2, 3, 4]</div><div class="line">3 3 3 [0, 1, 2, 3, 4]</div><div class="line">6 4 4 [0, 1, 2, 3, 4]</div><div class="line">10</div></pre></td></tr></table></figure>
+<p>从上面的输出结果可以看出<code>callback</code>被调用四次，每次调用的参数和返回值如下表：<br>| callback | accumulator | currentValue | currentIndex | array | return |<br>|:—:|:—:|:—:|:—:|:—:|:—:|<br>|第一次调用|0|1|1|[0, 1, 2, 3, 4]|1|<br>|第二次调用|1|2|2|[0, 1, 2, 3, 4]|3|<br>|第三次调用|3|3|3|[0, 1, 2, 3, 4]|6|<br>|第四次调用|6|4|4|[0, 1, 2, 3, 4]|10|</p>
+<p>上面是没有传入第二个参数（<code>initialValue</code>）的情况，那传入第二个参数又是怎么样的呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var sum = [0,1,2,3,4].reduce(function(accumulator, currentValue, currentIndex, array)&#123;</div><div class="line">  console.log(accumulator, currentValue, currentIndex, array)</div><div class="line">  return accumulator + currentValue;</div><div class="line">&#125;, 10);</div><div class="line">console.log(sum);</div><div class="line"></div><div class="line">// output</div><div class="line">10 0 0 [0, 1, 2, 3, 4]</div><div class="line">10 1 1 [0, 1, 2, 3, 4]</div><div class="line">11 2 2 [0, 1, 2, 3, 4]</div><div class="line">13 3 3 [0, 1, 2, 3, 4]</div><div class="line">16 4 4 [0, 1, 2, 3, 4]</div><div class="line">20</div></pre></td></tr></table></figure>
+<p>传入第二个参数后<code>callback</code>调用了五次，每次调用的参数和返回值如下表：<br>| callback | accumulator | currentValue | currentIndex | array | return |<br>|:—:|:—:|:—:|:—:|:—:|:—:|<br>|第一次调用|10|0|0|[0, 1, 2, 3, 4]|10|<br>|第二次调用|10|1|1|[0, 1, 2, 3, 4]|11|<br>|第三次调用|11|2|2|[0, 1, 2, 3, 4]|13|<br>|第四次调用|13|3|3|[0, 1, 2, 3, 4]|16|<br>|第五次调用|16|4|4|[0, 1, 2, 3, 4]|20|<br>从上面的情况可以看出：不提供<code>initialValue</code> ，reduce方法会从索引1的地方开始执行<code>callback</code>方法，跳过第一个索引。提供 <code>initialValue</code>，从索引0开始。<br>同时，是否提供<code>initialValue</code>对于回调函数第一次执行时，<code>accumulator</code>和<code>currentValue</code>的取值有两种情况：调用reduce时提供<code>initialValue</code>，<code>accumulator</code>取值为<code>initialValue</code>，<code>currentValue</code>取数组中的第一个值；没有提供<code>initialValue</code> ，<code>accumulator</code>取数组中的第一个值，<code>currentValue</code>取数组中的第二个值。</p>
+<p>reduceRight与reduce类似，不同之处在于它是从最后一个值开始计算的。</p>
+<p>那么我们该如何拓展一个reduce / reduceRight方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">Array.prototype.reduce = Array.prototype.reduce || function (callback, initialValue ) &#123;</div><div class="line">  var previous = initialValue, k = 0, length = this.length;</div><div class="line">  if (typeof initialValue === &quot;undefined&quot;) &#123;</div><div class="line">    previous = this[0];</div><div class="line">    k = 1;</div><div class="line">  &#125;</div><div class="line">     </div><div class="line">  if (typeof callback === &quot;function&quot;) &#123;</div><div class="line">    for (k; k &lt; length; k++) &#123;</div><div class="line">      this.hasOwnProperty(k) &amp;&amp; (previous = callback(previous, this[k], k, this));</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return previous;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">Array.prototype.reduceRight = Array.prototype.reduceRight || function (callback, initialValue ) &#123;</div><div class="line">    var length = this.length, k = length - 1, previous = initialValue;</div><div class="line">    if (typeof initialValue === &quot;undefined&quot;) &#123;</div><div class="line">        previous = this[length - 1];</div><div class="line">        k--;</div><div class="line">    &#125;</div><div class="line">    if (typeof callback === &quot;function&quot;) &#123;</div><div class="line">       for (k; k &gt; -1; k-=1) &#123;          </div><div class="line">          this.hasOwnProperty(k) &amp;&amp; (previous = callback(previous, this[k], k, this));</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">    return previous;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
+<h3 id="find-findIndex"><a href="#find-findIndex" class="headerlink" title="find / findIndex"></a>find / findIndex</h3><p>find方法用于找出第一个符合条件的数组成员。它的参数跟forEach方法是一样的；所有数组成员依次执行回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var value = [1, 5, 10, 15].find(function(element, index, array) &#123;</div><div class="line">  return element &gt; 9;</div><div class="line">&#125;);</div><div class="line">var value2 = [1, 5, 10, 15].find(function(element, index, array) &#123;</div><div class="line">  return element &gt; 20;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">console.log(value); // 10</div><div class="line">console.log(value2); // undefined</div></pre></td></tr></table></figure>
+<p>findIndex方法和find相似；不过它返回数组中符合条件的元素的索引。如果所有成员都不符合条件，则返回-1。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var value = [1, 5, 10, 15].findIndex(function(element, index, array) &#123;</div><div class="line">  return element &gt; 9;</div><div class="line">&#125;);</div><div class="line">var value2 = [1, 5, 10, 15].findIndex(function(element, index, array) &#123;</div><div class="line">  return element &gt; 20;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">console.log(value); // 2</div><div class="line">console.log(value2); // -1</div></pre></td></tr></table></figure>
+<p>对于不支持find / findIndex方法的浏览器，我们可以自己实现一个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Array.prototype.find = Array.prototype.find || function (fn, context) &#123;</div><div class="line">  if (typeof fn === &quot;function&quot;) &#123;</div><div class="line">    for (var k = 0, length = this.length; k &lt; length; k++) &#123;</div><div class="line">      if (fn.call(context, this[k], k, this)) &#123;</div><div class="line">        return this[k];</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return undefined;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">Array.prototype.findIndex = Array.prototype.findIndex || function (fn, context) &#123;</div><div class="line">  if (typeof fn === &quot;function&quot;) &#123;</div><div class="line">    for (var k = 0, length = this.length; k &lt; length; k++) &#123;</div><div class="line">      if (fn.call(context, this[k], k, this)) &#123;</div><div class="line">        return k;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return -1;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面的兼容实现不知道对不对，欢迎大家指正。<br>参考资料：<br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Koa2源码阅读笔记]]></title>
+      <url>http://mrsunny123.github.io/2017/06/21/Koa2-Code/</url>
+      <content type="html"><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近空闲时间读了一下<a href="https://github.com/koajs/koa" target="_blank" rel="external">Koa2</a>的源码；在阅读Koa2(version 2.2.0)的源码的过程中，我的感受是代码简洁、思路清晰（不得不佩服大神的水平）。<br>下面是我读完之后的一些感受。</p>
+<h2 id="Koa的设计理念"><a href="#Koa的设计理念" class="headerlink" title="Koa的设计理念"></a>Koa的设计理念</h2><blockquote>
+<p>Koa 是一个轻量级的、极富表现力的 http 框架。<br>一个web request会通过 Koa 的中间件栈，来动态完成 response 的处理。<br>Koa2 采用了 async 和 await 的语法来增强中间件的表现力。<br>Koa 不在内核方法中绑定任何中间件，它仅仅提供了一个轻量优雅的函数库。</p>
+</blockquote>
+<h2 id="Koa基本组成"><a href="#Koa基本组成" class="headerlink" title="Koa基本组成"></a>Koa基本组成</h2><p>Koa源码非常精简，只有四个文件：</p>
+<ul>
+<li>application.js：框架入口；负责管理中间件，以及处理请求</li>
+<li>context.js：context对象的原型，代理request与response对象上的方法和属性</li>
+<li>request.js：request对象的原型，提供请求相关的方法和属性</li>
+<li>response.js：response对象的原型，提供响应相关的方法和属性<a id="more"></a>
+<h3 id="application-js"><a href="#application-js" class="headerlink" title="application.js"></a>application.js</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">module.exports = class Application extends Emitter &#123;</div><div class="line">  constructor() &#123;</div><div class="line">    super();</div><div class="line"></div><div class="line">    this.proxy = false; // 是否信任 proxy header 参数，默认为 false</div><div class="line">    </div><div class="line">    this.middleware = []; //保存通过app.use(middleware)注册的中间件</div><div class="line">    </div><div class="line">    this.subdomainOffset = 2; // 子域默认偏移量，默认为 2</div><div class="line">    </div><div class="line">    this.env = process.env.NODE_ENV || &apos;development&apos;; // 环境参数，默认为 NODE_ENV 或 ‘development’</div><div class="line">    </div><div class="line">    this.context = Object.create(context); //context模块，通过context.js创建</div><div class="line">    </div><div class="line">    this.request = Object.create(request); //request模块，通过request.js创建</div><div class="line">    </div><div class="line">    this.response = Object.create(response); //response模块，通过response.js创建</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>application.js 是 koa 的入口主要文件，暴露应用的 class, 这个 class 继承自 EventEmitter ，这里可以看出跟 koa1.x 的不同，koa1.x 是用的是构造函数的方式，koa2 大量使用 es6 的语法。调用的时候就跟 koa1.x 有区别<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var koa = require(&apos;koa&apos;);</div><div class="line">// koa 1.x</div><div class="line">var app = koa();</div><div class="line">// koa 2.x</div><div class="line">// 使用class必须使用new来调用</div><div class="line">var app = new koa();</div></pre></td></tr></table></figure></p>
+<p>application.js除了上面的的构造函数外，还暴露了一些公用的api，比如两个常见的，一个是<code>listen</code>，一个是<code>use</code>。</p>
+<h4 id="use函数"><a href="#use函数" class="headerlink" title="use函数"></a>use函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">use(fn) &#123;</div><div class="line">  if (typeof fn !== &apos;function&apos;) throw new TypeError(&apos;middleware must be a function!&apos;);</div><div class="line">  if (isGeneratorFunction(fn)) &#123;</div><div class="line">    deprecate(&apos;Support for generators will be removed in v3. &apos; +</div><div class="line">              &apos;See the documentation for examples of how to convert old middleware &apos; +</div><div class="line">              &apos;https://github.com/koajs/koa/blob/master/docs/migration.md&apos;);</div><div class="line">    fn = convert(fn);</div><div class="line">  &#125;</div><div class="line">  debug(&apos;use %s&apos;, fn._name || fn.name || &apos;-&apos;);</div><div class="line">  this.middleware.push(fn);</div><div class="line">  return this;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>use</code>函数做的事很简单：注册一个中间件<code>fn</code>，其实就是将<code>fn</code>放入<code>middleware</code>数组。</p>
+<h4 id="listen函数"><a href="#listen函数" class="headerlink" title="listen函数"></a>listen函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">listen(...args) &#123;</div><div class="line">  debug(&apos;listen&apos;);</div><div class="line">  const server = http.createServer(this.callback());</div><div class="line">  return server.listen(...args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>listen</code>方法首先会通过<code>this.callback</code>方法来返回一个函数作为<code>http.createServer</code>的回调函数，然后进行监听。我们已经知道，<code>http.createServer</code>的回调函数接收两个参数：<code>req</code>和<code>res</code>，下面来看<code>this.callback</code>的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">callback() &#123;</div><div class="line">  const fn = compose(this.middleware);</div><div class="line">    </div><div class="line">  if (!this.listeners(&apos;error&apos;).length) this.on(&apos;error&apos;, this.onerror);</div><div class="line">    </div><div class="line">  const handleRequest = (req, res) =&gt; &#123;</div><div class="line">    res.statusCode = 404;</div><div class="line">    const ctx = this.createContext(req, res);</div><div class="line">    const onerror = err =&gt; ctx.onerror(err);</div><div class="line">    const handleResponse = () =&gt; respond(ctx);</div><div class="line">    onFinished(res, onerror);</div><div class="line">    return fn(ctx).then(handleResponse).catch(onerror);</div><div class="line">  &#125;;</div><div class="line">    </div><div class="line">  return handleRequest;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先，<code>callback</code>方法把所有<code>middleware</code>进行了组合，使用了<code>koa-compose</code>，我们来看一下<code>koa-compose</code>的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">// koa-compose</div><div class="line"></div><div class="line">function compose (middleware) &#123;</div><div class="line">// 传入的middleware必须是一个数组</div><div class="line">  if (!Array.isArray(middleware)) throw new TypeError(&apos;Middleware stack must be an array!&apos;)</div><div class="line">// 传入的middleware的每一个元素都必须是函数</div><div class="line">  for (const fn of middleware) &#123;</div><div class="line">    if (typeof fn !== &apos;function&apos;) throw new TypeError(&apos;Middleware must be composed of functions!&apos;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return function (context, next) &#123;</div><div class="line">    let index = -1</div><div class="line">    return dispatch(0)</div><div class="line">    function dispatch (i) &#123;</div><div class="line">      if (i &lt;= index) return Promise.reject(new Error(&apos;next() called multiple times&apos;))</div><div class="line">      index = i</div><div class="line">      let fn = middleware[i]</div><div class="line">      //下面两行代码是处理最后一个中间件还有next的情况的，其实就是直接resolve出来</div><div class="line">      if (i === middleware.length) fn = next</div><div class="line">      if (!fn) return Promise.resolve() </div><div class="line">      try &#123;</div><div class="line">        // 这里就是传入next执行中间件代码了</div><div class="line">        return Promise.resolve(fn(context, function next () &#123;</div><div class="line">          return dispatch(i + 1)</div><div class="line">        &#125;))</div><div class="line">      &#125; catch (err) &#123;</div><div class="line">        return Promise.reject(err)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到<code>koa-compose</code>基本就是个<code>dispatch</code>函数的递归调用。其中最重要的就是下面这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">return Promise.resolve(fn(context, function next () &#123;</div><div class="line">  return dispatch(i + 1)</div><div class="line">&#125;))</div></pre></td></tr></table></figure>
+<p>这段代码等价于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fn(context, function next () &#123;</div><div class="line"> return dispatch(i + 1)</div><div class="line">&#125;)</div><div class="line">return Promise.resolve()</div></pre></td></tr></table></figure>
+<p>这里<code>middlewareFunction</code>的第二个参数(也就是next)是动态传递进去的信使，它会调取<code>dispatch(index)</code>执行下一个的<code>middleware</code>。最后会返回一个<code>Resolved</code>（已完成）状态的Promise对象。这个对象的作用我们稍后再说。</p>
+<p>我们先暂时回到<code>callback</code>方法里面，前面说了它先对<code>middleware</code>进行了组合，生成了一个函数<code>fn</code>。<br>然后，<code>callback</code>方法返回<code>http.createServer</code>所需要的回调函数<code>handleRequest</code>。</p>
+<p><code>handleRequest</code>函数，先把http code默认设置为404，接着利用<code>createContext</code>函数把node返回的req和res进行了封装创建出<code>context</code>，<br>然后通过<code>onFinished(res, onerror)</code>监听<code>http response</code>，当请求结束时执行回调。这里传入的回调是<code>context.onerror(err)</code>，即当错误发生时才执行。<br>最后返回 <code>fn(ctx).then(handleResponse).catch(onerror)</code>的执行结果，这里的<code>fn</code>函数就是就是组合所有<code>middleware</code>后生成的函数，调用它执行所有<code>middleware</code>后会返回前面提到的<code>Resolved</code>（已完成）状态的Promise对象，之后执行响应处理函数<code>respond(ctx)</code>（<code>respond</code>函数里面也主要是一些收尾工作，例如判断http code为空如何输出啦，http method是head如何输出啦，body返回是流或json时如何输出；代码就不贴了，感兴趣的小伙伴自己可以去看一下），当抛出异常时同样使用 <code>context.onerror(err)</code>处理。</p>
+<p>我们可以看看<code>createContext</code>函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">createContext(req, res) &#123;</div><div class="line">  const context = Object.create(this.context);</div><div class="line">  const request = context.request = Object.create(this.request);</div><div class="line">  const response = context.response = Object.create(this.response);</div><div class="line">  context.app = request.app = response.app = this;</div><div class="line">  context.req = request.req = response.req = req;</div><div class="line">  context.res = request.res = response.res = res;</div><div class="line">  request.ctx = response.ctx = context;</div><div class="line">  request.response = response;</div><div class="line">  response.request = request;</div><div class="line">  context.originalUrl = request.originalUrl = req.url;</div><div class="line">  context.cookies = new Cookies(req, res, &#123;</div><div class="line">    keys: this.keys,</div><div class="line">    secure: request.secure</div><div class="line">  &#125;);</div><div class="line">  request.ip = request.ips[0] || req.socket.remoteAddress || &apos;&apos;;</div><div class="line">  context.accept = request.accept = accepts(req);</div><div class="line">  context.state = &#123;&#125;;</div><div class="line">  return context;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>createContext</code>创建<code>context</code>的时候，还会同时创建request和response，通过下图可以比较直观地看到所有这些对象之间的关系。<br><img src="https://sfault-image.b0.upaiyun.com/135/226/1352261008-594a32c87b693_articlex" alt="图片描述"></p>
+<p>图中：</p>
+<ul>
+<li>最左边一列表示每个文件的导出对象</li>
+<li>中间一列表示每个Koa应用及其维护的属性</li>
+<li>右边两列表示对应每个请求所维护的一些列对象</li>
+<li>黑色的线表示实例化</li>
+<li>红色的线表示原型链</li>
+<li>蓝色的线表示属性</li>
+</ul>
+<p>通过上面的分析，我们已经可以大概得知Koa处理请求的过程：当请求到来的时候，会通过 req 和 res 来创建一个 context (ctx) ，然后执行中间件。</p>
+<h3 id="content-js"><a href="#content-js" class="headerlink" title="content.js"></a>content.js</h3><p>content.js 主要的功能提供了对<code>request</code>和<code>response</code>对象的方法与属性便捷访问能力。<br>其中使用了<a href="https://github.com/tj/node-delegates" target="_blank" rel="external">node-delegates</a>（有兴趣的可以看一下<a href="https://github.com/tj/node-delegates/blob/master/index.js" target="_blank" rel="external">源码</a>），将<code>context.request</code>与<code>context.response</code>上的方法与属性代理到<code>context</code>上。<br>在源码中，我们可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// context.js</div><div class="line"></div><div class="line">delegate(proto, &apos;response&apos;)</div><div class="line">  .method(&apos;attachment&apos;)</div><div class="line">  // ...</div><div class="line">  .access(&apos;status&apos;)</div><div class="line">  // ...</div><div class="line">  .getter(&apos;writable&apos;);</div><div class="line"></div><div class="line">delegate(proto, &apos;request&apos;)</div><div class="line">  .method(&apos;acceptsLanguages&apos;)</div><div class="line">  // ...</div><div class="line">  .access(&apos;querystring&apos;)</div><div class="line">  // ...</div><div class="line">  .getter(&apos;ip&apos;);</div></pre></td></tr></table></figure>
+<h3 id="request-js"><a href="#request-js" class="headerlink" title="request.js"></a>request.js</h3><p>request.js 封装了请求相关的属性以及方法。通过 application.js 中的<code>createContext</code>方法，代理对应的 request 对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const request = context.request = Object.create(this.request);</div><div class="line">// ...</div><div class="line">context.req = request.req = response.req = req;</div><div class="line">// ...</div><div class="line">request.response = response;</div></pre></td></tr></table></figure>
+<p><code>request.req</code>为原生的请求对象，在 request.js 中属性的获取都是通过 <code>ths.req</code>来获取的（即 <code>request.req</code>）。</p>
+<h3 id="response-js"><a href="#response-js" class="headerlink" title="response.js"></a>response.js</h3><p>response.js 封装了响应相关的属性以及方法。与 request 相同，通过<code>createContext</code>方法代理对应的 response 对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const response = context.response = Object.create(this.response);</div><div class="line">// ...</div><div class="line">context.res = request.res = response.res = res;</div><div class="line">// ...</div><div class="line">response.request = request;</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>关于Koa2的源码就先分析到这，希望对大家有所帮助。<br>如有不同的看法，欢迎交流！</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[紧贴底部的页脚]]></title>
+      <url>http://mrsunny123.github.io/2017/06/16/Sticky-Footer/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在写前端页面时，经常会遇到这种情况：<em>有一个具有块级样式的页脚，当页面内容足够长时它一切正常；有的时候，由于页面长度不够，页面底部的页脚会很尴尬的跑上来；页脚不能像我们期望中那样“紧贴”在视口的最底部，而是紧跟在内容的下方。</em></p>
+<p>那么怎样做到内容多时页脚在内容下方，内容少时页脚“紧贴”在视口底部？我总结了四种方法。<br><a id="more"></a></p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>首先我先写一个简单的页面结构，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</div><div class="line">    &lt;title&gt;紧贴底部的页脚&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div class=&quot;wrapper&quot;&gt;</div><div class="line">        &lt;header&gt;</div><div class="line">            &lt;span&gt;Header&lt;/span&gt;</div><div class="line">        &lt;/header&gt;</div><div class="line">        &lt;main&gt;</div><div class="line">            &lt;p&gt;我是内容&lt;/p&gt;</div><div class="line">        &lt;/main&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;footer&gt;</div><div class="line">        &lt;span&gt;Fotter&lt;/span&gt;</div><div class="line">    &lt;/footer&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>再页面加点公共样式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">*&#123;</div><div class="line">    padding:0;</div><div class="line">    margin: 0;</div><div class="line">&#125;</div><div class="line">header&#123;</div><div class="line">    line-height: 80px;</div><div class="line">&#125;</div><div class="line">header,footer&#123;</div><div class="line">    background-color: #ccc;</div><div class="line">    text-align: center;</div><div class="line">&#125;</div><div class="line">main&#123;</div><div class="line">    text-align: center;</div><div class="line">    font-size: 30px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来我们用四种不同的方法来实现如何让页脚紧贴底部。</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">/* footer的每一级父元素都为100%高 */</div><div class="line">html,body &#123;</div><div class="line">    height: 100%;</div><div class="line">    width: 100%;</div><div class="line">&#125;</div><div class="line">/* 这里将页面内容最小高度设为100%；撑满屏幕，</div><div class="line">然后使用margin-bottom负值把页脚吸上来，</div><div class="line">最后设置底部内边距用来填充内容过多时被遮挡的页脚。 */</div><div class="line">.wrapper&#123;</div><div class="line">    height: auto !important;</div><div class="line">    min-height: 100%;</div><div class="line">    height: 100%;</div><div class="line">    margin-bottom: -80px;</div><div class="line">    padding-bottom: 80px;</div><div class="line">    box-sizing: border-box;</div><div class="line">&#125;</div><div class="line">footer&#123;</div><div class="line">    height: 80px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>方法二和方法一比较类似，只是用伪元素取代了内边距。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">html,body &#123;</div><div class="line">    height: 100%;</div><div class="line">    width: 100%;</div><div class="line">&#125;</div><div class="line">.wrapper&#123;</div><div class="line">    height: auto !important;</div><div class="line">    min-height: 100%;</div><div class="line">    height: 100%;</div><div class="line">    margin-bottom: -80px;</div><div class="line">&#125;</div><div class="line">/* 这里用伪元素取代了方法一中.wrapper的内边距 */</div><div class="line">.wrapper::after&#123;</div><div class="line">    content: &quot;&quot;;</div><div class="line">    display: block;</div><div class="line">    height: 80px;</div><div class="line">&#125;</div><div class="line">footer&#123;</div><div class="line">    height: 80px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h3><p>方法三借助<a href="http://www.zhangxinxu.com/wordpress/2012/09/new-viewport-relative-units-vw-vh-vm-vmin/" target="_blank" rel="external">视口相关的长度单位</a>以及<a href="http://www.css88.com/book/css/values/functional/calc%28%29.htm" target="_blank" rel="external">calc()</a>函数。这两个东西都只能兼容到IE9。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.wrapper&#123;</div><div class="line">    min-height:calc(100vh - 80px);</div><div class="line">&#125;</div><div class="line">footer&#123;</div><div class="line">    height: 80px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>前三种方法都有一定的局限性，都要给页脚设置固定的高度，不够灵活。有没有更加灵活的方法呢？<br>当然有，那就是我们方法四了。</p>
+<h3 id="方法四"><a href="#方法四" class="headerlink" title="方法四"></a>方法四</h3><p>方法四用到了<code>CSS3</code>中的布局神器<a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flexbox</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">body &#123;</div><div class="line">    display: flex;</div><div class="line">    flex-flow: column;</div><div class="line">    min-height: 100vh;</div><div class="line">&#125;</div><div class="line">.wrapper &#123;</div><div class="line">    flex: 1; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样就可以了！我们只需要四行简单的代码，就完美实现了紧贴底部的页脚。<code>Flexbox</code>是不是相当霸气？<br><code>Flexbox</code>兼容性不是很好（万恶的IE），但在移动端还是不错的。可以放心使用。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>上面是我总结的四种方法，如果还有什么更好的方法，欢迎共同探讨！</p>
+<p>参考资料：<br><a href="http://harttle.com/2016/09/09/sticky-footer.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">CSS 总在底部的页脚</a><br><a href="https://book.douban.com/subject/26745943/" target="_blank" rel="external">CSS揭秘</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[VSCode 常用快捷键]]></title>
+      <url>http://mrsunny123.github.io/2017/05/12/VSCode-Keyboard/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>用 <code>VSCdode</code> 开发也有一段时间了，本人觉得非常好用，现在已经是我的主力编辑器。<br><code>VSCode</code> 内置很多快捷键，可以大大的提高我们的开发效率。<br><a id="more"></a></p>
+<h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><h3 id="基础编辑"><a href="#基础编辑" class="headerlink" title="基础编辑"></a>基础编辑</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Ctrl+X</code></td>
+<td style="text-align:left">剪切</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+C</code></td>
+<td style="text-align:left">复制</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+K</code></td>
+<td style="text-align:left">删除当前行</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Enter</code></td>
+<td style="text-align:left">在当前行之后插入一行</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+Enter</code></td>
+<td style="text-align:left">在当前行之前插入一行</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+Up/Down</code></td>
+<td style="text-align:left">移动当前行上下</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Shift+Alt+Up/Down</code></td>
+<td style="text-align:left">在当前行上下复制当前行</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Up/Down</code></td>
+<td style="text-align:left">行视图上下偏移</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+PageUp/PageDown</code></td>
+<td style="text-align:left">屏视图上下偏移</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+[</code></td>
+<td style="text-align:left">折叠区域代码</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+]</code></td>
+<td style="text-align:left">展开区域代码</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+[</code></td>
+<td style="text-align:left">折叠区域内所有代码（包括子域和父域）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+]</code></td>
+<td style="text-align:left">展开区域内所有代码（包括子域和父域）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+0</code></td>
+<td style="text-align:left">折叠所有区域内的代码</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+J</code></td>
+<td style="text-align:left">展开所有区域内的代码</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+C</code></td>
+<td style="text-align:left">添加行注释</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+U</code></td>
+<td style="text-align:left">删除行注释</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+/</code></td>
+<td style="text-align:left">添加关闭行注释</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Shift+Alt+A</code></td>
+<td style="text-align:left">添加关闭区域注释</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+Z</code></td>
+<td style="text-align:left">添加关闭自动换行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="导航"><a href="#导航" class="headerlink" title="导航"></a>导航</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Ctrl+T</code></td>
+<td style="text-align:left">启动符号搜索框</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+G</code></td>
+<td style="text-align:left">跳转行</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+P</code></td>
+<td style="text-align:left">启动文件搜索框，方便快速打开文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+O</code></td>
+<td style="text-align:left">跳转至符号处</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+M</code></td>
+<td style="text-align:left">显示问题面板</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>F8</code></td>
+<td style="text-align:left">跳转到下一个错误或者警告</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Shift+F8</code></td>
+<td style="text-align:left">跳转到上一个错误或者警告</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+Tab</code></td>
+<td style="text-align:left">切换到最近打开的文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+Left/Right</code></td>
+<td style="text-align:left">向前/向后</td>
+</tr>
+</tbody>
+</table>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Ctrl+F</code></td>
+<td style="text-align:left">查询</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+H</code></td>
+<td style="text-align:left">替换</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>F3</code></td>
+<td style="text-align:left">查找下一个</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Shift+F3</code></td>
+<td style="text-align:left">查找上一个</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+Enter</code></td>
+<td style="text-align:left">选中所有匹配的查询字符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+C</code></td>
+<td style="text-align:left">切换是否区分大小写查找</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+R</code></td>
+<td style="text-align:left">切换是否使用正则查找</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Alt+W</code></td>
+<td style="text-align:left">切换是否使用全词查找</td>
+</tr>
+</tbody>
+</table>
+<h3 id="编辑-窗口管理"><a href="#编辑-窗口管理" class="headerlink" title="编辑/窗口管理"></a>编辑/窗口管理</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+N</code></td>
+<td style="text-align:left">打开新窗口</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+W</code></td>
+<td style="text-align:left">关闭窗口</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+F4</code></td>
+<td style="text-align:left">关闭当前编辑窗口</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K F</code></td>
+<td style="text-align:left">关闭当前打开的文件夹</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+\</code></td>
+<td style="text-align:left">拆分编辑器（最多拆分为三块）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+1/2/3</code></td>
+<td style="text-align:left">切换焦点在不同的拆分窗口</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Ctrl+N</code></td>
+<td style="text-align:left">新建文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+O</code></td>
+<td style="text-align:left">打开文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+S</code></td>
+<td style="text-align:left">保存文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K S</code></td>
+<td style="text-align:left">保存所有文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+S</code></td>
+<td style="text-align:left">另存为</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K W</code></td>
+<td style="text-align:left">关闭一组拆分的窗口</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K Ctrl+W</code></td>
+<td style="text-align:left">关闭所有编辑窗口</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+T</code></td>
+<td style="text-align:left">撤销最近关闭的一个文件编辑窗口</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Tab</code></td>
+<td style="text-align:left">调出最近打开的文件列表，重复按会切换到下一个</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+Tab</code></td>
+<td style="text-align:left">调出最近打开的文件列表，重复按会切换到上一个</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K P</code></td>
+<td style="text-align:left">复制当前打开文件的存放路径</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K R</code></td>
+<td style="text-align:left">打开当前编辑文件存放位置【文件管理器】</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+K O</code></td>
+<td style="text-align:left">在新的编辑器中打开当前编辑的文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="显示"><a href="#显示" class="headerlink" title="显示"></a>显示</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">快捷键</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>F11</code></td>
+<td style="text-align:left">切换全屏显示</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+B</code></td>
+<td style="text-align:left">切换侧边栏显示隐藏</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ctrl+Shift+V</code></td>
+<td style="text-align:left">Markdown预览切换</td>
+</tr>
+</tbody>
+</table>
+<p>###光标操作###<br>| 快捷键 | 作用 |<br>| :— |:—|<br>| <code>Home/End</code> | 光标跳转到行首/尾 |<br>| <code>Ctrl+Home/End</code> | 光标跳转到页首/尾 |<br>| <code>Alt+Click</code> | 插入光标（支持多个） |<br>| <code>Ctrl+Alt+Up/Down</code> | 上下插入光标（支持多个） |<br>| <code>Ctrl+U</code> | 撤销最后一次光标操作 |<br>| <code>Shift+Alt+I</code> | 插入光标到选中范围内所有行行尾 |<br>| <code>Ctrl+I</code> | 选中当前行 |<br>| <code>Shift+Alt+(drag mouse)</code> | 在鼠标拖动区域的每行行尾插入光标 |<br>| <code>Ctrl+F2</code> | 选择当前字符的所有出现，然后进行操作 |<br>| <code>Ctrl+Shift+\</code> | 跳转到与当前括号匹配的括号 |</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面只是一些<code>VSCode</code>中比较常用的快捷键，更多快捷键请看<a href="https://code.visualstudio.com/docs/getstarted/keybindings" target="_blank" rel="external">这里</a>。</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[CSS选择器整理]]></title>
+      <url>http://mrsunny123.github.io/2016/12/15/Css-Selector/</url>
+      <content type="html"><![CDATA[<p>很多人都觉得<code>CSS</code>特别简单，但其实真正写好<code>CSS</code>并不容易，<code>CSS</code>的每一点其实内容都很多，就拿选择器来说，<code>CSS</code>选择器大概可以分为五类：</p>
+<ul>
+<li>元素选择器</li>
+<li>关系选择器</li>
+<li>属性选择器</li>
+<li>伪类选择器</li>
+<li>伪对象选择器<a id="more"></a>
+<h2 id="元素选择器"><a href="#元素选择器" class="headerlink" title="元素选择器"></a>元素选择器</h2>| 选择器 | 名称 | 描述 |<br>| — | — | — |<br>| <code>*</code> | 通配选择器 | 选择所有的元素 |<br>| <code>E</code> | 元素选择器 | 选择指定的元素 |<br>| <code>#idName</code> | id选择器 | 选择id属性等于idName的元素 |<br>| <code>.className</code> | class选择器 | 选择class属性包含className的元素 |<br>元素选择器只要是写<code>CSS</code>都会经常用，这一块的内容非常简单，没什么特别要说的。</li>
+</ul>
+<h2 id="关系选择器"><a href="#关系选择器" class="headerlink" title="关系选择器"></a>关系选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E F</code></td>
+<td>包含选择器</td>
+<td>选择所有包含在E元素里面的F元素</td>
+</tr>
+<tr>
+<td><code>E&gt;F</code></td>
+<td>子选择器</td>
+<td>选择所有作为E元素的子元素F</td>
+</tr>
+<tr>
+<td><code>E+F</code></td>
+<td>相邻选择器</td>
+<td>选择紧贴在E元素之后的F元素</td>
+</tr>
+<tr>
+<td><code>E~F</code></td>
+<td>兄弟选择器</td>
+<td>选择E元素所有兄弟元素F</td>
+</tr>
+</tbody>
+</table>
+<p>这里要注意几点：</p>
+<ul>
+<li>子选择器只能选中字元素，而不能选中孙辈；而包含选择符将会选中所有符合条件的后代，包括儿子，孙子，孙子的孙子…</li>
+<li>相邻选择符只会选中符合条件的相邻的兄弟元素；而兄弟选择符会选中所有符合条件的兄弟元素，不强制是紧邻的元素。</li>
+<li>在Android Browser4.2.*及以下，伪类选择器<code>:checked</code>与兄弟选择符一起使用会有一个bug，<a href="https://github.com/doyoe/trip#user-content-checked-sibling-bug" target="_blank" rel="external">查看详情</a>。</li>
+</ul>
+<h2 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E[att]</code></td>
+<td>选择具有att属性的E元素</td>
+</tr>
+<tr>
+<td><code>E[att=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值等于val的E元素</td>
+</tr>
+<tr>
+<td><code>E[att~=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值其中一个等于val的E元素（包含只有一个值且该值等于val的情况）</td>
+</tr>
+<tr>
+<td><code>E[att&#124;=”val”]</code></td>
+<td>选择具有att属性且属性值为以val开头并用连接符<code>-</code>分隔的字符串的E元素，如果属性值仅为val，也将被选择</td>
+</tr>
+<tr>
+<td><code>E[att^=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值为以val开头的字符串的E元素</td>
+</tr>
+<tr>
+<td><code>E[att$=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值为以val结尾的字符串的E元素</td>
+</tr>
+<tr>
+<td><code>E[att*=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值为包含val的字符串的E元素</td>
+</tr>
+</tbody>
+</table>
+<h2 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E:link</code></td>
+<td>设置超链接a在未被访问前的样式</td>
+</tr>
+<tr>
+<td><code>E:visited</code></td>
+<td>设置超链接a在其链接地址已被访问过时的样式</td>
+</tr>
+<tr>
+<td><code>E:hover</code></td>
+<td>设置元素鼠标在其悬停时的样式</td>
+</tr>
+<tr>
+<td><code>E:active</code></td>
+<td>设置元素在被用户激活（在鼠标点击与释放之间发生的事件）时的样式</td>
+</tr>
+<tr>
+<td><code>E:focus</code></td>
+<td>设置元素在成为输入焦点（该元素的onfocus事件发生）时的样式。(一般应用于表单元素)</td>
+</tr>
+<tr>
+<td><code>E:checked</code></td>
+<td>匹配用户界面上处于选中状态的元素E。(用于input type为radio与checkbox时)</td>
+</tr>
+<tr>
+<td><code>E:enabled</code></td>
+<td>匹配用户界面上处于可用状态的元素E。(一般应用于表单元素)</td>
+</tr>
+<tr>
+<td><code>E:disabled</code></td>
+<td>匹配用户界面上处于禁用状态的元素E。(一般应用于表单元素)</td>
+</tr>
+<tr>
+<td><code>E:empty</code></td>
+<td>匹配没有任何子元素（包括text节点）的元素E</td>
+</tr>
+<tr>
+<td><code>E:root</code></td>
+<td>匹配E元素在文档的根元素。在HTML中，根元素永远是HTML</td>
+</tr>
+<tr>
+<td><code>E:not(s)</code></td>
+<td>匹配不含有s选择符的元素E</td>
+</tr>
+<tr>
+<td><code>E:first-child</code></td>
+<td>匹配父元素的第一个子元素E</td>
+</tr>
+<tr>
+<td><code>E:last-child</code></td>
+<td>匹配父元素的最后一个子元素E</td>
+</tr>
+<tr>
+<td><code>E:only-child</code></td>
+<td>匹配父元素仅有的一个子元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-child(n)</code></td>
+<td>匹配父元素的第n个子元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-last-child(n)</code></td>
+<td>匹配父元素的倒数第n个子元素E</td>
+</tr>
+<tr>
+<td><code>E:first-of-type</code></td>
+<td>匹配同类型中的第一个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:last-of-type</code></td>
+<td>匹配同类型中的最后一个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:only-of-type</code></td>
+<td>匹配同类型中的唯一的一个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-of-type(n)</code></td>
+<td>匹配同类型中的第n个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-last-of-type(n)</code></td>
+<td>匹配同类型中的倒数第n个同级兄弟元素E</td>
+</tr>
+</tbody>
+</table>
+<p>注意事项：</p>
+<ul>
+<li>超链接的4种状态(访问前，鼠标悬停，当前被点击，已访问)，需要有特定的书写顺序才能生效；<strong>a:hover 必须位于 a:link 和 a:visited 之后，a:active 必须位于 a:hover 之后</strong>。</li>
+<li><code>E:first-child</code>选择符，E必须是它的兄弟元素中的第一个元素，换言之，E必须是父元素的第一个子元素。与之类似的伪类还有<code>E:last-child</code>，只不过情况正好相反，需要它是最后一个子元素。<h3 id="关于-not-的用法"><a href="#关于-not-的用法" class="headerlink" title="关于:not()的用法"></a>关于<code>:not()</code>的用法</h3>假定有个列表，每个列表项都有一条底边线，但是最后一项不需要底边线。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> li:not(:last-child) &#123;</div><div class="line">	border-bottom: 1px solid #ddd;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述代码的意思是：给该列表中除最后一项外的所有列表项加一条底边线。是不是很方便。</p>
+<h3 id="关于-nth-child-的用法"><a href="#关于-nth-child-的用法" class="headerlink" title="关于:nth-child()的用法"></a>关于<code>:nth-child()</code>的用法</h3><p>要使<code>E:nth-child(n)</code>生效，E元素必须是某个元素的子元素，E的父元素最高是body，即E可以是body的子元素。<code>:first-child</code>、<code>:last-child</code>、<code>:only-child</code>、<code>:nth-last-child(n)</code>也是一样。<br><code>nth-child(n)</code>括号里的n可以是一个数字，一个关键字，或者一个公式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">:nth-child(length) /*参数是具体数字 length为整数*/</div><div class="line">:nth-child(n) /*参数是n,n从0开始计算*/</div><div class="line">:nth-child(n*length) /*n的倍数选择，n从0开始算*/</div><div class="line">:nth-child(n+length) /*选择大于等于length后面的元素*/</div><div class="line">:nth-child(-n+length) /*选择小于等于length前面的元素*/</div><div class="line">:nth-child(n*length+1) /*表示隔几选一*/</div><div class="line">:nth-child(2n) / :nth-child(even) /*表示偶数*/</div><div class="line">:nth-child(2n+1) / :nth-child(odd) /*表示奇数*/</div></pre></td></tr></table></figure></p>
+<h3 id="关于-child和-of-type的差异"><a href="#关于-child和-of-type的差异" class="headerlink" title="关于:...-child和:...-of-type的差异"></a>关于<code>:...-child</code>和<code>:...-of-type</code>的差异</h3><p>这两个系列的属性确实很相似，对于不熟悉的人可能很难区分。</p>
+<p><strong><code>E:first-of-type</code>总是能命中父元素的第1个为E的子元素，不论父元素第1个子元素是否为E；而<code>E:first-child</code>里的E元素必须是它的兄弟元素中的第一个元素，否则匹配失效。<code>E:last-of-type</code>与<code>E:last-child</code>也是同理。</strong><br><strong><code>E:nth-of-type(n)</code>总是能命中父元素的第n个为E的子元素，不论父元素第n个子元素是否为E；而<code>E:nth-child(n)</code>会选择父元素的第n个子元素E，如果第n个子元素不是E，则是无效选择符，但n会递增。</strong><br>关于<code>:nth-child()</code>与<code>:nth-of-type()</code>的区别可以看<a href="http://www.zhangxinxu.com/wordpress/2011/06/css3%E9%80%89%E6%8B%A9%E5%99%A8nth-child%E5%92%8Cnth-of-type%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82/" target="_blank" rel="external">这篇文章</a></p>
+<h3 id="用-empty区分空元素"><a href="#用-empty区分空元素" class="headerlink" title="用:empty区分空元素"></a>用<code>:empty</code>区分空元素</h3><p>选择不包含子元素的div元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">div:empty</div></pre></td></tr></table></figure></p>
+<p>选择包含子元素的div元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">div:not(:empty)</div></pre></td></tr></table></figure></p>
+<h2 id="伪对象选择器"><a href="#伪对象选择器" class="headerlink" title="伪对象选择器"></a>伪对象选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E:before</code>/<code>E::before</code></td>
+<td>在目标元素E的前面插入的内容。用来和content属性一起使用</td>
+</tr>
+<tr>
+<td><code>E:after</code>/<code>E::after</code></td>
+<td>在目标元素E的后面插入的内容。用来和content属性一起使用</td>
+</tr>
+<tr>
+<td><code>E:first-letter</code>/<code>E::first-letter</code></td>
+<td>设置元素内的第一个字符的样式</td>
+</tr>
+<tr>
+<td><code>E:first-line</code>/<code>E::first-line</code></td>
+<td>设置元素内的第一行的样式</td>
+</tr>
+<tr>
+<td><code>E::placeholder</code></td>
+<td>设置元素文字占位符的样式。(一般用于input输入框)</td>
+</tr>
+<tr>
+<td><code>E::selection</code></td>
+<td>设置元素被选择时的字体颜色和背景颜色</td>
+</tr>
+</tbody>
+</table>
+<p>注意事项：</p>
+<ul>
+<li><code>::placeholder</code>在使用时需要加上各个浏览器的前缀；除了Firefox是 <code>::[prefix]placeholder</code>，其他浏览器都是使用 <code>::[prefix]input-placeholder</code>。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>选择器用得好其实可以让我们少些很多代码。其实还有一些东西没有展开来讲，比如<code>:before</code>和<code>:after</code>，后面专门写一篇文章来说。</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[JavaScript必会技能——正则表达式]]></title>
+      <url>http://mrsunny123.github.io/2016/11/25/RegExp/</url>
+      <content type="html"><![CDATA[<h1 id="正则表达式是什么"><a href="#正则表达式是什么" class="headerlink" title="正则表达式是什么"></a>正则表达式是什么</h1><p>RegExp 对象表示正则表达式，它是对<code>字符串</code>执行模式匹配的强大工具。</p>
+<h2 id="为什么使用正则表达式"><a href="#为什么使用正则表达式" class="headerlink" title="为什么使用正则表达式"></a>为什么使用正则表达式</h2><ul>
+<li>测试字符串内的模式。例如，可以测试输入字符串，以查看字符串内是否出现电话号码模式或信用卡号码模式。这称为数据验证。</li>
+<li>替换文本。可以使用正则表达式来识别文档中的特定文本，完全删除该文本或者用其他文本替换它。</li>
+<li>基于模式匹配从字符串中提取子字符串。可以查找文档内或输入域内特定的文本。<a id="more"></a>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2>正则表达式有两种方法定义：</li>
+</ul>
+<p>1.直接量语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/pattern/attributes</div></pre></td></tr></table></figure></p>
+<p>2.创建 RegExp 对象的语法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">new RegExp(pattern, attributes);</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>参数</strong>：参数pattern是一个字符串，指定了正则表达式的模式；参数attributes是一个可选的参数，包含属性g，i，m，分别使用与全局匹配，不区分大小写匹配，多行匹配；<br><strong>返回值</strong>：一个新的RegExp对象，具有指定的模式和标志；</p>
+</blockquote>
+<h3 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h3><table>
+<thead>
+<tr>
+<th>修饰符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td>执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>执行不分大小写匹配。</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>执行多行匹配。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="括号"><a href="#括号" class="headerlink" title="括号"></a>括号</h3><p>方括号包含一系列字符，可以匹配它所包含的任意字符；同时可以通过<code>^</code>符号来定义否定字符类</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[abc]</code></td>
+<td>查找在方括号中的任意一个字符</td>
+</tr>
+<tr>
+<td><code>[^abc]</code></td>
+<td>查找不在方括号中的任意一个字符</td>
+</tr>
+<tr>
+<td><code>[0-9]</code></td>
+<td>查找0-9中的任意一个数字</td>
+</tr>
+<tr>
+<td><code>[a-z]</code></td>
+<td>查找任何从小写 a 到小写 z 的字符</td>
+</tr>
+<tr>
+<td><code>[A-Z]</code></td>
+<td>查找任何从大写 a 到大写 z 的字符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h3><table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>查找任意的单个字符，除换行符和其他Unicode行终止符之外</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>查找字母数字和下划线 ，等价于<code>[a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>查找除字母数字下划线之外的字符，等价于<code>[\^a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>查找数字字符，等价于<code>[0-9]</code></td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>查找非数字字符，等价于<code>[\^0-9]</code></td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>匹配任何空白字符，包括空格，制表符，换行符等等。等价于<code>[\f\n\r\t\v]</code></td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td>匹配任何非空白字符，等价于<code>[\^\f\n\r\t\v]</code></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>查找一个单词边界，也就是指单词和空格间的位置，比如<code>er\b</code>可以匹配”never”中的”er”,但是不能匹配”verb”中的”er”</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>查找非单词边界，<code>er\B</code>能匹配”ver”中的”er”,但不能匹配”never”中的”er”</td>
+</tr>
+<tr>
+<td><code>\0</code></td>
+<td>查找空字符(<code>&quot;&quot;</code>)</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>查找换行符</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>查找回车符</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>查找换页符</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>查找制表符</td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>查找垂直制表符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h3><table>
+<thead>
+<tr>
+<th>量词</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n+</code></td>
+<td>匹配任何至少包含一个n的字符串，等价于<code>n{1,}</code></td>
+</tr>
+<tr>
+<td><code>n*</code></td>
+<td>匹配零个或者多个n的字符串，等价于<code>n{0,}</code></td>
+</tr>
+<tr>
+<td><code>n?</code></td>
+<td>匹配零个或者1个n的字符串，等价于<code>n{0,1}</code></td>
+</tr>
+<tr>
+<td><code>n{x}</code></td>
+<td>匹配包含x个n的序列字符串</td>
+</tr>
+<tr>
+<td><code>n{x,y}</code></td>
+<td>匹配至少x个，最多y个n的字符串</td>
+</tr>
+<tr>
+<td><code>n{x,}</code></td>
+<td>匹配至少x个n的字符串</td>
+</tr>
+<tr>
+<td><code>n$</code></td>
+<td>匹配以n结尾的字符串</td>
+</tr>
+<tr>
+<td><code>^n</code></td>
+<td>匹配以n开头的字符串</td>
+</tr>
+</tbody>
+</table>
+<p>###正则表达式的特殊字符中需要转义字符###</p>
+<blockquote>
+<p>正则表达式中的特殊字符都有它们的特殊含义，所以当我们要匹配这些特殊字符本身时，需要对字符进行转义，转义只需要在字符前面加上<code>\</code>，这些特殊字符包括<code>$</code> <code>^</code> <code>*</code> <code>+</code> <code>.</code> <code>[</code> <code>?</code> <code>{</code> <code>|</code> <code>(</code> <code>)</code> <code>\</code></p>
+</blockquote>
+<h2 id="支持正则表达式的方法"><a href="#支持正则表达式的方法" class="headerlink" title="支持正则表达式的方法"></a>支持正则表达式的方法</h2><h3 id="RegExp-对象方法"><a href="#RegExp-对象方法" class="headerlink" title="RegExp 对象方法"></a>RegExp 对象方法</h3><p>1.<strong>test方法</strong>：该方法用于检测一个字符串是否匹配某个模式。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>RegExpObject.test(str)</code><br><strong>参数</strong>：str是需要检测的字符串<br><strong>返回值</strong>：如果字符串str中含有与RegExpObject匹配的文本的话，返回true，否则返回false</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var str = &quot;longen and yunxi&quot;;</div><div class="line">console.log(/longen/.test(str)); // true</div><div class="line">console.log(/longlong/.test(str)); //false</div></pre></td></tr></table></figure></p>
+<p>2.<strong>exec方法</strong>：该方法用于检索字符串中的正则表达式的匹配。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>RegExpObject.exec(str)</code><br><strong>参数</strong>：str是需要检测的字符串<br><strong>返回值</strong>：返回一个数组，存放匹配的结果，如果未找到匹配，则返回值为null</p>
+</blockquote>
+<p>示例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var str = &quot;javascript html css&quot;;</div><div class="line">console.log(/html/.exec(str)); // [&quot;html&quot;, index: 11, input: &quot;javascript html css&quot;]</div><div class="line">返回的数组的第一个元素是与正则表达式相匹配的文本，该方法还返回2个属性，index属性声明的是匹配文本的第一个字符的位置；input属性则存放的是被检索的字符串string。</div><div class="line"></div><div class="line">// 假如没有找到的话，则返回null</div><div class="line">console.log(/node/.exec(str)); // null</div></pre></td></tr></table></figure>
+<h3 id="支持正则表达式的-String-对象的方法"><a href="#支持正则表达式的-String-对象的方法" class="headerlink" title="支持正则表达式的 String 对象的方法"></a>支持正则表达式的 String 对象的方法</h3><p>1.<strong>search方法</strong>：该方法用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的字符串。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.search(regexp)</code><br><strong>参数</strong>：regexp可以是在stringObject中检索的字符串，也可以是需要检索的RegExp对象<br><strong>返回值</strong>：stringObject中第一个与regexp对象相匹配的子串的起始位置。如果没有找到任何匹配的子串，则返回-1；</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var str = &quot;hello world,hello world&quot;;</div><div class="line">// 返回匹配到的第一个位置</div><div class="line">console.log(str.search(/hello/)); // 0</div><div class="line">// search方法不执行全局匹配，它将忽略标志g，同时它也没有regexp对象的lastIndex的属性，且总是从字符串开始位置进行查找，总是返回的是stringObject匹配的第一个位置。</div><div class="line">console.log(str.search(/hello/g)); //0</div><div class="line">console.log(str.search(/world/)); // 6</div><div class="line"></div><div class="line">// 也可以是检索字符串中的字符</div><div class="line">console.log(str.search(&quot;wo&quot;)); // 6</div><div class="line"></div><div class="line">// 如果没有检索到的话，则返回-1</div><div class="line">console.log(str.search(/longen/)); // -1</div><div class="line"></div><div class="line">// 我们检索的时候 可以忽略大小写来检索</div><div class="line">var str2 = &quot;Hello&quot;;</div><div class="line">console.log(str2.search(/hello/i)); // 0</div></pre></td></tr></table></figure></p>
+<p>2.<strong>match方法</strong>：该方法用于在字符串内检索指定的值，或找到一个或者多个正则表达式的匹配。该方法类似于indexOf()或者lastIndexOf(); 但是它返回的是指定的值，而不是字符串的位置。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.match(regexp)</code><br><strong>参数</strong>：regexp可以是在stringObject中检索的字符串，也可以是需要检索的RegExp对象<br><strong>返回值</strong>：存放匹配成功的数组；如果没有找到任何的一个匹配，那么它将返回的是null。</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var str = &quot;hello world&quot;;</div><div class="line">// 返回的数组内有三个元素，第一个元素的存放的是匹配的文本，还有二个对象属性；index属性表明的是匹配文本的起始字符在stringObject中的位置；input属性声明的是对stringObject对象的引用；</div><div class="line">console.log(str.match(&quot;hello&quot;)); // [&quot;hello&quot;, index: 0, input: &quot;hello world&quot;]</div><div class="line">console.log(str.match(&quot;Hello&quot;)); // null</div><div class="line">console.log(str.match(/hello/)); // [&quot;hello&quot;, index: 0, input: &quot;hello world&quot;]</div><div class="line"></div><div class="line">// 全局匹配也返回一个数组，但有些不一样；它的数组元素中存放的是 stringObject 中所有的匹配子串，而且也没有 index 属性或 input 属性。</div><div class="line">var str2=&quot;1 plus 2 equal 3&quot;</div><div class="line">console.log(str2.match(/\d+/g)); //[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]</div></pre></td></tr></table></figure></p>
+<p>3.<strong>replace方法</strong>：该方法用于在字符串中使用一些字符替换另一些字符，或者替换一个与正则表达式匹配的子字符串。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.replace(regexp/substr,replacement);</code><br><strong>参数</strong>：regexp/substr可以是字符串或者是需要替换模式的RegExp对象；replacement可以是替换的文本或者是生成替换文本的函数。<br><strong>返回值</strong>：返回替换后的新字符串。</p>
+<p>字符串 stringObject 的 replace() 方法执行的是查找并替换的操作。它将在 stringObject 中查找与regexp 相匹配的子字符串，然后用 replacement 来替换这些子串。如果 regexp 具有全局标志 g，那么replace() 方法将替换所有匹配的子串。否则，它只替换第一个匹配子串。 </p>
+<p>replacement可以是字符串，也可以是函数。如果它是字符串，那么每个匹配都将由字符串替换。但是 replacement 中的 $字符具有特定的含义。如下表所示，它说明从模式匹配得到的字符串将用于替换。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$1</code>、<code>$2</code>、…、<code>$99</code></td>
+<td>与 regexp 中的第 1 到第 99 个子表达式相匹配的文本。</td>
+</tr>
+<tr>
+<td><code>$&amp;</code></td>
+<td>与 regexp 相匹配的子串。</td>
+</tr>
+<tr>
+<td><code>$`</code></td>
+<td>位于匹配子串左侧的文本。</td>
+</tr>
+<tr>
+<td><code>$’</code></td>
+<td>位于匹配子串右侧的文本。</td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td>表示美元符号$。</td>
+</tr>
+</tbody>
+</table>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">var str = &quot;hello world&quot;;</div><div class="line">// 使用字符串替换字符串</div><div class="line">var s1 = str.replace(&quot;hello&quot;,&quot;a&quot;);</div><div class="line">console.log(s1);// a world</div><div class="line"></div><div class="line">// 使用正则替换字符串</div><div class="line">var s2 = str.replace(/hello/,&quot;b&quot;);</div><div class="line">console.log(s2); // b world</div><div class="line"></div><div class="line">// 使用正则全局替换字符串</div><div class="line">var s3 = str.replace(/l/g,&apos;&apos;);</div><div class="line">console.log(s3); // heo word</div><div class="line"></div><div class="line">// $1,$2 代表的是第一个和第二个子表达式相匹配的文本</div><div class="line">// 子表达式需要使用小括号括起来,代表的含义是分组</div><div class="line">var name = &quot;longen    ,yunxi&quot;;</div><div class="line">var s4 = name.replace(/(\w+)\s*,\s*(\w+)/,&quot;$2 $1&quot;);</div><div class="line">console.log(s4); // &quot;yunxi,longen&quot;</div><div class="line"></div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &apos;$&amp;&apos;)) //hello world</div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &apos;$$&apos;)) //hello $orld</div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &apos;$`&apos;)) //hello hello orld</div><div class="line">console.log(&apos;hello world&apos;.replace(/w/g, &quot;$&apos;&quot;)) //hello orldorld</div><div class="line"></div><div class="line">// replace 第二个参数也可以是一个function 函数</div><div class="line">// 单词首字母大写</div><div class="line">var name = &apos;aaa bbb ccc&apos;;</div><div class="line">var uw=name.replace(/\b\w+\b/g, function(word)&#123;</div><div class="line">	return word.substring(0,1).toUpperCase()+word.substring(1);&#125;</div><div class="line">);</div><div class="line">console.log(uw) //Aaa Bbb Ccc</div><div class="line"></div><div class="line"></div><div class="line">var name2 = &quot;123cbc45678rtyu909876pjkl54321&quot;;</div><div class="line">name2.replace(/\d+/g,function(v)&#123;</div><div class="line">    console.log(v); </div><div class="line">    /*</div><div class="line">     * 第一次打印123</div><div class="line">     * 第二次打印45678</div><div class="line">     * 第三次打印909876</div><div class="line">     * 第四次打印54321</div><div class="line">     */</div><div class="line">&#125;);</div><div class="line">/*</div><div class="line"> * 如下函数，回调函数参数一共有四个</div><div class="line"> * 第一个参数的含义是 匹配的字符串</div><div class="line"> * 第二个参数的含义是 正则表达式分组内容，没有分组的话，就没有该参数,</div><div class="line"> * 如果没有该参数的话那么第四个参数就是undefined</div><div class="line"> * 第三个参数的含义是 匹配项在字符串中的索引index</div><div class="line"> * 第四个参数的含义是 原字符串</div><div class="line"> */</div><div class="line"> name2.replace(/(\d+)/g,function(a,b,c,d)&#123;</div><div class="line">    console.log(a);</div><div class="line">    console.log(b);</div><div class="line">    console.log(c);</div><div class="line">    console.log(d);</div><div class="line">    /*</div><div class="line">     * 如上会执行四次，值分别如下(正则使用小括号，代表分组)：</div><div class="line">     * 第一次： 123,123,0,123cbc45678rtyu909876pjkl54321</div><div class="line">     * 第二次： 45678,45678,6,123cbc45678rtyu909876pjkl54321</div><div class="line">     * 第三次： 909876,909876,15,123cbc45678rtyu909876pjkl54321</div><div class="line">     * 第四次： 54321,54321,25,123cbc45678rtyu909876pjkl54321</div><div class="line">     */</div><div class="line"> &#125;);</div></pre></td></tr></table></figure></p>
+<p>4.<strong>split方法</strong>：该方法把一个字符串分割成字符串数组。</p>
+<blockquote>
+<p><strong>语法</strong>：<code>stringObject.split(separator,howmany)</code><br><strong>参数</strong>：<br>   1.separator[必填项]，字符串或正则表达式，该参数指定的地方分割stringObject;<br>   2.howmany[可选] 该参数指定返回的数组的最大长度，如果设置了该参数，返回的子字符串不会多于这个参数指定的数组。如果没有设置该参数的话，整个字符串都会被分割，不考虑他的长度。<br><strong>返回值</strong>：一个字符串数组。该数组通过在separator指定的边界处将字符串stringObject分割成子字符串。</p>
+</blockquote>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var str=&quot;How are you doing today?&quot;</div><div class="line">console.log(str.split(&quot; &quot;)) //[&quot;How&quot;, &quot;are&quot;, &quot;you&quot;, &quot;doing&quot;, &quot;today?&quot;]</div><div class="line">console.log(str.split(&quot;&quot;)) //[&quot;H&quot;, &quot;o&quot;, &quot;w&quot;, &quot; &quot;, &quot;a&quot;, &quot;r&quot;, &quot;e&quot;, &quot; &quot;, &quot;y&quot;, &quot;o&quot;, &quot;u&quot;, &quot; &quot;, &quot;d&quot;, &quot;o&quot;, &quot;i&quot;, &quot;n&quot;, &quot;g&quot;, &quot; &quot;, &quot;t&quot;, &quot;o&quot;, &quot;d&quot;, &quot;a&quot;, &quot;y&quot;, &quot;?&quot;]</div><div class="line">console.log(str.split(&quot; &quot;,3)) //[&quot;How&quot;, &quot;are&quot;, &quot;you&quot;]</div><div class="line"></div><div class="line">// 也可以使用正则表达式</div><div class="line">console.log(str.split(/\s+/)) //[&quot;How&quot;, &quot;are&quot;, &quot;you&quot;, &quot;doing&quot;, &quot;today?&quot;]</div></pre></td></tr></table></figure></p>
+<h2 id="贪婪模式与非贪婪模式"><a href="#贪婪模式与非贪婪模式" class="headerlink" title="贪婪模式与非贪婪模式"></a>贪婪模式与非贪婪模式</h2><p>Javascript中的正则表达式贪婪模式与非贪婪模式的区别是：被量词修饰的子表达式的匹配行为；贪婪模式在整个表达式匹配成功的情况下尽可能多的匹配；非贪婪模式在整个表达式匹配成功的前提下，尽可能少的匹配。</p>
+<p>一些常见的修饰贪婪模式的量词如下：<br><code>{x,y}</code>，<code>{x,}</code>，<code>?</code>，<code>*</code>和<code>+</code></p>
+<p>非贪婪模式就是在如上贪婪模式后加上一个问号（<code>?</code>），就可以变成非贪婪模式的量词；如下：<br><code>{x,y}?</code>，<code>{x,}?</code>，<code>??</code>，<code>*?</code>，和<code>+?</code></p>
+<p>示例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//贪婪模式，尽可能多的匹配</div><div class="line">console.log(&apos;0123456789&apos;.replace(/\d&#123;3,6&#125;/,&quot;*&quot;)) //*6789</div><div class="line"></div><div class="line">//非贪婪模式，尽可能少的匹配</div><div class="line">console.log(&apos;0123456789&apos;.replace(/\d&#123;3,6&#125;?/,&quot;*&quot;)) //*3456789</div></pre></td></tr></table></figure></p>
+<h2 id="分组与反向引用"><a href="#分组与反向引用" class="headerlink" title="分组与反向引用"></a>分组与反向引用</h2><p><strong>分组</strong>，又称为子表达式。把正则表达式拆分成小表达式。</p>
+<p>直接上代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//不分组，量词仅作用到最后一个字符(c)</div><div class="line">console.log(/abc&#123;2&#125;/.test(&apos;abcabc&apos;)); // false</div><div class="line">console.log(/abc&#123;2&#125;/.test(&apos;abcc&apos;)); //true</div><div class="line"></div><div class="line">//分组，量词作用于整个括号里的子表达式</div><div class="line">console.log(/(abc)&#123;2&#125;/.test(&apos;abcabc&apos;)); // true</div><div class="line">console.log(/(abc)&#123;2&#125;/.test(&apos;abcc&apos;)); //false</div></pre></td></tr></table></figure></p>
+<p>分组经常和<strong>反向引用</strong>一起使用，反向引用在前面的replace方法就有了，只不过没有说他的概念，这里说一下：<code>当一个正则表达式被分组后，每个分组自动被赋予一个组号，一左到右分别是 $1 $2…</code><br>再举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//格式化日期</div><div class="line">var reg = /^(\d&#123;4&#125;)[/-](\d&#123;2&#125;)[/-](\d&#123;2&#125;)$/</div><div class="line">console.log(&apos;2016/11/18&apos;.replace(reg, &apos;$1年$2月$3日&apos;)) //2016年11月18日</div><div class="line">console.log(&apos;2016-11-18&apos;.replace(reg, &apos;$1年$2月$3日&apos;)) //2016年11月18日</div><div class="line">console.log(&apos;2016-11-18&apos;.replace(reg, &apos;$1$2$3&apos;)) //20161118</div></pre></td></tr></table></figure></p>
+<h2 id="非捕获性分组"><a href="#非捕获性分组" class="headerlink" title="非捕获性分组"></a>非捕获性分组</h2><p>不是所有分组都能创建反向引用，有一种分组叫做非捕获性分组，非捕获性分组以<code>(?:pattern)</code>表示，在一些只需要分组匹配但是并不需要得到各个分组匹配的结果时，使用非捕获性分组可以提高匹配速度；非捕获分组的含义我们可以理解为如下：子表达式可以作为被整体修饰但是子表达式匹配的结果不会被存储；如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var reg = /(?:\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/</div><div class="line">var date = &apos;2012-12-21&apos;</div><div class="line">reg.test(date)</div><div class="line">RegExp.$1  // 12</div><div class="line">RegExp.$2  // 21</div></pre></td></tr></table></figure>
+<p>这里，<code>(?:\d{4})</code>分组不会捕获任何字符串，所以<code>$1</code>为<code>(\d{2})</code>捕获的字符串。</p>
+<h2 id="零宽断言"><a href="#零宽断言" class="headerlink" title="零宽断言"></a>零宽断言</h2><p>初学者第一次看到这个名词可能有点懵逼(我第一次也不懂)，这里说明一下。</p>
+<blockquote>
+<p>零宽断言就是下结论，例如ab，正则：a(?=b)，匹配a并且向右看是b，得到的结果是a，断言不会在匹配的内容当中，如果是a(?=c)，则匹配不到任何内容，因为匹配a以后向右看并不是c。另外，零宽断言分两种：前瞻(Lookahead)和后顾(Lookbehind);<code>但JavaScript只支持前瞻</code>。</p>
+</blockquote>
+<p>前瞻表达式的语法如下：</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m(?=n)</code></td>
+<td>匹配后面紧接n的字符串m</td>
+</tr>
+<tr>
+<td><code>m(?!n)</code></td>
+<td>匹配后面没有紧接n的字符串m</td>
+</tr>
+</tbody>
+</table>
+<p>再两个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 获取字符串中以ing结尾的单词的前半部分</div><div class="line">var str = &apos;I love dancing but he likes singing&apos;;</div><div class="line">var pattern = /\b\w+(?=ing\b)/g;</div><div class="line">var ans = str.match(pattern);</div><div class="line">console.log(ans); // [&quot;danc&quot;, &quot;sing&quot;]</div><div class="line"></div><div class="line"></div><div class="line">// 获取第五位不是i的单词的前四位</div><div class="line">var s = &apos;I love dancing but he likes singing&apos;;</div><div class="line">var pattern = /\b\w&#123;4&#125;(?!i)/g;</div><div class="line">var ans = s.match(pattern);</div><div class="line">console.log(ans); // [&quot;love&quot;, &quot;like&quot;]</div></pre></td></tr></table></figure></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>正则表达式基础知识差不多这些够用了，后面就是多谢多运用。共勉！</p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>最后推荐两个比较好的工具，能帮助我们写出更好更准确的正则表达式。<br><a href="https://regexper.com/" target="_blank" rel="external">正则表达式图形化工具</a><br><a href="http://regexr.com/" target="_blank" rel="external">正则表达式检测工具</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://www.runoob.com/jsref/jsref-obj-regexp.html" target="_blank" rel="external">JavaScript RegExp 对象</a><br><a href="http://www.cnblogs.com/tugenhua0707/p/5037811.html" target="_blank" rel="external">深入浅出的javascript的正则表达式学习教程</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[移动Web开发小结]]></title>
+      <url>http://mrsunny123.github.io/2016/09/26/%E7%A7%BB%E5%8A%A8Web/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>在做移动Web开发时有很多地方跟PC端是不一样的，需要不一样的设置，这里就记录下移动Web开发中有用的设置和一些通用代码。</p>
+</blockquote>
+<h1 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h1><h2 id="设置页面宽度等于设备宽度，并禁止用户缩放页面"><a href="#设置页面宽度等于设备宽度，并禁止用户缩放页面" class="headerlink" title="设置页面宽度等于设备宽度，并禁止用户缩放页面"></a>设置页面宽度等于设备宽度，并禁止用户缩放页面</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="忽略页面中的数字识别为电话，忽略email识别"><a href="#忽略页面中的数字识别为电话，忽略email识别" class="headerlink" title="忽略页面中的数字识别为电话，忽略email识别"></a>忽略页面中的数字识别为电话，忽略email识别</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;format-detection&quot; content=&quot;telphone=no, email=no&quot; /&gt;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="开启对web-app程序的支持（仅针对IOS系统）"><a href="#开启对web-app程序的支持（仅针对IOS系统）" class="headerlink" title="开启对web app程序的支持（仅针对IOS系统）"></a>开启对web app程序的支持（仅针对IOS系统）</h2><blockquote>
+<p>网站开启对web app程序的支持，其实意思就是删除默认的苹果工具栏和菜单栏，开启全屏显示</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="改变顶部状态条的颜色（仅针对IOS系统）"><a href="#改变顶部状态条的颜色（仅针对IOS系统）" class="headerlink" title="改变顶部状态条的颜色（仅针对IOS系统）"></a>改变顶部状态条的颜色（仅针对IOS系统）</h2><blockquote>
+<p>在 web app 下状态条（屏幕顶部条）的颜色默认值为 default（白色），可以定为 black（黑色）和 black-translucent（灰色半透明）；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="完整的HTML模板"><a href="#完整的HTML模板" class="headerlink" title="完整的HTML模板"></a>完整的HTML模板</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;meta charset=&quot;utf-8&quot;&gt;</div><div class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;</div><div class="line">&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;</div><div class="line">&lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;</div><div class="line">&lt;meta name=&quot;format-detection&quot; content=&quot;telphone=no, email=no&quot; /&gt;</div><div class="line">&lt;title&gt;标题&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">这里开始内容</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><h2 id="css-reset"><a href="#css-reset" class="headerlink" title="css reset"></a>css reset</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">html&#123;</div><div class="line">    -webkit-tap-highlight-color: rgba(0,0,0,0); /*去掉触摸遮盖层*/</div><div class="line">    -webkit-user-modify: read-write-plaintext-only;</div><div class="line">    -webkit-user-select: none; /*禁止用户选择文字*/</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*设置所有盒子大小计算边框内*/</div><div class="line">*,</div><div class="line">*:before,</div><div class="line">*:after &#123;</div><div class="line">    box-sizing: border-box;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*消除输入框的阴影和边框*/</div><div class="line">input,textarea, select&#123;</div><div class="line">    -webkit-appearance: none; /*去掉webkit默认的表单样式*/</div><div class="line">    appearance: none;</div><div class="line">    outline: none;</div><div class="line">    border: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="消除transition动画闪屏"><a href="#消除transition动画闪屏" class="headerlink" title="消除transition动画闪屏"></a>消除transition动画闪屏</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.animate &#123;</div><div class="line">    -webkit-transform-style: preserve-3d; /*设置内嵌的元素在 3D 空间如何呈现：保留 3D*/</div><div class="line">    -webkit-backface-visibility: hidden; /*设置进行转换的元素的背面在面对用户时是否可见：隐藏*/</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="开启硬件加速"><a href="#开启硬件加速" class="headerlink" title="开启硬件加速"></a>开启硬件加速</h2><blockquote>
+<p> 解决页面闪白，保证动画流畅。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">.css &#123;</div><div class="line">   -webkit-transform: translate3d(0, 0, 0);</div><div class="line">   -moz-transform: translate3d(0, 0, 0);</div><div class="line">   -ms-transform: translate3d(0, 0, 0);</div><div class="line">   transform: translate3d(0, 0, 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="关于打电话、发短信、发邮件的实现"><a href="#关于打电话、发短信、发邮件的实现" class="headerlink" title="关于打电话、发短信、发邮件的实现"></a>关于打电话、发短信、发邮件的实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;tel:10086&quot;&gt;打电话给：10086&lt;/a&gt;</div><div class="line">&lt;a href=&quot;sms:10086&quot;&gt;发短信给：10086&lt;/a&gt;</div><div class="line">&lt;a href=&quot;mailto:zhangxy_92@outlook.com&quot;&gt;发邮件给：zhangxy_92@outlook.com&lt;/a&gt;</div></pre></td></tr></table></figure>
+<h2 id="关于布局"><a href="#关于布局" class="headerlink" title="关于布局"></a>关于布局</h2><blockquote>
+<p>移动端中对于flexbox的支持已经很好，flexbox是布局神器。阮一峰老师写过<a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">flexbox 入门教程</a>；以后自己可能也会写一篇flexbox的学习和总结笔记。</p>
+</blockquote>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[JS开发中的一些小技巧和方法]]></title>
+      <url>http://mrsunny123.github.io/2016/09/19/JS-Tips/</url>
+      <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这两年前端很火，JavaScript又是前端的必会技能，在JavaScript开发中其实有一些有意思的小技巧和方法，本文记录了一些我工作中遇到的一些技巧和方法。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="生成指定范围内的随机数"><a href="#生成指定范围内的随机数" class="headerlink" title="生成指定范围内的随机数"></a>生成指定范围内的随机数</h2><blockquote>
+<p>当我们需要获取指定范围<code>(min,max)</code>内的整数的时候，下面的代码非常适合；这段代码用的还挺多的。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function setRadomNum(min,max)&#123;</div><div class="line">    return  Math.floor(Math.random() * (max - min + 1)) + min;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="json转url参数"><a href="#json转url参数" class="headerlink" title="json转url参数"></a>json转url参数</h2><blockquote>
+<p>当我们进行http请求时，可能需要把json转化为url参数，这时下面这段代码就派上用场了。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function json2url(json) &#123;</div><div class="line">    var arr=[];</div><div class="line">    for(var name in json)&#123;</div><div class="line">        arr.push(name+&apos;=&apos;+json[name]);</div><div class="line">    &#125;</div><div class="line">    return arr.join(&apos;&amp;&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="验证是否为数组"><a href="#验证是否为数组" class="headerlink" title="验证是否为数组"></a>验证是否为数组</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function isArray(obj)&#123;</div><div class="line">    return Array.isArray(obj) || Object.prototype.toString.call(obj) === &apos;[object Array]&apos;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>先检验本地是否有<code>Array.isArray</code>函数，没有就执行后面的方法检测。</p>
+</blockquote>
+<h2 id="清空数组"><a href="#清空数组" class="headerlink" title="清空数组"></a>清空数组</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">方式一 通过将长度设置为0</div><div class="line">var arr=[1,2,3,4,5];</div><div class="line">arr.length=0;</div><div class="line"></div><div class="line">方式二 通过splice方法</div><div class="line"> var arr=[1,2,3,4,5];</div><div class="line">arr.splice(0,arr.length);</div><div class="line"></div><div class="line">//方式三</div><div class="line">var arr=[1,2,3,4,5];</div><div class="line">arr=[];</div></pre></td></tr></table></figure>
+<blockquote>
+<p>方式三将一个新的数组的引用赋值给变量，其他引用并不受影响。 这意味着以前数组的内容被引用的话将依旧存在于内存中，这将导致内存泄漏。<code>最高效的方法是第一种</code>，所以推荐使用第一种方法清空数组。</p>
+</blockquote>
+<h2 id="保留指定小数位"><a href="#保留指定小数位" class="headerlink" title="保留指定小数位"></a>保留指定小数位</h2><blockquote>
+<p>这个需求在项目中也是很常见的，可以toFixed()方法</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var num =3.1415926;</div><div class="line">num = num.toFixed(4); //toFixed()方法可把 Number 四舍五入为指定小数位数的数字，括号里面取值0~20（包括0和20）</div><div class="line">console.log(num); //3.1416</div></pre></td></tr></table></figure>
+<h2 id="打乱数组的顺序"><a href="#打乱数组的顺序" class="headerlink" title="打乱数组的顺序"></a>打乱数组的顺序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">方式一</div><div class="line">arr.sort(function()&#123;return Math.random()-0.5&#125;);</div><div class="line"></div><div class="line">方式二</div><div class="line">function shuffle(arr) &#123;</div><div class="line">    var i, </div><div class="line">        j,</div><div class="line">        temp;</div><div class="line">    for (i = arr.length - 1; i &gt; 0; i--) &#123;</div><div class="line">        j = Math.floor(Math.random() * (i + 1));</div><div class="line">        temp = arr[i];</div><div class="line">        arr[i] = arr[j];</div><div class="line">        arr[j] = temp;</div><div class="line">    &#125;</div><div class="line">    return arr;    </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>方式一使用了数组的内置排序方法：<code>sort</code>，而方式二是借助了一个中间量，随机数组里的两个值，让它们交换位置。</p>
+</blockquote>
+<h2 id="使用-而不是"><a href="#使用-而不是" class="headerlink" title="使用 === 而不是 =="></a>使用 === 而不是 ==</h2><blockquote>
+<p>== (或者 !=) 操作在需要的情况下自动进行了类型转换。=== (或 !==)操作不会执行任何转换。===在比较值和类型时，可以说比==更快。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[10] ==  10      // 为 true</div><div class="line">[10] === 10      // 为 false</div><div class="line"></div><div class="line">&apos;10&apos; ==  10      // 为 true</div><div class="line">&apos;10&apos; === 10      // 为 false</div><div class="line"></div><div class="line"> []  ==  0       // 为 true</div><div class="line"> []  === 0       // 为 false</div><div class="line"></div><div class="line"> &apos;&apos;  ==  false   // 为 true 但 true == &quot;a&quot; 为false</div><div class="line"> &apos;&apos;  === false   // 为 false</div></pre></td></tr></table></figure>
+<h2 id="妙用“-amp-amp-”和“-”"><a href="#妙用“-amp-amp-”和“-”" class="headerlink" title="妙用“&amp;&amp;”和“||”"></a>妙用“&amp;&amp;”和“||”</h2><blockquote>
+<p><code>||</code>和<code>&amp;&amp;</code>运算符妙用，可用于精简代码，降低程序的可读性。</p>
+</blockquote>
+<p><strong>用于赋值</strong><br><code>&amp;&amp;</code>：从左往右依次判断，当当前值为<code>true</code>则继续，为<code>false</code>则返回此值（是返回未转换为布尔值时的原值哦）<br><code>||</code> ： 从左往右依次判断，当当前值为<code>false</code>则继续，为<code>true</code>则返回此值（是返回未转换为布尔值时的原值哦）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var attr = true &amp;&amp; 4 &amp;&amp; &quot;aaa&quot;; //aaa;</div><div class="line"></div><div class="line">var attr = true &amp;&amp; 0 &amp;&amp; &quot;aaa&quot;; //0</div><div class="line"></div><div class="line">var attr = 100 || 12; //100</div><div class="line"></div><div class="line">var attr = &quot;e&quot; || &quot;hahaha&quot; //&apos;e&apos;</div><div class="line"></div><div class="line">var attr = &quot;&quot; || &quot;hahaha&quot; //&apos;hahaha&apos;</div></pre></td></tr></table></figure></p>
+<p><strong>用于条件执行语句</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 普通的if语句</div><div class="line">if(test)&#123;</div><div class="line">  isTrue();</div><div class="line">&#125;</div><div class="line">// 上面的语句可以使用 &apos;&amp;&amp;&apos; 写为：</div><div class="line">( test &amp;&amp; isTrue() );</div><div class="line"></div><div class="line"></div><div class="line">test = false;</div><div class="line">if(!test)&#123;</div><div class="line">  isFalse();</div><div class="line">&#125;</div><div class="line">// 上面的语句可以使用 &apos;||&apos; 写为：</div><div class="line">( test || isFalse());</div></pre></td></tr></table></figure>
+<p><strong>用于多次判断后的赋值</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">var add_level = 0; </div><div class="line">if(add_step == 5)&#123; </div><div class="line">    add_level = 1; </div><div class="line">&#125; </div><div class="line">else if(add_step == 10)&#123; </div><div class="line">    add_level = 2; </div><div class="line">&#125; </div><div class="line">else if(add_step == 12)&#123; </div><div class="line">    add_level = 3; </div><div class="line">&#125; </div><div class="line">else if(add_step == 15)&#123; </div><div class="line">    add_level = 4; </div><div class="line">&#125; </div><div class="line">else &#123; </div><div class="line">    add_level = 0; </div><div class="line">&#125;</div><div class="line"></div><div class="line">//可以写成</div><div class="line">var add_level = (add_step==5 &amp;&amp; 1) || (add_step==10 &amp;&amp; 2) || (add_step==12 &amp;&amp; 3) || (add_step==15 &amp;&amp; 4) || 0;</div></pre></td></tr></table></figure>
+<h2 id="获取数组中的最大值或最小值"><a href="#获取数组中的最大值或最小值" class="headerlink" title="获取数组中的最大值或最小值"></a>获取数组中的最大值或最小值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function maxAndMin(arr)&#123;</div><div class="line">    return &#123;</div><div class="line">       max:Math.max.apply(null,arr.join(&apos;,&apos;).split(&apos;,&apos;)),</div><div class="line">       min:Math.min.apply(null,arr.join(&apos;,&apos;).split(&apos;,&apos;))</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>该方法适合一维或者多维数组。</p>
+</blockquote>
+<h2 id="随机获取数组里的元素"><a href="#随机获取数组里的元素" class="headerlink" title="随机获取数组里的元素"></a>随机获取数组里的元素</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function getRadomFromArr(arr)&#123;</div><div class="line">    return arr[Math.floor(Math.random()*arr.length)];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="从数组里查找指定的值"><a href="#从数组里查找指定的值" class="headerlink" title="从数组里查找指定的值"></a>从数组里查找指定的值</h2><blockquote>
+<p>查到了返回<code>true</code>，没查到返回<code>false</code>。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function findInArr(arr, value)&#123;</div><div class="line">	for (var i=0; i&lt;arr.length; i++)&#123;</div><div class="line">		if (arr[i] == value)&#123;</div><div class="line">			return true;</div><div class="line">		&#125;</div><div class="line">	&#125;	</div><div class="line">	return false;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="生成指定长度的随机数字字母字符串"><a href="#生成指定长度的随机数字字母字符串" class="headerlink" title="生成指定长度的随机数字字母字符串"></a>生成指定长度的随机数字字母字符串</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function getRandomStr(len) &#123;</div><div class="line">    var str = &quot;&quot;;</div><div class="line">    for( ; str.length &lt; len; str  += Math.random().toString(36).substr(2));</div><div class="line">    return  str.substr(0, len);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="去除字符串的空格"><a href="#去除字符串的空格" class="headerlink" title="去除字符串的空格"></a>去除字符串的空格</h2><blockquote>
+<p>虽然在ECMAScript5中已经实现了trim方法，它对低版本浏览器并不支持，所以有时候我们需要自己实现。</p>
+</blockquote>
+<p><strong>去除首尾空格</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function trim(str)&#123;</div><div class="line">    return str.replace(/(^\s*)|(\s*$)/g, &quot;&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">trim(&apos;  hello world    &apos;); //&quot;hello world&quot;</div></pre></td></tr></table></figure></p>
+<p><strong>去除所有空格</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function trimAll(str)&#123;</div><div class="line">    return str.replace(/\s+/g,&quot;&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">trimAll(&apos;   he ll o  wo  r ld    &apos;); //&quot;helloworld&quot;</div></pre></td></tr></table></figure></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>JavaScript里面肯定还有很多技巧，以后遇到了慢慢总结。JavaScript的水很深，感觉还有好多要学的。加油！！！</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Web 存储 —— 关于Cookie, LocalStorage 与 SessionStorage]]></title>
+      <url>http://mrsunny123.github.io/2016/09/11/Web-Storage/</url>
+      <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>做项目是会有各种需求，有时候希望通过一些手段来持久化的存储一些有用的数据。一般将这项任务交给了服务器端的数据库或者浏览器端的cookie。随着HTML5的出现，web开发又有了新选择：Web Storage。下面就来说说cookie与web Storage。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p><code>Cookie</code>是小甜饼的意思。cookie 确实非常小，它的大小限制为4KB左右。它的主要用途有保存登录信息，比如你登录某个网站市场可以看到“记住密码”，这通常就是通过在 Cookie 中存入一段辨别用户身份的数据来实现的。</p>
+<h2 id="Web-Storage"><a href="#Web-Storage" class="headerlink" title="Web Storage"></a>Web Storage</h2><p>html5中的Web Storage包括了两种存储方式：<code>sessionStorage</code>和<code>localStorage</code>。<br><a id="more"></a><br><code>SessionStorage</code>用于本地存储一个会话（session）中的数据，这些数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁。因此SessionStorage不是一种持久化的本地存储，仅仅是会话级别的存储。</p>
+<p><code>LocalStorage</code>用于持久化的本地存储，除非主动删除数据，否则数据是永远不会过期的。</p>
+<h3 id="Web-Storage浏览器兼容性"><a href="#Web-Storage浏览器兼容性" class="headerlink" title="Web Storage浏览器兼容性"></a>Web Storage浏览器兼容性</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">特性/浏览器</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Firefox (Gecko)</th>
+<th style="text-align:center">Internet Explorer</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">Safari (WebKit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>localStorage</strong></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">3.5</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">10.50</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>sessionStorage</strong></td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">10.50</td>
+<td style="text-align:center">4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="localStorage和sessionStorage操作"><a href="#localStorage和sessionStorage操作" class="headerlink" title="localStorage和sessionStorage操作"></a>localStorage和sessionStorage操作</h3><p>LocalStorage和SessionStorage都具有相同的操作方法，例如setItem、getItem、removeItem和clear等。</p>
+<p><strong>setItem</strong><br>用途：将value存储到key字段<br>用法：.setItem( key, value)<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.setItem(&quot;key&quot;, &quot;value&quot;);</div><div class="line">localStorage.setItem(&quot;site&quot;, &quot;123&quot;);</div></pre></td></tr></table></figure></p>
+<p><strong>getItem</strong><br>用途：获取指定key本地存储的值<br>用法：.getItem( key)<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.getItem(&quot;key&quot;);</div><div class="line">localStorage.getItem(&quot;site&quot;);</div></pre></td></tr></table></figure></p>
+<p><strong>removeItem</strong><br>用途：删除指定key本地存储的值<br>用法：.removeItem( key)<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.removeItem(&quot;key&quot;);</div><div class="line">localStorage.removeItem(&quot;site&quot;);</div></pre></td></tr></table></figure></p>
+<p><strong>clear</strong><br>用途：清除所有的key/value<br>用法：.clear()<br>代码示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sessionStorage.clear();</div><div class="line">localStorage.clear();</div></pre></td></tr></table></figure></p>
+<p><strong>点操作和[ ]</strong><br>web Storage不但可以用自身的setItem,getItem等方便存取，也可以像普通对象一样用点(.)操作符，及[]的方式进行数据存储，像如下的代码： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var storage = window.localStorage; </div><div class="line">storage.key1 = &quot;hello&quot;; </div><div class="line">storage[&quot;key2&quot;] = &quot;world&quot;; </div><div class="line">console.log(storage.key1); </div><div class="line">console.log(storage[&quot;key2&quot;]);</div></pre></td></tr></table></figure>
+<p><strong>localStorage和sessionStorage的key和length属性实现遍历</strong><br>sessionStorage和localStorage提供的key()和length可以方便的实现存储的数据遍历，例如下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var storage = window.localStorage; </div><div class="line">for (var i=0, len = storage.length; i  &lt;  len; i++)&#123; </div><div class="line">    var key = storage.key(i);     </div><div class="line">    var value = storage.getItem(key);     </div><div class="line">    console.log(key + &quot;=&quot; + value); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="三者的对比"><a href="#三者的对比" class="headerlink" title="三者的对比"></a>三者的对比</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Cookie</th>
+<th style="text-align:left">LocalStorage</th>
+<th style="text-align:left">SessionStorage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">数据的有效期</td>
+<td style="text-align:left">可设置失效时间，默认是关闭浏览器后失效</td>
+<td style="text-align:left">除非被清除，否则永久保存</td>
+<td style="text-align:left">仅在当前会话下有效，关闭页面或浏览器后被清除</td>
+</tr>
+<tr>
+<td style="text-align:left">可存储数据大小</td>
+<td style="text-align:left">4K左右</td>
+<td style="text-align:left">5M左右</td>
+<td style="text-align:left">5M左右</td>
+</tr>
+<tr>
+<td style="text-align:left">是否需要与服务端通信</td>
+<td style="text-align:left">每次都会携带在HTTP头中，如果使用cookie保存过多数据会带来性能问题</td>
+<td style="text-align:left">仅在客户端（即浏览器）中保存，不参与和服务器的通信</td>
+<td style="text-align:left">仅在客户端（即浏览器）中保存，不参与和服务器的通信</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>除了上面以外，<code>LocalStorage</code>与<code>SessionStorage</code>拥有<code>setItem</code>,<code>getItem</code>,<code>removeItem</code>,<code>clear</code>等方法，操作起来比较方便，而<code>Cookie</code>需要前端开发者自己封装<code>setCookie</code>，<code>getCookie</code>。</p>
+</blockquote>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p><code>Cookie</code>比较常见的应用是判断用户是否登录。针对登录过的用户，服务器端会在他登录时往 <code>Cookie</code> 中插入一段加密过的唯一辨识单一用户的辨识码，下次只要读取这个值就可以判断当前用户是否登录啦。<br><code>LocalStorage</code>可以用来保存用户在电商网站的购物车信息，也可以保存一些HTML5游戏的本地数据。</p>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>使用<code>Cookie</code>、<code>localStorage</code> 和 <code>sessionStorage</code>的时候，需要时刻注意是否有代码存在 XSS 注入的风险。如果你的网站中有 XSS 的风险，它们就能对你的 <code>localStorage</code> 随意更改。所以千万不要用它们存储你系统中的敏感数据。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.cnblogs.com/yuzhongwusan/archive/2011/12/19/2293347.html" target="_blank" rel="external">HTMl5的sessionStorage和localStorage</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API" target="_blank" rel="external">使用 Web Storage API</a><br><a href="https://segmentfault.com/a/1190000002723469" target="_blank" rel="external">详说 Cookie, LocalStorage 与 SessionStorage</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[JavaScript对象克隆]]></title>
+      <url>http://mrsunny123.github.io/2016/08/24/JS-Clone/</url>
+      <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前有人问我如何克隆一个JS对象，我当时没答上来；过后我查资料弄懂了这个问题，现在整理成文。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>JavaScript的一切实例都是对象，但他们也分为原始类型和引用类型。原始类型对象指的是字符串（<code>String</code>）、数值（<code>Number</code>）、布尔值（<code>Boolean</code>）、<code>undefined</code>、<code>null</code>，引用类型对象指的是数组（<code>Array</code>）、对象（<code>Object</code>）、函数（<code>Function</code>）。<br>既然对象分为这两类，他们的复制克隆也是有差别的。普通对象存储的是对象的实际数据，而引用对象存储的是对象的引用地址，而把对象的实际内容单独存放。下面我们就来看看他们克隆的区别。<br><a id="more"></a></p>
+<h2 id="原始类型对象的克隆"><a href="#原始类型对象的克隆" class="headerlink" title="原始类型对象的克隆"></a>原始类型对象的克隆</h2><h3 id="字符串的克隆"><a href="#字符串的克隆" class="headerlink" title="字符串的克隆"></a>字符串的克隆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var x=&quot;abc&quot;;</div><div class="line">var y=x;</div><div class="line">y=&quot;xyz&quot;;</div><div class="line"> </div><div class="line">alert(x);   // &quot;abc&quot;</div><div class="line">alert(y);   // &quot;xyz&quot;</div></pre></td></tr></table></figure>
+<h3 id="数值的克隆"><a href="#数值的克隆" class="headerlink" title="数值的克隆"></a>数值的克隆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var x=1;</div><div class="line">var y=x;</div><div class="line">y=2;</div><div class="line"></div><div class="line">alert(x);   // 1</div><div class="line">alert(y);   // 2</div></pre></td></tr></table></figure>
+<h3 id="布尔值的克隆"><a href="#布尔值的克隆" class="headerlink" title="布尔值的克隆"></a>布尔值的克隆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var x=true;</div><div class="line">var y=x;</div><div class="line">y=false;</div><div class="line"> </div><div class="line">alert(x);   // true</div><div class="line">alert(y);   // false</div></pre></td></tr></table></figure>
+<p>我们可以看出来原始类型的克隆很简单，只需要一个<code>=</code>赋值就可以了；<code>undefined</code>、<code>null</code>也是同理。</p>
+<h2 id="引用类型的对象克隆"><a href="#引用类型的对象克隆" class="headerlink" title="引用类型的对象克隆"></a>引用类型的对象克隆</h2><h3 id="数值的克隆-1"><a href="#数值的克隆-1" class="headerlink" title="数值的克隆"></a>数值的克隆</h3><p>如果采用普通克隆：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var x=[1,2];</div><div class="line">var y=x;</div><div class="line">y.push(3);</div><div class="line"></div><div class="line">alert(x);   // 1,2,3</div><div class="line">alert(y);   // 1,2,3</div></pre></td></tr></table></figure></p>
+<p>由上可知，原始数组x，克隆数组y，修改了克隆数组y，但也同时修改了原始数组x，这就是引用对象的特点。那么怎样才能达到完整的数组克隆呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var x=[1,2];</div><div class="line">var y=[];</div><div class="line">var i=0;</div><div class="line">var j=x.length;</div><div class="line">for(;i&lt;j;i++)</div><div class="line">&#123;</div><div class="line">	y[i]=x[i];</div><div class="line">&#125;</div><div class="line">y.push(3);</div><div class="line"> </div><div class="line">console.log(x);   // [1,2]</div><div class="line">console.log(y);   // [1,2,3]</div></pre></td></tr></table></figure></p>
+<p>这样，两个数值就互不干扰，实现了完整数组克隆。</p>
+<h3 id="对象的克隆"><a href="#对象的克隆" class="headerlink" title="对象的克隆"></a>对象的克隆</h3><p>和数组的克隆同理，对象的完整克隆如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var x=&#123;a:2,b:4&#125;;</div><div class="line">var y=&#123;&#125;;</div><div class="line">var i;</div><div class="line">for(i in x)</div><div class="line">&#123;</div><div class="line">	y[i]=x[i];</div><div class="line">&#125;</div><div class="line">y.c=6;</div><div class="line"> </div><div class="line">console.log(x);   // Object &#123;a: 2, b: 4&#125; </div><div class="line">console.log(y);   // Object &#123;a: 2, b: 4, c: 6&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="函数的克隆"><a href="#函数的克隆" class="headerlink" title="函数的克隆"></a>函数的克隆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var x=function()&#123;alert(1);&#125;;</div><div class="line">var y=x;</div><div class="line">y=function()&#123;alert(2);&#125;;</div><div class="line"></div><div class="line">console.log(x);   // function()&#123;alert(1);&#125;;</div><div class="line">console.log(y);   // function()&#123;alert(2);&#125;;</div></pre></td></tr></table></figure>
+<p>函数的克隆与原始类型对象克隆的方式类似；只需要使用<code>=</code>就可以了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>根据上面的情况，另外，克隆引用对象必须采用完整克隆（深度克隆），包括对象的值也是一个对象也要进行完整克隆（深度克隆）。所以，我们可以总结并封装一个通用的克隆方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">function clone(obj)&#123;</div><div class="line">    var o,i,j,k;</div><div class="line">    if(typeof(obj)!==&quot;object&quot; || obj===null)return obj;</div><div class="line">    if(obj instanceof Array)&#123;</div><div class="line">        o=[];</div><div class="line">        i=0;j=obj.length;</div><div class="line">        for(;i&lt;j;i++)&#123;</div><div class="line">            if(typeof(obj[i])===&quot;object&quot; &amp;&amp; obj[i]!=null)&#123;</div><div class="line">                o[i]=clone(obj[i]);</div><div class="line">            &#125;else&#123;</div><div class="line">                o[i]=obj[i];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;else&#123;</div><div class="line">        o=&#123;&#125;;</div><div class="line">        for(i in obj)&#123;</div><div class="line">            if(typeof(obj[i])===&quot;object&quot; &amp;&amp; obj[i]!==null)&#123;</div><div class="line">                o[i]=clone(obj[i]);</div><div class="line">            &#125;else&#123;</div><div class="line">                o[i]=obj[i];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return o;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Hexo搭建个人博客]]></title>
+      <url>http://mrsunny123.github.io/2016/08/23/Hello-Hexo/</url>
+      <content type="html"><![CDATA[<hr>
+<p>做前端也有一段时间了，身为一个有(ai)追(zhuang)求(X)前端，怎么能没有自己的个人博客呢^_^<br>有想法就去做，所以最近用Hexo在github上搭建一个自己的开源博客，终于有了自己的博客了，也希望自己以后能坚持写文！！！<br>搭建过程中也遇到一些问题，接下来，我将遇到的问题记录下来作为第一篇博客，希望能帮到有需要的人。<br><a id="more"></a></p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><ul>
+<li>安装Node.js<br>到<a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>官网下载相应系统的最新版本，一路安装即可。</li>
+<li>安装git<br>根据不同系统安装相应的 <a href="https://git-scm.com/" target="_blank" rel="external">git</a> 环境。Mac、Linux系统不多说，Windows一般安装<a href="https://git-for-windows.github.io/" target="_blank" rel="external">msysgit</a>。</li>
+<li>安装Hexo<br>使用<code>npm install hexo-cli -g</code>命令安装 <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a> 到全局，然后输入命令<code>hexo -v</code>，输出hexo的版本号即为安装成功。</li>
+<li><p>github准备</p>
+<ul>
+<li>博客是在 <a href="https://github.com/" target="_blank" rel="external">github</a> 上托管维护的，所以当然需要一个github账号。然后在账号下创建一个名为<code>your-name.github.io</code>的仓库。(<code>your-name</code>为你的账号名，比如我的账号名为<code>mrsunny123</code>，那仓库名为<code>mrsunny123.github.io</code>；下文同理)</li>
+<li><p>接下来打开Git Bash，输入配置信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git config --global user.name &quot;You Name&quot;</div><div class="line">git config --global user.email yourmail@server.com</div><div class="line">ssh-keygen -C &apos;yourmail@server.com&apos; -t rsa      //生成ssh秘钥</div></pre></td></tr></table></figure>
+</li>
+<li><p>接着在C:User你的windows用户名.ssh 下找到 id_rsa.pub 文件；</p>
+</li>
+<li>打开github个人首页，点击<code>settings -&gt; SSH and GPG keys -&gt; New SSH key</code>；title 可以随便取名字，Key 里面添加的内容为 id_rsa.pub 文件内所有的代码。然后点击<code>Add SSH key</code>即可。</li>
+<li>使用<code>SSH -v git@github.com</code>命令检测 Git 与 GitHub 是否连接成功。</li>
+</ul>
+</li>
+</ul>
+<h1 id="本地部署Hexo"><a href="#本地部署Hexo" class="headerlink" title="本地部署Hexo"></a>本地部署Hexo</h1><ul>
+<li>在某个地方新建一个项目文件夹（比如Blog），然后进入Blog目录，输入<code>hexo init</code>命令进行初始化；</li>
+<li>初始化完成后，然后输入<code>hexo generate(g)</code>命令将文章编译为静态页面；</li>
+<li>把文章变成页面后，输入<code>hexo server(s)</code>命令启动本地服务，在浏览器中输入<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a>查看生成的页面效果。</li>
+</ul>
+<h1 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h1><p>Hexo自己默认的主题是<code>landscape</code>，如果你满足与它，可以跳过这个步骤，直接进行下一步。我觉得默认主题不好看，所以换成了<code>yilia</code>主题，这个主题在移动端的显示也很不错。</p>
+<ul>
+<li><p>clone 主题代码<br>在目录下执行下面命令clone主题代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia</div></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>Blog/_config.yml</code>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">theme: yilia    //默认为landscape</div></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>themes/yilia/_config.yml</code>文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"># Header</div><div class="line">menu:</div><div class="line">  主页: /</div><div class="line">  所有文章: /archives</div><div class="line">  #随笔: /categories</div><div class="line"></div><div class="line"># SubNav</div><div class="line">subnav:</div><div class="line">  github: &quot;https://github.com/MrSunny123&quot;</div><div class="line">  weibo: &quot;http://weibo.com/u/5896702219&quot;</div><div class="line">  mail: &quot;mailto:zhangxy_92@outlook.com&quot;</div><div class="line">  rss: &quot;/atom.xml&quot;</div><div class="line">  #douban: &quot;#&quot;</div><div class="line">  #zhihu: &quot;#&quot;</div><div class="line">  #facebook: &quot;#&quot;</div><div class="line">  #google: &quot;#&quot;</div><div class="line">  #twitter: &quot;#&quot;</div><div class="line">  #linkedin: &quot;#&quot;</div><div class="line"></div><div class="line">rss: /atom.xml</div><div class="line"></div><div class="line"># 是否需要修改 root 路径</div><div class="line"># 如果您的网站存放在子目录中，例如 http://yoursite.com/blog，</div><div class="line"># 请将您的 url 设为 http://yoursite.com/blog 并把 root 设为 /blog/。</div><div class="line">root: </div><div class="line"></div><div class="line"># Content</div><div class="line">excerpt_link: 阅读全文</div><div class="line">fancybox: true</div><div class="line">mathjax: true</div><div class="line"></div><div class="line"># 是否开启动画效果</div><div class="line">animate: true</div><div class="line"></div><div class="line"># 是否在新窗口打开链接</div><div class="line">open_in_new: false</div><div class="line"></div><div class="line"># Miscellaneous</div><div class="line">google_analytics: &apos;&apos;</div><div class="line">favicon: /favicon.png</div><div class="line"></div><div class="line">#你的头像url</div><div class="line">avatar: /img/head.jpg</div><div class="line">#是否开启分享</div><div class="line">share_jia: true</div><div class="line">share_addthis: true</div><div class="line">#是否开启多说评论，填写你在多说申请的项目名称 duoshuo: duoshuo-key</div><div class="line">#若使用disqus，请在博客config文件中填写disqus_shortname，并关闭多说评论</div><div class="line">duoshuo: &quot;sunny-blog&quot;</div><div class="line">#是否开启云标签</div><div class="line">tagcloud: true</div><div class="line"></div><div class="line">#是否开启友情链接</div><div class="line">#不开启——</div><div class="line">friends: false</div><div class="line">#开启——</div><div class="line">#friends:</div><div class="line">  #奥巴马的博客: http://localhost:4000/</div><div class="line"></div><div class="line">#是否开启“关于我”。</div><div class="line">#不开启——</div><div class="line">#aboutme: false</div><div class="line">#开启——</div><div class="line">aboutme: 程序猿一枚，目前专注WEB前端开发......</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>温馨提示：修改的时候，每个冒号后面都需要留一个英文空格，不然会出现报错！</code></p>
+<ul>
+<li>查看效果<br>更改主题之后使用命令<code>hexo server(s)</code>打开本地服务，查看效果。</li>
+</ul>
+<h1 id="部署到github"><a href="#部署到github" class="headerlink" title="部署到github"></a>部署到github</h1><p>上面所有的操作完成之后，你就可以将你的Blog项目部署到github上了。</p>
+<ul>
+<li><p>部署之前先修改<code>Blog/_config.yml</code>文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">    type: git</div><div class="line">    repository: https://github.com/MrSunny123/MrSunny123.github.io.git  //MrSunny123替换为你自己的用户名(下文同理)</div><div class="line">    branch: master</div></pre></td></tr></table></figure>
+</li>
+<li><p>然后使用如下命令部署：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ npm install hexo-deployer-git --save</div><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>部署成功后，你在浏览器中输入<code>mrsunny123.github.io</code>，就能看到和本地一样的效果了。</p>
+<h1 id="写文章"><a href="#写文章" class="headerlink" title="写文章"></a>写文章</h1><p>博客搭建完成后，就是写文和维护了，更新和维护其实很简单，每次只要依次执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ hexo new(n) xxx    //创建新文章</div><div class="line">$ hexo clean     //清除缓存</div><div class="line">$ hexo generate(g)    //文章写完后执行，把文章生成页面</div><div class="line">$ hexo server(s)    //启动本地服务调试</div><div class="line">$ hexo deploy(d)    //部署到github</div></pre></td></tr></table></figure></p>
+<p><a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>支持<code>Markdown</code>写文章，所以只有关心内容，不用担心排版，用起来还是很不错的^_^</p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>博客还不是很完善，后期还会做一些修改，其实已经添加了一些东西了，比如：添加总站访问量和文章阅读量。<br>如果大家有什么问题，欢迎留言，我会把我知道的告诉大家。<br>好了，到这里利用Hexo搭建github博客的步骤就结束了。想想还有点小激动呢……</p>
+]]></content>
+    </entry>
+    
+  
+  
+</search>

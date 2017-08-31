@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Koa2源码阅读笔记 | Sunny的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引言最近空闲时间读了一下Koa2的源码；在阅读Koa2(version 2.2.0)的源码的过程中，我的感受是代码简洁、思路清晰（不得不佩服大神的水平）。下面是我读完之后的一些感受。
+Koa的设计理念
+Koa 是一个轻量级的、极富表现力的 http 框架。一个web request会通过 Koa 的中间件栈，来动态完成 response 的处理。Koa2 采用了 async 和 await 的语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Koa2源码阅读笔记">
+<meta property="og:url" content="http://mrsunny123.github.io/2017/06/21/Koa2-Code/index.html">
+<meta property="og:site_name" content="Sunny的博客">
+<meta property="og:description" content="引言最近空闲时间读了一下Koa2的源码；在阅读Koa2(version 2.2.0)的源码的过程中，我的感受是代码简洁、思路清晰（不得不佩服大神的水平）。下面是我读完之后的一些感受。
+Koa的设计理念
+Koa 是一个轻量级的、极富表现力的 http 框架。一个web request会通过 Koa 的中间件栈，来动态完成 response 的处理。Koa2 采用了 async 和 await 的语法">
+<meta property="og:image" content="https://sfault-image.b0.upaiyun.com/135/226/1352261008-594a32c87b693_articlex">
+<meta property="og:updated_time" content="2017-08-31T03:10:56.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Koa2源码阅读笔记">
+<meta name="twitter:description" content="引言最近空闲时间读了一下Koa2的源码；在阅读Koa2(version 2.2.0)的源码的过程中，我的感受是代码简洁、思路清晰（不得不佩服大神的水平）。下面是我读完之后的一些感受。
+Koa的设计理念
+Koa 是一个轻量级的、极富表现力的 http 框架。一个web request会通过 Koa 的中间件栈，来动态完成 response 的处理。Koa2 采用了 async 和 await 的语法">
+<meta name="twitter:image" content="https://sfault-image.b0.upaiyun.com/135/226/1352261008-594a32c87b693_articlex">
+  
+    <link rel="alternative" href="/atom.xml" title="Sunny的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="//favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/head.jpg" class="js-avatar show" src="/img/head.jpg">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sunny</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">花开堪折直须折，莫待无花空折枝。</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/MrSunny123" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/5896702219" title="weibo">weibo</a>
+					        
+								<a class="mail" target="_blank" href="mailto:zhangxy_92@outlook.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 12.5px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 12.5px;">CSS3</a> <a href="/tags/ES5/" style="font-size: 10px;">ES5</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/HTML5/" style="font-size: 12.5px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Koa2/" style="font-size: 10px;">Koa2</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/VSCode/" style="font-size: 10px;">VSCode</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/教程/" style="font-size: 17.5px;">教程</a> <a href="/tags/移动开发/" style="font-size: 10px;">移动开发</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">程序猿一枚，目前专注WEB前端开发......</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sunny</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img lazy-src="/img/head.jpg" class="js-avatar show" src="/img/head.jpg">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sunny</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">花开堪折直须折，莫待无花空折枝。</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/MrSunny123" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/5896702219" title="weibo">weibo</a>
+			        
+						<a class="mail" target="_blank" href="mailto:zhangxy_92@outlook.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Koa2-Code" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/21/Koa2-Code/" class="article-date">
+  	<time datetime="2017-06-21T03:03:02.000Z" itemprop="datePublished">2017-06-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Koa2源码阅读笔记
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa2/">Koa2</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/">Node.js</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+        <div class="busuanzi-read-num">
+            阅读次数：<span id="busuanzi_value_page_pv"></span>次
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近空闲时间读了一下<a href="https://github.com/koajs/koa" target="_blank" rel="external">Koa2</a>的源码；在阅读Koa2(version 2.2.0)的源码的过程中，我的感受是代码简洁、思路清晰（不得不佩服大神的水平）。<br>下面是我读完之后的一些感受。</p>
+<h2 id="Koa的设计理念"><a href="#Koa的设计理念" class="headerlink" title="Koa的设计理念"></a>Koa的设计理念</h2><blockquote>
+<p>Koa 是一个轻量级的、极富表现力的 http 框架。<br>一个web request会通过 Koa 的中间件栈，来动态完成 response 的处理。<br>Koa2 采用了 async 和 await 的语法来增强中间件的表现力。<br>Koa 不在内核方法中绑定任何中间件，它仅仅提供了一个轻量优雅的函数库。</p>
+</blockquote>
+<h2 id="Koa基本组成"><a href="#Koa基本组成" class="headerlink" title="Koa基本组成"></a>Koa基本组成</h2><p>Koa源码非常精简，只有四个文件：</p>
+<ul>
+<li>application.js：框架入口；负责管理中间件，以及处理请求</li>
+<li>context.js：context对象的原型，代理request与response对象上的方法和属性</li>
+<li>request.js：request对象的原型，提供请求相关的方法和属性</li>
+<li>response.js：response对象的原型，提供响应相关的方法和属性<a id="more"></a>
+<h3 id="application-js"><a href="#application-js" class="headerlink" title="application.js"></a>application.js</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">module.exports = class Application extends Emitter &#123;</div><div class="line">  constructor() &#123;</div><div class="line">    super();</div><div class="line"></div><div class="line">    this.proxy = false; // 是否信任 proxy header 参数，默认为 false</div><div class="line">    </div><div class="line">    this.middleware = []; //保存通过app.use(middleware)注册的中间件</div><div class="line">    </div><div class="line">    this.subdomainOffset = 2; // 子域默认偏移量，默认为 2</div><div class="line">    </div><div class="line">    this.env = process.env.NODE_ENV || &apos;development&apos;; // 环境参数，默认为 NODE_ENV 或 ‘development’</div><div class="line">    </div><div class="line">    this.context = Object.create(context); //context模块，通过context.js创建</div><div class="line">    </div><div class="line">    this.request = Object.create(request); //request模块，通过request.js创建</div><div class="line">    </div><div class="line">    this.response = Object.create(response); //response模块，通过response.js创建</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>application.js 是 koa 的入口主要文件，暴露应用的 class, 这个 class 继承自 EventEmitter ，这里可以看出跟 koa1.x 的不同，koa1.x 是用的是构造函数的方式，koa2 大量使用 es6 的语法。调用的时候就跟 koa1.x 有区别<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var koa = require(&apos;koa&apos;);</div><div class="line">// koa 1.x</div><div class="line">var app = koa();</div><div class="line">// koa 2.x</div><div class="line">// 使用class必须使用new来调用</div><div class="line">var app = new koa();</div></pre></td></tr></table></figure></p>
+<p>application.js除了上面的的构造函数外，还暴露了一些公用的api，比如两个常见的，一个是<code>listen</code>，一个是<code>use</code>。</p>
+<h4 id="use函数"><a href="#use函数" class="headerlink" title="use函数"></a>use函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">use(fn) &#123;</div><div class="line">  if (typeof fn !== &apos;function&apos;) throw new TypeError(&apos;middleware must be a function!&apos;);</div><div class="line">  if (isGeneratorFunction(fn)) &#123;</div><div class="line">    deprecate(&apos;Support for generators will be removed in v3. &apos; +</div><div class="line">              &apos;See the documentation for examples of how to convert old middleware &apos; +</div><div class="line">              &apos;https://github.com/koajs/koa/blob/master/docs/migration.md&apos;);</div><div class="line">    fn = convert(fn);</div><div class="line">  &#125;</div><div class="line">  debug(&apos;use %s&apos;, fn._name || fn.name || &apos;-&apos;);</div><div class="line">  this.middleware.push(fn);</div><div class="line">  return this;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>use</code>函数做的事很简单：注册一个中间件<code>fn</code>，其实就是将<code>fn</code>放入<code>middleware</code>数组。</p>
+<h4 id="listen函数"><a href="#listen函数" class="headerlink" title="listen函数"></a>listen函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">listen(...args) &#123;</div><div class="line">  debug(&apos;listen&apos;);</div><div class="line">  const server = http.createServer(this.callback());</div><div class="line">  return server.listen(...args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>listen</code>方法首先会通过<code>this.callback</code>方法来返回一个函数作为<code>http.createServer</code>的回调函数，然后进行监听。我们已经知道，<code>http.createServer</code>的回调函数接收两个参数：<code>req</code>和<code>res</code>，下面来看<code>this.callback</code>的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">callback() &#123;</div><div class="line">  const fn = compose(this.middleware);</div><div class="line">    </div><div class="line">  if (!this.listeners(&apos;error&apos;).length) this.on(&apos;error&apos;, this.onerror);</div><div class="line">    </div><div class="line">  const handleRequest = (req, res) =&gt; &#123;</div><div class="line">    res.statusCode = 404;</div><div class="line">    const ctx = this.createContext(req, res);</div><div class="line">    const onerror = err =&gt; ctx.onerror(err);</div><div class="line">    const handleResponse = () =&gt; respond(ctx);</div><div class="line">    onFinished(res, onerror);</div><div class="line">    return fn(ctx).then(handleResponse).catch(onerror);</div><div class="line">  &#125;;</div><div class="line">    </div><div class="line">  return handleRequest;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先，<code>callback</code>方法把所有<code>middleware</code>进行了组合，使用了<code>koa-compose</code>，我们来看一下<code>koa-compose</code>的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">// koa-compose</div><div class="line"></div><div class="line">function compose (middleware) &#123;</div><div class="line">// 传入的middleware必须是一个数组</div><div class="line">  if (!Array.isArray(middleware)) throw new TypeError(&apos;Middleware stack must be an array!&apos;)</div><div class="line">// 传入的middleware的每一个元素都必须是函数</div><div class="line">  for (const fn of middleware) &#123;</div><div class="line">    if (typeof fn !== &apos;function&apos;) throw new TypeError(&apos;Middleware must be composed of functions!&apos;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return function (context, next) &#123;</div><div class="line">    let index = -1</div><div class="line">    return dispatch(0)</div><div class="line">    function dispatch (i) &#123;</div><div class="line">      if (i &lt;= index) return Promise.reject(new Error(&apos;next() called multiple times&apos;))</div><div class="line">      index = i</div><div class="line">      let fn = middleware[i]</div><div class="line">      //下面两行代码是处理最后一个中间件还有next的情况的，其实就是直接resolve出来</div><div class="line">      if (i === middleware.length) fn = next</div><div class="line">      if (!fn) return Promise.resolve() </div><div class="line">      try &#123;</div><div class="line">        // 这里就是传入next执行中间件代码了</div><div class="line">        return Promise.resolve(fn(context, function next () &#123;</div><div class="line">          return dispatch(i + 1)</div><div class="line">        &#125;))</div><div class="line">      &#125; catch (err) &#123;</div><div class="line">        return Promise.reject(err)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到<code>koa-compose</code>基本就是个<code>dispatch</code>函数的递归调用。其中最重要的就是下面这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">return Promise.resolve(fn(context, function next () &#123;</div><div class="line">  return dispatch(i + 1)</div><div class="line">&#125;))</div></pre></td></tr></table></figure>
+<p>这段代码等价于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fn(context, function next () &#123;</div><div class="line"> return dispatch(i + 1)</div><div class="line">&#125;)</div><div class="line">return Promise.resolve()</div></pre></td></tr></table></figure>
+<p>这里<code>middlewareFunction</code>的第二个参数(也就是next)是动态传递进去的信使，它会调取<code>dispatch(index)</code>执行下一个的<code>middleware</code>。最后会返回一个<code>Resolved</code>（已完成）状态的Promise对象。这个对象的作用我们稍后再说。</p>
+<p>我们先暂时回到<code>callback</code>方法里面，前面说了它先对<code>middleware</code>进行了组合，生成了一个函数<code>fn</code>。<br>然后，<code>callback</code>方法返回<code>http.createServer</code>所需要的回调函数<code>handleRequest</code>。</p>
+<p><code>handleRequest</code>函数，先把http code默认设置为404，接着利用<code>createContext</code>函数把node返回的req和res进行了封装创建出<code>context</code>，<br>然后通过<code>onFinished(res, onerror)</code>监听<code>http response</code>，当请求结束时执行回调。这里传入的回调是<code>context.onerror(err)</code>，即当错误发生时才执行。<br>最后返回 <code>fn(ctx).then(handleResponse).catch(onerror)</code>的执行结果，这里的<code>fn</code>函数就是就是组合所有<code>middleware</code>后生成的函数，调用它执行所有<code>middleware</code>后会返回前面提到的<code>Resolved</code>（已完成）状态的Promise对象，之后执行响应处理函数<code>respond(ctx)</code>（<code>respond</code>函数里面也主要是一些收尾工作，例如判断http code为空如何输出啦，http method是head如何输出啦，body返回是流或json时如何输出；代码就不贴了，感兴趣的小伙伴自己可以去看一下），当抛出异常时同样使用 <code>context.onerror(err)</code>处理。</p>
+<p>我们可以看看<code>createContext</code>函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// application.js</div><div class="line"></div><div class="line">createContext(req, res) &#123;</div><div class="line">  const context = Object.create(this.context);</div><div class="line">  const request = context.request = Object.create(this.request);</div><div class="line">  const response = context.response = Object.create(this.response);</div><div class="line">  context.app = request.app = response.app = this;</div><div class="line">  context.req = request.req = response.req = req;</div><div class="line">  context.res = request.res = response.res = res;</div><div class="line">  request.ctx = response.ctx = context;</div><div class="line">  request.response = response;</div><div class="line">  response.request = request;</div><div class="line">  context.originalUrl = request.originalUrl = req.url;</div><div class="line">  context.cookies = new Cookies(req, res, &#123;</div><div class="line">    keys: this.keys,</div><div class="line">    secure: request.secure</div><div class="line">  &#125;);</div><div class="line">  request.ip = request.ips[0] || req.socket.remoteAddress || &apos;&apos;;</div><div class="line">  context.accept = request.accept = accepts(req);</div><div class="line">  context.state = &#123;&#125;;</div><div class="line">  return context;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>createContext</code>创建<code>context</code>的时候，还会同时创建request和response，通过下图可以比较直观地看到所有这些对象之间的关系。<br><img src="https://sfault-image.b0.upaiyun.com/135/226/1352261008-594a32c87b693_articlex" alt="图片描述"></p>
+<p>图中：</p>
+<ul>
+<li>最左边一列表示每个文件的导出对象</li>
+<li>中间一列表示每个Koa应用及其维护的属性</li>
+<li>右边两列表示对应每个请求所维护的一些列对象</li>
+<li>黑色的线表示实例化</li>
+<li>红色的线表示原型链</li>
+<li>蓝色的线表示属性</li>
+</ul>
+<p>通过上面的分析，我们已经可以大概得知Koa处理请求的过程：当请求到来的时候，会通过 req 和 res 来创建一个 context (ctx) ，然后执行中间件。</p>
+<h3 id="content-js"><a href="#content-js" class="headerlink" title="content.js"></a>content.js</h3><p>content.js 主要的功能提供了对<code>request</code>和<code>response</code>对象的方法与属性便捷访问能力。<br>其中使用了<a href="https://github.com/tj/node-delegates" target="_blank" rel="external">node-delegates</a>（有兴趣的可以看一下<a href="https://github.com/tj/node-delegates/blob/master/index.js" target="_blank" rel="external">源码</a>），将<code>context.request</code>与<code>context.response</code>上的方法与属性代理到<code>context</code>上。<br>在源码中，我们可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// context.js</div><div class="line"></div><div class="line">delegate(proto, &apos;response&apos;)</div><div class="line">  .method(&apos;attachment&apos;)</div><div class="line">  // ...</div><div class="line">  .access(&apos;status&apos;)</div><div class="line">  // ...</div><div class="line">  .getter(&apos;writable&apos;);</div><div class="line"></div><div class="line">delegate(proto, &apos;request&apos;)</div><div class="line">  .method(&apos;acceptsLanguages&apos;)</div><div class="line">  // ...</div><div class="line">  .access(&apos;querystring&apos;)</div><div class="line">  // ...</div><div class="line">  .getter(&apos;ip&apos;);</div></pre></td></tr></table></figure>
+<h3 id="request-js"><a href="#request-js" class="headerlink" title="request.js"></a>request.js</h3><p>request.js 封装了请求相关的属性以及方法。通过 application.js 中的<code>createContext</code>方法，代理对应的 request 对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const request = context.request = Object.create(this.request);</div><div class="line">// ...</div><div class="line">context.req = request.req = response.req = req;</div><div class="line">// ...</div><div class="line">request.response = response;</div></pre></td></tr></table></figure>
+<p><code>request.req</code>为原生的请求对象，在 request.js 中属性的获取都是通过 <code>ths.req</code>来获取的（即 <code>request.req</code>）。</p>
+<h3 id="response-js"><a href="#response-js" class="headerlink" title="response.js"></a>response.js</h3><p>response.js 封装了响应相关的属性以及方法。与 request 相同，通过<code>createContext</code>方法代理对应的 response 对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const response = context.response = Object.create(this.response);</div><div class="line">// ...</div><div class="line">context.res = request.res = response.res = res;</div><div class="line">// ...</div><div class="line">response.request = request;</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>关于Koa2的源码就先分析到这，希望对大家有所帮助。<br>如有不同的看法，欢迎交流！</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/27/Array-Ergodic/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          上一篇：JavaScript数组迭代（遍历）方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/06/16/Sticky-Footer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">下一篇：紧贴底部的页脚</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="ds-share" data-thread-key="此处请替换为当前文章的thread-key" data-title="此处请替换为分享时显示的标题" data-images="此处请替换为分享时显示的图片的链接地址" data-content="此处请替换为分享时显示的内容" data-url="此处请替换为分享时显示的链接地址">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      	
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ 	</div>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<!-- 
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+ -->
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Koa2-Code" data-title="Koa2源码阅读笔记" data-url="http://mrsunny123.github.io/2017/06/21/Koa2-Code/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"sunny-blog"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+				<span id="busuanzi_container_site_pv">
+    			本站总访问量<span id="busuanzi_value_site_pv" style="color:#000; opacity:1;"></span>次
+				</span>
+				<span id="busuanzi_container_site_uv">
+  				本站访客数<span id="busuanzi_value_site_uv" style="color:#000" opacity:1;></span>人次
+				</span>
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten --- &copy; 2017 Sunny
+      	</div>
+    </div>
+  </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: /
+	}
+</script>
+<script src="/js/require,jquery.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

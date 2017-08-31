@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>CSS选择器整理 | Sunny的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="很多人都觉得CSS特别简单，但其实真正写好CSS并不容易，CSS的每一点其实内容都很多，就拿选择器来说，CSS选择器大概可以分为五类：
+
+元素选择器
+关系选择器
+属性选择器
+伪类选择器
+伪对象选择器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS选择器整理">
+<meta property="og:url" content="http://mrsunny123.github.io/2016/12/15/Css-Selector/index.html">
+<meta property="og:site_name" content="Sunny的博客">
+<meta property="og:description" content="很多人都觉得CSS特别简单，但其实真正写好CSS并不容易，CSS的每一点其实内容都很多，就拿选择器来说，CSS选择器大概可以分为五类：
+
+元素选择器
+关系选择器
+属性选择器
+伪类选择器
+伪对象选择器">
+<meta property="og:updated_time" content="2017-08-31T01:56:42.183Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS选择器整理">
+<meta name="twitter:description" content="很多人都觉得CSS特别简单，但其实真正写好CSS并不容易，CSS的每一点其实内容都很多，就拿选择器来说，CSS选择器大概可以分为五类：
+
+元素选择器
+关系选择器
+属性选择器
+伪类选择器
+伪对象选择器">
+  
+    <link rel="alternative" href="/atom.xml" title="Sunny的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="//favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/head.jpg" class="js-avatar show" src="/img/head.jpg">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sunny</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">花开堪折直须折，莫待无花空折枝。</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/MrSunny123" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/5896702219" title="weibo">weibo</a>
+					        
+								<a class="mail" target="_blank" href="mailto:zhangxy_92@outlook.com" title="mail">mail</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 12.5px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 12.5px;">CSS3</a> <a href="/tags/ES5/" style="font-size: 10px;">ES5</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/HTML5/" style="font-size: 12.5px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Koa2/" style="font-size: 10px;">Koa2</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/VSCode/" style="font-size: 10px;">VSCode</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/教程/" style="font-size: 17.5px;">教程</a> <a href="/tags/移动开发/" style="font-size: 10px;">移动开发</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">程序猿一枚，目前专注WEB前端开发......</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sunny</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img lazy-src="/img/head.jpg" class="js-avatar show" src="/img/head.jpg">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sunny</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">花开堪折直须折，莫待无花空折枝。</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/MrSunny123" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/5896702219" title="weibo">weibo</a>
+			        
+						<a class="mail" target="_blank" href="mailto:zhangxy_92@outlook.com" title="mail">mail</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Css-Selector" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/15/Css-Selector/" class="article-date">
+  	<time datetime="2016-12-15T01:50:56.000Z" itemprop="datePublished">2016-12-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CSS选择器整理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/学习/">学习</a>
+	</div>
+
+
+        <div class="busuanzi-read-num">
+            阅读次数：<span id="busuanzi_value_page_pv"></span>次
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>很多人都觉得<code>CSS</code>特别简单，但其实真正写好<code>CSS</code>并不容易，<code>CSS</code>的每一点其实内容都很多，就拿选择器来说，<code>CSS</code>选择器大概可以分为五类：</p>
+<ul>
+<li>元素选择器</li>
+<li>关系选择器</li>
+<li>属性选择器</li>
+<li>伪类选择器</li>
+<li>伪对象选择器<a id="more"></a>
+<h2 id="元素选择器"><a href="#元素选择器" class="headerlink" title="元素选择器"></a>元素选择器</h2>| 选择器 | 名称 | 描述 |<br>| — | — | — |<br>| <code>*</code> | 通配选择器 | 选择所有的元素 |<br>| <code>E</code> | 元素选择器 | 选择指定的元素 |<br>| <code>#idName</code> | id选择器 | 选择id属性等于idName的元素 |<br>| <code>.className</code> | class选择器 | 选择class属性包含className的元素 |<br>元素选择器只要是写<code>CSS</code>都会经常用，这一块的内容非常简单，没什么特别要说的。</li>
+</ul>
+<h2 id="关系选择器"><a href="#关系选择器" class="headerlink" title="关系选择器"></a>关系选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E F</code></td>
+<td>包含选择器</td>
+<td>选择所有包含在E元素里面的F元素</td>
+</tr>
+<tr>
+<td><code>E&gt;F</code></td>
+<td>子选择器</td>
+<td>选择所有作为E元素的子元素F</td>
+</tr>
+<tr>
+<td><code>E+F</code></td>
+<td>相邻选择器</td>
+<td>选择紧贴在E元素之后的F元素</td>
+</tr>
+<tr>
+<td><code>E~F</code></td>
+<td>兄弟选择器</td>
+<td>选择E元素所有兄弟元素F</td>
+</tr>
+</tbody>
+</table>
+<p>这里要注意几点：</p>
+<ul>
+<li>子选择器只能选中字元素，而不能选中孙辈；而包含选择符将会选中所有符合条件的后代，包括儿子，孙子，孙子的孙子…</li>
+<li>相邻选择符只会选中符合条件的相邻的兄弟元素；而兄弟选择符会选中所有符合条件的兄弟元素，不强制是紧邻的元素。</li>
+<li>在Android Browser4.2.*及以下，伪类选择器<code>:checked</code>与兄弟选择符一起使用会有一个bug，<a href="https://github.com/doyoe/trip#user-content-checked-sibling-bug" target="_blank" rel="external">查看详情</a>。</li>
+</ul>
+<h2 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E[att]</code></td>
+<td>选择具有att属性的E元素</td>
+</tr>
+<tr>
+<td><code>E[att=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值等于val的E元素</td>
+</tr>
+<tr>
+<td><code>E[att~=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值其中一个等于val的E元素（包含只有一个值且该值等于val的情况）</td>
+</tr>
+<tr>
+<td><code>E[att&#124;=”val”]</code></td>
+<td>选择具有att属性且属性值为以val开头并用连接符<code>-</code>分隔的字符串的E元素，如果属性值仅为val，也将被选择</td>
+</tr>
+<tr>
+<td><code>E[att^=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值为以val开头的字符串的E元素</td>
+</tr>
+<tr>
+<td><code>E[att$=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值为以val结尾的字符串的E元素</td>
+</tr>
+<tr>
+<td><code>E[att*=&quot;val&quot;]</code></td>
+<td>选择具有att属性且属性值为包含val的字符串的E元素</td>
+</tr>
+</tbody>
+</table>
+<h2 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E:link</code></td>
+<td>设置超链接a在未被访问前的样式</td>
+</tr>
+<tr>
+<td><code>E:visited</code></td>
+<td>设置超链接a在其链接地址已被访问过时的样式</td>
+</tr>
+<tr>
+<td><code>E:hover</code></td>
+<td>设置元素鼠标在其悬停时的样式</td>
+</tr>
+<tr>
+<td><code>E:active</code></td>
+<td>设置元素在被用户激活（在鼠标点击与释放之间发生的事件）时的样式</td>
+</tr>
+<tr>
+<td><code>E:focus</code></td>
+<td>设置元素在成为输入焦点（该元素的onfocus事件发生）时的样式。(一般应用于表单元素)</td>
+</tr>
+<tr>
+<td><code>E:checked</code></td>
+<td>匹配用户界面上处于选中状态的元素E。(用于input type为radio与checkbox时)</td>
+</tr>
+<tr>
+<td><code>E:enabled</code></td>
+<td>匹配用户界面上处于可用状态的元素E。(一般应用于表单元素)</td>
+</tr>
+<tr>
+<td><code>E:disabled</code></td>
+<td>匹配用户界面上处于禁用状态的元素E。(一般应用于表单元素)</td>
+</tr>
+<tr>
+<td><code>E:empty</code></td>
+<td>匹配没有任何子元素（包括text节点）的元素E</td>
+</tr>
+<tr>
+<td><code>E:root</code></td>
+<td>匹配E元素在文档的根元素。在HTML中，根元素永远是HTML</td>
+</tr>
+<tr>
+<td><code>E:not(s)</code></td>
+<td>匹配不含有s选择符的元素E</td>
+</tr>
+<tr>
+<td><code>E:first-child</code></td>
+<td>匹配父元素的第一个子元素E</td>
+</tr>
+<tr>
+<td><code>E:last-child</code></td>
+<td>匹配父元素的最后一个子元素E</td>
+</tr>
+<tr>
+<td><code>E:only-child</code></td>
+<td>匹配父元素仅有的一个子元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-child(n)</code></td>
+<td>匹配父元素的第n个子元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-last-child(n)</code></td>
+<td>匹配父元素的倒数第n个子元素E</td>
+</tr>
+<tr>
+<td><code>E:first-of-type</code></td>
+<td>匹配同类型中的第一个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:last-of-type</code></td>
+<td>匹配同类型中的最后一个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:only-of-type</code></td>
+<td>匹配同类型中的唯一的一个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-of-type(n)</code></td>
+<td>匹配同类型中的第n个同级兄弟元素E</td>
+</tr>
+<tr>
+<td><code>E:nth-last-of-type(n)</code></td>
+<td>匹配同类型中的倒数第n个同级兄弟元素E</td>
+</tr>
+</tbody>
+</table>
+<p>注意事项：</p>
+<ul>
+<li>超链接的4种状态(访问前，鼠标悬停，当前被点击，已访问)，需要有特定的书写顺序才能生效；<strong>a:hover 必须位于 a:link 和 a:visited 之后，a:active 必须位于 a:hover 之后</strong>。</li>
+<li><code>E:first-child</code>选择符，E必须是它的兄弟元素中的第一个元素，换言之，E必须是父元素的第一个子元素。与之类似的伪类还有<code>E:last-child</code>，只不过情况正好相反，需要它是最后一个子元素。<h3 id="关于-not-的用法"><a href="#关于-not-的用法" class="headerlink" title="关于:not()的用法"></a>关于<code>:not()</code>的用法</h3>假定有个列表，每个列表项都有一条底边线，但是最后一项不需要底边线。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> li:not(:last-child) &#123;</div><div class="line">	border-bottom: 1px solid #ddd;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述代码的意思是：给该列表中除最后一项外的所有列表项加一条底边线。是不是很方便。</p>
+<h3 id="关于-nth-child-的用法"><a href="#关于-nth-child-的用法" class="headerlink" title="关于:nth-child()的用法"></a>关于<code>:nth-child()</code>的用法</h3><p>要使<code>E:nth-child(n)</code>生效，E元素必须是某个元素的子元素，E的父元素最高是body，即E可以是body的子元素。<code>:first-child</code>、<code>:last-child</code>、<code>:only-child</code>、<code>:nth-last-child(n)</code>也是一样。<br><code>nth-child(n)</code>括号里的n可以是一个数字，一个关键字，或者一个公式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">:nth-child(length) /*参数是具体数字 length为整数*/</div><div class="line">:nth-child(n) /*参数是n,n从0开始计算*/</div><div class="line">:nth-child(n*length) /*n的倍数选择，n从0开始算*/</div><div class="line">:nth-child(n+length) /*选择大于等于length后面的元素*/</div><div class="line">:nth-child(-n+length) /*选择小于等于length前面的元素*/</div><div class="line">:nth-child(n*length+1) /*表示隔几选一*/</div><div class="line">:nth-child(2n) / :nth-child(even) /*表示偶数*/</div><div class="line">:nth-child(2n+1) / :nth-child(odd) /*表示奇数*/</div></pre></td></tr></table></figure></p>
+<h3 id="关于-child和-of-type的差异"><a href="#关于-child和-of-type的差异" class="headerlink" title="关于:...-child和:...-of-type的差异"></a>关于<code>:...-child</code>和<code>:...-of-type</code>的差异</h3><p>这两个系列的属性确实很相似，对于不熟悉的人可能很难区分。</p>
+<p><strong><code>E:first-of-type</code>总是能命中父元素的第1个为E的子元素，不论父元素第1个子元素是否为E；而<code>E:first-child</code>里的E元素必须是它的兄弟元素中的第一个元素，否则匹配失效。<code>E:last-of-type</code>与<code>E:last-child</code>也是同理。</strong><br><strong><code>E:nth-of-type(n)</code>总是能命中父元素的第n个为E的子元素，不论父元素第n个子元素是否为E；而<code>E:nth-child(n)</code>会选择父元素的第n个子元素E，如果第n个子元素不是E，则是无效选择符，但n会递增。</strong><br>关于<code>:nth-child()</code>与<code>:nth-of-type()</code>的区别可以看<a href="http://www.zhangxinxu.com/wordpress/2011/06/css3%E9%80%89%E6%8B%A9%E5%99%A8nth-child%E5%92%8Cnth-of-type%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82/" target="_blank" rel="external">这篇文章</a></p>
+<h3 id="用-empty区分空元素"><a href="#用-empty区分空元素" class="headerlink" title="用:empty区分空元素"></a>用<code>:empty</code>区分空元素</h3><p>选择不包含子元素的div元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">div:empty</div></pre></td></tr></table></figure></p>
+<p>选择包含子元素的div元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">div:not(:empty)</div></pre></td></tr></table></figure></p>
+<h2 id="伪对象选择器"><a href="#伪对象选择器" class="headerlink" title="伪对象选择器"></a>伪对象选择器</h2><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E:before</code>/<code>E::before</code></td>
+<td>在目标元素E的前面插入的内容。用来和content属性一起使用</td>
+</tr>
+<tr>
+<td><code>E:after</code>/<code>E::after</code></td>
+<td>在目标元素E的后面插入的内容。用来和content属性一起使用</td>
+</tr>
+<tr>
+<td><code>E:first-letter</code>/<code>E::first-letter</code></td>
+<td>设置元素内的第一个字符的样式</td>
+</tr>
+<tr>
+<td><code>E:first-line</code>/<code>E::first-line</code></td>
+<td>设置元素内的第一行的样式</td>
+</tr>
+<tr>
+<td><code>E::placeholder</code></td>
+<td>设置元素文字占位符的样式。(一般用于input输入框)</td>
+</tr>
+<tr>
+<td><code>E::selection</code></td>
+<td>设置元素被选择时的字体颜色和背景颜色</td>
+</tr>
+</tbody>
+</table>
+<p>注意事项：</p>
+<ul>
+<li><code>::placeholder</code>在使用时需要加上各个浏览器的前缀；除了Firefox是 <code>::[prefix]placeholder</code>，其他浏览器都是使用 <code>::[prefix]input-placeholder</code>。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>选择器用得好其实可以让我们少些很多代码。其实还有一些东西没有展开来讲，比如<code>:before</code>和<code>:after</code>，后面专门写一篇文章来说。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/12/VSCode-Keyboard/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          上一篇：VSCode 常用快捷键
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/11/25/RegExp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">下一篇：JavaScript必会技能——正则表达式</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="ds-share" data-thread-key="此处请替换为当前文章的thread-key" data-title="此处请替换为分享时显示的标题" data-images="此处请替换为分享时显示的图片的链接地址" data-content="此处请替换为分享时显示的内容" data-url="此处请替换为分享时显示的链接地址">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      	
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ 	</div>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<!-- 
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+ -->
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Css-Selector" data-title="CSS选择器整理" data-url="http://mrsunny123.github.io/2016/12/15/Css-Selector/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"sunny-blog"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+				<span id="busuanzi_container_site_pv">
+    			本站总访问量<span id="busuanzi_value_site_pv" style="color:#000; opacity:1;"></span>次
+				</span>
+				<span id="busuanzi_container_site_uv">
+  				本站访客数<span id="busuanzi_value_site_uv" style="color:#000" opacity:1;></span>人次
+				</span>
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten --- &copy; 2017 Sunny
+      	</div>
+    </div>
+  </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: /
+	}
+</script>
+<script src="/js/require,jquery.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
